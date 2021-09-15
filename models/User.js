@@ -1,6 +1,10 @@
 const { Schema, model } = require("mongoose");
 const UserSchema = new Schema(
   {
+    employee_id: {
+      type: String,
+      required: true
+    },
     first_name: {
       type: String,
       required: true
@@ -39,11 +43,11 @@ const UserSchema = new Schema(
     },
     user_role: {
       type: String,
-      required:true
+      required: true
     },
   },
   { timestamps: true }
 );
 
 
-module.exports = model("users", UserSchema);
+module.exports = model("User", UserSchema);

@@ -4,7 +4,7 @@ const passport = require("passport");
 const User = require("../models/User");
 const dotenv = require('dotenv')
 require('../middlewares/passport')(passport);
-const { SECRET, REFRESH_TOKEN } = require("../config");
+const { SECRET } = require("../config");
 
 /**
  * @DESC To register the user (USER)
@@ -13,12 +13,10 @@ const { SECRET, REFRESH_TOKEN } = require("../config");
 dotenv.config({ path: './config.env' });
 
 const userRegister = async (userDets, res) => {
-    const { first_name, last_name, email, phone_num, gender, address, position, username, password, password2, user_role } = userDets;
+    const { employee_id, first_name, last_name, email, phone_num, gender, address, position, username, password, password2, user_role } = userDets;
     try {
-        
         //Check required fields
-        //Check required fields
-        if (!first_name || !last_name || !email || !phone_num || !gender || !address || !position || !username || !password || !password2 || !user_role) {
+        if (!employee_id || !first_name || !last_name || !email || !phone_num || !gender || !address || !position || !username || !password || !password2 || !user_role) {
             return res.status(400).json({
                 message: `Please enter all fields`,
                 success: false
@@ -63,6 +61,7 @@ const userRegister = async (userDets, res) => {
         const hashpassword = await bcrypt.hash(userDets.password, 12);
         // create a new user
         const newUser = new User({
+            employee_id,
             first_name, 
             last_name, 
             email, 
@@ -78,7 +77,7 @@ const userRegister = async (userDets, res) => {
 
         await newUser.save();
         return res.status(201).json({
-            message: "You are successfully registred. ",
+            message: "You are successfully registered. ",
             success: true
         });
     } catch (err) {
@@ -119,22 +118,11 @@ const userLogin = async (userCreds, res) => {
             SECRET,
             { expiresIn: "7 days" }
         );
-        // Create refresh tokrn
-        // const refreshToken = jwt.sign(
-        //     {
-        //         user_id: user._id,
-        //         role: user.user_role,
-        //         username: user.username,
-        //         email: user.email
-        //     },
-        //     process.env.REFRESH_TOKEN
-        // );
         let result = {
             username: user.username,
             role: user.role,
             email: user.email,
             token: `Bearer ${accessToken}`,
-            // refreshToken: refreshToken,
             expiresIn: 168
         };
 

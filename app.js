@@ -21,6 +21,9 @@ app.use(passport.initialize());
 
 // User Router Middleware
 app.use("/api/users", require("./routes/users"));
+app.use("/api/FAQ", require("./routes/FAQ"));
+app.use("/api/students", require("./routes/students"));
+app.use("/api/query", require("./routes/query"));
 
 const startApp = async () => {
   try {

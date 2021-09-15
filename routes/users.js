@@ -9,7 +9,7 @@ const {
 } = require("../utils/Auth");
 
 // Users Registeration Route (/api/users/register-user)
-router.post("/register-user", async (req, res) => {
+router.post("/register-user", userAuth, async (req, res) => {
   await userRegister(req.body, res);
 });
 
