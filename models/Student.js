@@ -6,8 +6,8 @@ const StudentSchema = new Schema(
             type: String,
             required: true
         },
-        sender_number: {
-            type: Number,
+        email: {
+            type: String,
             required: true
         },
         first_name: {

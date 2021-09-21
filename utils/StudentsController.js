@@ -21,7 +21,7 @@ const ShowAllStudent = async (req, res) => {
     } catch (error) {
         // Implement logger function (winston)
         return res.status(500).json({
-            message: "Unable to add new FAQ",
+            message: "Server Error",
             success: false
         });
     }
@@ -33,7 +33,7 @@ const ShowStudent = async (req, id, res) => {
     try {
         let student = await Student.findById(id);
         console.log(student)
-        
+
         if (!student) {
             return res.status(404).json({
                 message: "Student not Found",
@@ -47,28 +47,39 @@ const ShowStudent = async (req, id, res) => {
         }
 
     } catch (err) {
-        console.error(err)
-        res.render('error/404')
+        res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
     }
 }
 
 // Create new Student
 const AddStudent = async (req, res) => {
-    const { student_id, sender_number, first_name, last_name, phone_number, gender, address, school } = req;
+    const { student_id, email, first_name, last_name, phone_number, gender, address, school } = req;
 
     try {
         // console.log(user_id)
         //Check required fields
-        if (!student_id || !sender_number || !first_name || !last_name || !phone_number || !gender || !address || !school) {
+        if (!student_id || !email || !first_name || !last_name || !phone_number || !gender || !address || !school) {
             return res.status(400).json({
                 message: `Please enter all fields`,
+                success: false
+            });
+        }
+
+        let studentIDtaken = await Student.findOne({ student_id });
+
+        if (studentIDtaken) {
+            return res.status(400).json({
+                message: `Student ID is already registered`,
                 success: false
             });
         }
         // create a new FAQ
         const newStudent = new Student({
             student_id,
-            sender_number,
+            email,
             first_name,
             last_name,
             phone_number,
@@ -83,6 +94,7 @@ const AddStudent = async (req, res) => {
             success: true
         });
     } catch (err) {
+        console.log(err)
         return res.status(500).json({
             message: "Unable to add new Student",
             success: false
@@ -149,33 +161,33 @@ const DeleteStudent = async (req, id, res) => {
 
 //Show Student
 const SearchStudent = async (req, search_item, res) => {
-//     try {
-//         student = await Student.find({
-//             $or: [
-//                 { student_id: search_item },
-//                 { last_name: search_item }
-//             ]
-//         });
+    //     try {
+    //         student = await Student.find({
+    //             $or: [
+    //                 { student_id: search_item },
+    //                 { last_name: search_item }
+    //             ]
+    //         });
 
-//         if (!student) {
-//             return res.status(404).json({
-//                 message: "Student not Found",
-//                 success: false
-//             });
-//         } else {
-//             return res.json({
-//                 student: student,
-//                 succes: true
-//             });
-//         }
+    //         if (!student) {
+    //             return res.status(404).json({
+    //                 message: "Student not Found",
+    //                 success: false
+    //             });
+    //         } else {
+    //             return res.json({
+    //                 student: student,
+    //                 succes: true
+    //             });
+    //         }
 
 
-//     } catch (error) {
-//         return res.status(500).json({
-//             message: "Unable tp search for the moementr",
-//             success: false
-//         });
-//     }
+    //     } catch (error) {
+    //         return res.status(500).json({
+    //             message: "Unable tp search for the moementr",
+    //             success: false
+    //         });
+    //     }
 
 }
 

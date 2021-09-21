@@ -3,9 +3,11 @@ const router = require("express").Router();
 const {
   userAuth,
   userLogin,
-//   checkRole,
+  editUser,
   userRegister,
-//   serializeUser
+  serializeUser,
+  getAllUsers,
+  getUser
 } = require("../utils/Auth");
 
 // Users Registeration Route (/api/users/register-user)
@@ -18,27 +20,26 @@ router.post("/login-user", async (req, res) => {
   await userLogin(req.body, res);
 });
 
-// Users Protected Route -dashboard
-router.get(
-  "/dashboard",
-  userAuth,
-  async (req, res) => {
-      user = req.user;
-    return res.json(req.user);
-  }
-);
+// Users Login Route (api/users/edit)
+router.post("/edit/:id", userAuth, async (req, res) => {
+  const id = req.params.id;
+  await editUser(req.body,id, res);
+});
 
+// Users Protected Route (api/users/dashboard)
+router.get("/dashboard", userAuth, async (req, res) => {
+  return res.json(serializeUser(req.user));
+});
 
-// Profile Route
-// router.get("/profile", userAuth, async (req, res) => {
-//   return res.json(serializeUser(req.user));
-// });
+// // Users Show all Users Route (api/users/show)
+router.get("/show", userAuth, async (req, res) => {
+  await getAllUsers(req, res);
+});
 
-
-// router.get('/logout', function(req, res){
-//     req.logout();
-//     return res.json('You are now logout');
-//   });
-
+// // Users Show Users Route (api/users/show)
+router.get("/show/:id", /* userAuth, */ async (req, res) => {
+  const id = req.params.id;
+  await getUser(req, id ,res);
+});
 
 module.exports = router;

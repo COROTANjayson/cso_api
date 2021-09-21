@@ -58,19 +58,20 @@ const userRegister = async (userDets, res) => {
         }
 
         // Get the hashed password
-        const hashpassword = await bcrypt.hash(userDets.password, 12);
+        const salt = bcrypt.genSaltSync(10);
+        const hashpassword = await bcrypt.hash(userDets.password, salt);
         // create a new user
         const newUser = new User({
             employee_id,
-            first_name, 
-            last_name, 
-            email, 
-            phone_num, 
-            gender, 
-            address, 
-            position, 
-            username, 
-            password,  
+            first_name,
+            last_name,
+            email,
+            phone_num,
+            gender,
+            address,
+            position,
+            username,
+            password,
             user_role
         });
         newUser.password = hashpassword;
@@ -91,7 +92,7 @@ const userRegister = async (userDets, res) => {
 };
 
 /**
- * @DESC To Login the user (ADMIN, SUPER_ADMIN, USER)
+ * @DESC To Login the user ()
  */
 const userLogin = async (userCreds, res) => {
     let { username, password } = userCreds;
@@ -139,11 +140,175 @@ const userLogin = async (userCreds, res) => {
     }
 };
 
+/**
+ * @DESC get all users
+ */
+const getAllUsers = async (req, res) => {
+
+    try {
+        // await User.find( function (err, users) {
+        //     if (err) return next(err);
+        //     res.json({
+        //         student_list: users,
+        //         succes: true
+        //     }).select(['-password']);
+
+        // });
+        users = await User.find().select(['-password']);
+
+        return res.json({
+            users: users,
+            succes: true
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
+    }
+}
+
+/**
+ * @DESC get users
+ */
+
+const getUser = async (req, id, res) => {
+
+    try {
+        let user = await User.findById(id).select(['-password']);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found",
+                success: false
+            });
+        } else {
+            return res.json({
+                user: user,
+                succes: true
+            });
+        }
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
+    }
+}
+
+
+/**
+ * @DESC edit user
+ */
+const editUser = async (req, id, res) => {
+    const { employee_id, first_name, last_name, email, phone_num, gender, address, position, password, password2, username, user_role } = req;
+    try {
+
+        let user = await User.findById(id);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not Found",
+                success: false
+            });
+        }
+
+        //Check required fields
+        if (!employee_id || !first_name || !last_name || !email || !phone_num || !gender || !address || !position || !username || !user_role) {
+            return res.status(400).json({
+                message: `Please enter all required fields`,
+                success: false
+            });
+        }
+
+        //Check passwords match
+        if (password) {
+            if (password != password2) {
+                return res.status(400).json({
+                    message: `Passwords do not match`,
+                    success: false
+                });
+            }
+
+            // // Check pass length if less than 8
+            if (password.length < 8) {
+                return res.status(400).json({
+                    message: `Password must be at least 6 characters`,
+                    success: false
+                });
+            }
+        }
+
+
+        // Validate the username
+        let checkUser = false;
+        let usernameNotTaken = await validateUsername(req.username);
+
+
+        if (username === user.username) {
+            checkUser = true;
+        } else if (!usernameNotTaken) {
+            return res.status(400).json({
+                message: `Username is already taken.`,
+                success: false
+            });
+        }
+
+        // validate the email
+        let emailNotRegistered = await validateEmail(req.email);
+        if (email === user.email) {
+            checkEmail = true;
+        } else if (!emailNotRegistered) {
+            return res.status(400).json({
+                message: `Email is already registered.`,
+                success: false
+            });
+        }
+
+        // Get the hashed password
+        const salt = bcrypt.genSaltSync(10);
+
+        if (password) {
+            const hashpassword = await bcrypt.hash(req.password, salt);
+            req.password = hashpassword;
+        }
+
+
+        // await editUser.save();
+
+        await User.findOneAndUpdate({ _id: id }, req, {
+            new: true,
+            // runValidators: true,
+            useFindAndModify: false
+        });
+
+        return res.status(201).json({
+            message: "User Successfully updated ",
+            success: true
+        });
+    } catch (err) {
+        console.log(err)
+        // Implement logger function (winston)
+        return res.status(500).json({
+            message: "Unable to create your account.",
+            success: false
+        });
+    }
+};
+
+
+
 const validateUsername = async username => {
     let user = await User.findOne({ username });
     return user ? false : true;
 };
 
+const validateEmail = async email => {
+    let user = await User.findOne({ email });
+    return user ? false : true;
+};
 /**
  * @DESC Passport middleware
  */
@@ -157,17 +322,20 @@ const checkRole = roles => (req, res, next) =>
         ? res.status(401).json("Unauthorized")
         : next();
 
-const validateEmail = async email => {
-    let user = await User.findOne({ email });
-    return user ? false : true;
-};
+
 
 const serializeUser = user => {
     return {
-        username: user.username,
-        email: user.email,
-        name: user.name,
         _id: user._id,
+        employee_id: user.employee_id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        phone_num: user.phone,
+        gender: user.gender,
+        address: user.address,
+        position: user.position,
+        user_role: user.user_role,
         updatedAt: user.updatedAt,
         createdAt: user.createdAt
     };
@@ -178,5 +346,8 @@ module.exports = {
     checkRole,
     userLogin,
     userRegister,
-    serializeUser
+    serializeUser,
+    editUser,
+    getAllUsers,
+    getUser
 };
