@@ -24,6 +24,7 @@ app.use("/api/users", require("./routes/users"));
 app.use("/api/FAQ", require("./routes/FAQ"));
 app.use("/api/students", require("./routes/students"));
 app.use("/api/query", require("./routes/query"));
+app.use("/api/sender", require("./routes/sender"));
 
 const startApp = async () => {
   try {

@@ -11,7 +11,7 @@ const {
 } = require("../utils/QueryController");
 
 // // Show all query (api/query/show)
-router.get("/show", userAuth, async (req, res) => {
+router.get("/show", /* userAuth, */ async (req, res) => {
     await GetAllQueries(req.body, res);
 });
 
@@ -24,7 +24,7 @@ router.get("/show/:sender_id/:session_id/:category_id", userAuth, async (req, re
 });
 
 // Add new query Route (/api/query/add)
-router.post("/add/:sender_id/:session_id/:category_id", userAuth, async (req, res) => {
+router.post("/add/:sender_id/:session_id/:category_id", /* userAuth, */ async (req, res) => {
     const send_id = req.params.sender_id
     const session_id = req.params.session_id
     const category_id = req.params.category_id

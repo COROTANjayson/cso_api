@@ -3,7 +3,7 @@ const { Schema, model } = require("mongoose");
 const SenderSchema = new Schema(
     {
         student_id: {
-            type: Schema.Types.ObjectId,
+            type: String,
             ref: 'Student',
         },
         sender_phone_number: {

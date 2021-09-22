@@ -2,9 +2,9 @@ const { Schema, model } = require("mongoose");
 const QuerySchema = new Schema(
   {
     sender_id: {
-      type: String,
-      // type: Schema.Types.ObjectId,
-      // ref: 'Sender',
+      // type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'Sender',
       required: true
     },
     session_id: {
