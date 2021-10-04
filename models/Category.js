@@ -6,10 +6,10 @@ const CategorySchema = new Schema(
             type: String,
             required: true
         },
-        officer_id: {
-            type: Schema.Types.ObjectId,
-            ref: 'User',
-        },
+        // officer_id: {
+        //     type: Schema.Types.ObjectId,
+        //     ref: 'User',
+        // },
         createdAt: {
             type: Date,
             default: Date.now,

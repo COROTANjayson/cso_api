@@ -25,12 +25,13 @@ app.use("/api/FAQ", require("./routes/FAQ"));
 app.use("/api/students", require("./routes/students"));
 app.use("/api/query", require("./routes/query"));
 app.use("/api/sender", require("./routes/sender"));
+app.use("/api/category", require("./routes/category"));
 
 const startApp = async () => {
   try {
     // Connection With DB
     await connect(DB, {
-      useFindAndModify: true,
+      useFindAndModify: false,
       useUnifiedTopology: true,
       useNewUrlParser: true
     });
