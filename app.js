@@ -5,6 +5,37 @@ const passport = require("passport");
 const { connect } = require("mongoose");
 const { success, error } = require("consola");
 
+// Serial port gsm
+const serialportgsm = require('serialport-gsm')
+const modem = serialportgsm.Modem()
+
+// Opening GSM module
+const options = {
+  baudRate: 9600,
+  dataBits: 8,
+  stopBits: 1,
+  parity: 'none',
+  rtscts: false,
+  xon: false,
+  xoff: false,
+  xany: false,
+  autoDeleteOnReceive: false,
+  enableConcatenation: true,
+  incomingCallIndication: true,
+  incomingSMSIndication: true,
+  pin: '',
+  customInitCommand: '',
+  logger: console
+}
+
+modem.open('COM4', options, (data)=>{console.log(data)});
+modem.on('open', data => {	
+  console.log('Modem is open');
+  modem.initializeModem((data)=>{
+    console.log('Modem is Initialized');
+  })
+})
+
 // Bring in the app constants
 const { DB, PORT } = require("./config");
 
