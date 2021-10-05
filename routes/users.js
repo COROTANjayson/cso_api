@@ -12,18 +12,21 @@ const {
 
 // Users Registeration Route (/api/users/register-user)
 router.post("/register-user", userAuth, async (req, res) => {
-  await userRegister(req.body, res);
+  await userRegister(req.body.data, res);
+  // await userRegister(req.body, res);
 });
 
 // Users Login Route (api/users/login-user)
 router.post("/login-user", async (req, res) => {
+  console.log(req.body);
   await userLogin(req.body, res);
 });
 
 // Users Login Route (api/users/edit)
 router.post("/edit/:id", userAuth, async (req, res) => {
   const id = req.params.id;
-  await editUser(req.body,id, res);
+  await editUser(req.body.data,id, res);
+  // await editUser(req.body,id, res);
 });
 
 // Users Protected Route (api/users/dashboard)
