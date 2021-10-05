@@ -22,7 +22,8 @@
     "mongoose": "^5.7.5",
     "mongoose-seed": "^0.6.0",
     "passport": "^0.4.0",
-    "passport-jwt": "^4.0.0"
+    "passport-jwt": "^4.0.0",
+    "serialport-gsm": "^3.4.1"
   },
   "devDependencies": {
     "nodemon": "^1.18.9"

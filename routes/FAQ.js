@@ -16,13 +16,15 @@ router.get("/show/:faq_id", userAuth, async (req, res) => {
 // Add FAQ Route (/api/FAQ/add)
 router.post("/add", userAuth, async (req, res) => {
     user_id = req.user
-    await AddFAQ(req.body, user_id._id, res);
+    await AddFAQ(req.body.data, user_id._id, res);
+    // await AddFAQ(req.body, user_id._id, res);
 });
 
 // Edit FAQ Route(api/FAQ/edit/faq_id)
 router.put("/edit/:faq_id", userAuth, async (req, res) => {
     const FAQ_id = req.params.faq_id;
-    await EditFAQ(req.body, FAQ_id, res);
+    await EditFAQ(req.body.data, FAQ_id, res);
+    // await EditFAQ(req.body, FAQ_id, res);
 });
 
 // Delete FAQ Route(api/FAQ/edit/faq_id)
