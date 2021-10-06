@@ -100,7 +100,25 @@ const SendSms = async (req,  res) => {
 
 };
 
+modem.on('onNewMessage', messageDetails => {
 
+    try {
+        modem.getOwnNumber((phone)=>{
+            const newSMS = new SMS({
+                message:messageDetails.message,
+                officer_phone:phone.data.number,
+                student_phone:messageDetails.sender,
+                type:'recieve',
+            });
+
+            // console.log(newSMS);
+            newSMS.save(()=>console.log('Saved'));
+            console.log(messageDetails)
+        });
+    } catch(err) {
+        console.log(err)
+    }
+})
 
 
 module.exports = {
