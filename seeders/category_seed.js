@@ -29,12 +29,16 @@ var data = [
     'model': 'Category',
     'documents': [
       {
-        'category_name': 'Category 1',
-        'officer_id:': 2001
+        'category_name': 'Allowance',
       },
       {
-        'category_name': 'Category 2',
-        'officer_id:': 2002
+        'category_name': 'Enrollment',
+      },
+      {
+        'category_name': 'Grades',
+      },
+      {
+        'category_name': 'Scholarship',
       }
     ]
   }

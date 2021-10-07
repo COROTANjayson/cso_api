@@ -15,8 +15,8 @@ const QuerySchema = new Schema(
 
     },
     category_id: {
-      type: String,
-      // type: Schema.Types.ObjectId,
+      // type: String,
+      type: Schema.Types.ObjectId,
       // ref: 'Category',
       required: true
     },
