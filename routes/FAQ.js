@@ -23,6 +23,8 @@ router.post("/add", userAuth, async (req, res) => {
 // Edit FAQ Route(api/FAQ/edit/faq_id)
 router.put("/edit/:faq_id", userAuth, async (req, res) => {
     const FAQ_id = req.params.faq_id;
+    console.log(FAQ_id);
+    console.log(req.body.data)
     await EditFAQ(req.body.data, FAQ_id, res);
     // await EditFAQ(req.body, FAQ_id, res);
 });

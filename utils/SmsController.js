@@ -1,7 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
-const Sender = require("../models/Sender");
 const dotenv = require('dotenv')
 require('../middlewares/passport')(passport);
 const { SECRET } = require("../config");
@@ -39,6 +38,25 @@ modem.initializeModem((data)=>{
 })
 })
 
+const GetAllSms = async(req, res) => {
+    try {
+        await SMS.find(function (err, sms) {
+            if (err) return next(err);
+            res.json({
+                SMS_list: sms,
+                succes: true
+            });
+
+        });
+    } catch (error) {
+        // Implement logger function (winston)
+        return res.status(500).json({
+            message: "Unable to Find SMS Messages",
+            success: false
+        });
+    }
+}
+
 
 // Create new Sender
 const SendSms = async (req,  res) => {
@@ -49,8 +67,6 @@ const SendSms = async (req,  res) => {
             const to = req.number;
             const text = req.text;
 
-            // Get Sim box
-            modem.getSimInbox((data)=>{console.log(data)})
 
             // Send Messages
             modem.sendSMS(to, text, false, (data)=>{
@@ -69,15 +85,20 @@ const SendSms = async (req,  res) => {
                             });
 
                             // console.log(newSMS);
-                            newSMS.save(()=>console.log('Saved'));
-                        });
+                            newSMS.save((data)=>{
+                                // console.log(newSMS);
+                                modem.deleteAllSimMessages()
+                                return res.status(201).json({
+                                    message: newSMS,
+                                    success: true
+                                });
+                            });
 
-                        return res.status(201).json({
-                            message: data,
-                            success: true
-                          });
+                        });
                       }catch(err){
-                        console.log(err);
+                        
+                        
+                        
                         return res.status(500).json({
                             message: "Send SMS Error",
                             success: false
@@ -100,27 +121,37 @@ const SendSms = async (req,  res) => {
 
 };
 
-modem.on('onNewMessage', messageDetails => {
-
-    try {
-        modem.getOwnNumber((phone)=>{
-            const newSMS = new SMS({
-                message:messageDetails.message,
-                officer_phone:phone.data.number,
-                student_phone:messageDetails.sender,
-                type:'recieve',
-            });
-
-            // console.log(newSMS);
-            newSMS.save(()=>console.log('Saved'));
-            console.log(messageDetails)
+const listenReply = (io) => {
+    // modem.on('onNewMessage', messageDetails => {
+    //     console.log(messageDetails);
+    // });
+    // Run when client connects
+    io.on('connection',(socket) => {
+        modem.on('onNewMessage', messageDetails => {
+            console.log(messageDetails.message);
+            
+            try {
+                modem.getOwnNumber((phone)=>{
+                    const newSMS = new SMS({
+                        message:messageDetails.message,
+                        officer_phone:phone.data.number,
+                        student_phone:messageDetails.sender,
+                        type:'recieve',
+                    });
+                    newSMS.save(()=>{
+                        SMS.find(function (err, sms) {
+                            modem.deleteAllSimMessages()
+                            socket.broadcast.emit("newdata", sms); 
+                        })
+                    });
+                });
+            } catch(err) {
+                console.log(err)
+            }
         });
-    } catch(err) {
-        console.log(err)
-    }
-})
-
-
-module.exports = {
-    SendSms
+    });
 };
+
+modem.on('onMemoryFull', result => { console.log(result) })
+
+module.exports = {SendSms, GetAllSms,listenReply }
