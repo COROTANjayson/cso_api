@@ -4,7 +4,7 @@ const express = require("express");
 const passport = require("passport");
 const { connect } = require("mongoose");
 const { success, error } = require("consola");
-
+const http = require('http');
 
 
 // Bring in the app constants
@@ -12,6 +12,14 @@ const { DB, PORT } = require("./config");
 
 // Initialize the application
 const app = express();
+
+// Socket io
+const socketio = require('socket.io');
+
+// Initialize and Connect to socket.io
+const server = http.createServer(app);
+const io = socketio(server);
+
 
 // Middlewares
 // app.use(cors());
@@ -28,7 +36,8 @@ app.use("/api/students", require("./routes/students"));
 app.use("/api/query", require("./routes/query"));
 app.use("/api/sender", require("./routes/sender"));
 app.use("/api/category", require("./routes/category"));
-app.use('/api/sms', require('./routes/sms'));
+app.use('/api/sms', require('./routes/sms')(io));
+
 
 const startApp = async () => {
   try {
@@ -45,9 +54,10 @@ const startApp = async () => {
     });
 
     // Start Listenting for the server on PORT
-    app.listen(PORT, () =>
+    server.listen(PORT, () =>
       success({ message: `Server started on PORT ${PORT}`, badge: true })
     );
+
   } catch (err) {
     error({
       message: `Unable to connect with Database \n${err}`,
