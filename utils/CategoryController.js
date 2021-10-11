@@ -69,13 +69,20 @@ const AddCategory = async (req, user_id, res) => {
                 success: false
             });
         }
-        // create a new FAQ
+        // create a new Category
         const newCategory = new Category({
             category_name
         });
 
         // newCategory.officer_id = user_id;
+        let checkCategory = await Category.findOne({ category_name });
 
+        if (checkCategory) {
+            return res.status(400).json({
+                message: `New Category is added`,
+                success: false
+            });
+        }
         await newCategory.save();
         return res.status(201).json({
             message: "Added new Category ",

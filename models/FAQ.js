@@ -6,16 +6,16 @@ const FAQSchema = new Schema(
       required: true
     },
     faq_answer: {
-        type: String,
-        required: true
-      },
-    officer_id: {
-    type: String,
-    required: true
+      type: String,
+      required: true
     },
-    officer_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
+    category_id: {
+      type: Schema.Types.ObjectId,
+      required: true
+    },
+    faq_utterances: {
+      type: Array,
+      required: true
     },
     createdAt: {
       type: Date,

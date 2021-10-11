@@ -16,7 +16,7 @@ router.get("/show/:cat_id", userAuth, async (req, res) => {
 // Add Category Route (/api/category/add)
 router.post("/add", userAuth, async (req, res) => {
     user_id = req.user
-    await AddCategory(req.body.data, user_id._id, res);
+    await AddCategory(req.body, user_id._id, res);
     // await AddCategory(req.body, user_id._id, res);
 });
 

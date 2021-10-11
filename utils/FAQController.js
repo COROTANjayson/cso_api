@@ -1,28 +1,36 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const FAQ = require("../models/FAQ");
-const dotenv = require('dotenv')
+const Category = require("../models/Category");
+mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
 require('../middlewares/passport')(passport);
-const { SECRET } = require("../config");
 
 
 //Show all FAQ
 const ShowAllFAQ = async (req, res) => {
-
     try {
-        await FAQ.find(function (err, faq) {
-            if (err) return next(err);
-            res.json({
+        
+        faq = await FAQ.aggregate([
+            {
+                "$lookup": {
+                    "from": 'categories',
+                    "localField": 'category_id',
+                    "foreignField": '_id',
+                    "as": "category"
+                }
+            },
+            { "$unwind": "$category" },
+            
+        ]);  
+        
+        return res.json({
                 FAQ_list: faq,
                 succes: true
             });
-
-        });
     } catch (error) {
         // Implement logger function (winston)
         return res.status(500).json({
-            message: "Unable to add new FAQ",
+            message: "Unable to show FAQ",
             success: false
         });
     }
@@ -32,10 +40,22 @@ const ShowAllFAQ = async (req, res) => {
 const ShowFAQ = async (req, faq_id, res) => {
 
     try {
-        let faq = await FAQ.findById(faq_id);
+        faq = await FAQ.aggregate([
+        { "$match": { "_id": ObjectId(`${faq_id}`) }} ,
+            {
+               
+                "$lookup": {
+                    "from": 'categories',
+                    "localField": 'category_id',
+                    "foreignField": '_id',
+                    "as": "category"
+                }
+            },
+            { "$unwind": "$category" },
+            
+        ]); 
 
-        // await FAQ.find(function (err, faq) {
-        if (!faq) {
+        if (!faq.length) {
             return res.status(404).json({
                 message: "FAQ not Found",
                 success: false
@@ -51,29 +71,38 @@ const ShowFAQ = async (req, faq_id, res) => {
 
 
     } catch (err) {
-        console.error(err)
-        res.render('error/404')
+        console.log(err);
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
     }
 }
 
 // Create new FAQ
 const AddFAQ = async (req, user_id, res) => {
-    const { faq_title, faq_answer } = req;
+    const { faq_title, faq_answer, faq_utterances, category_id } = req;
     try {
-        // console.log(user_id)
-        //Check required fields
-        if (!faq_title || !faq_answer) {
+        // Check required fields
+        if (!faq_title || !faq_answer || !faq_utterances) {
             return res.status(400).json({
                 message: `Please enter all fields`,
                 success: false
             });
         }
+
+        // Check Cateegory if it exist
+        let checkCategory = await Category.findById(category_id);
+        if (!checkCategory) {
+            return res.status(404).json({
+                message: "The category does not exist",
+                success: false
+            });
+        }
         // create a new FAQ
         const newFAQ = new FAQ({
-            faq_title, faq_answer
+            faq_title, faq_answer, faq_utterances, category_id
         });
-
-        newFAQ.officer_id = user_id;
 
         await newFAQ.save();
         return res.status(201).json({
@@ -81,9 +110,10 @@ const AddFAQ = async (req, user_id, res) => {
             success: true
         });
     } catch (err) {
+        console.log(err)
         // Implement logger function (winston)
         return res.status(500).json({
-            message: "Unable to add new FAQ",
+            message: "Server Error",
             success: false
         });
     }
@@ -112,7 +142,7 @@ const EditFAQ = async (req, faq_id, res) => {
 
     } catch (err) {
         return res.status(500).json({
-            message: "Cannot update FAQ",
+            message: "Server Error",
             success: false
         });
     }
@@ -140,7 +170,7 @@ const DeleteFAQ =  async (req, faq_id, res) => {
     } catch (err) {
         console.log(err)
         return res.status(500).json({
-            message: "Cannot delete FAQ",
+            message: "Server Error",
             success: false
         });
     }

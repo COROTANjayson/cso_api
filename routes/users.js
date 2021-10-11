@@ -18,7 +18,6 @@ router.post("/register-user", userAuth, async (req, res) => {
 
 // Users Login Route (api/users/login-user)
 router.post("/login-user", async (req, res) => {
-  console.log(req.body);
   await userLogin(req.body, res);
 });
 
