@@ -36,7 +36,7 @@ app.use("/api/students", require("./routes/students"));
 app.use("/api/query", require("./routes/query"));
 app.use("/api/sender", require("./routes/sender"));
 app.use("/api/category", require("./routes/category"));
-app.use('/api/sms', require('./routes/sms')(io));
+// app.use('/api/sms', require('./routes/sms')(io));
 
 
 const startApp = async () => {

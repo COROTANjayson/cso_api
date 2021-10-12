@@ -150,7 +150,6 @@ const EditFAQ = async (req, faq_id, res) => {
 
 // Delete FAQ
 const DeleteFAQ =  async (req, faq_id, res) => {
-    console.log(req)
     try {
         let faq = await FAQ.findById(faq_id);
 
