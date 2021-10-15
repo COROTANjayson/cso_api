@@ -29,18 +29,19 @@ const GetAllQueries = async (req, res) => {
                 }
             },
             { "$unwind": "$student" },
-            {
-                "$lookup": {
-                    "from": 'categories',
-                    "localField": 'category_id',
-                    "foreignField": '_id',
-                    "as": "category"
-                }
-            },
-            { "$unwind": "$category" },
+            // {
+            //     "$lookup": {
+            //         "from": 'categories',
+            //         "localField": 'category_id',
+            //         "foreignField": '_id',
+            //         "as": "category"
+            //     }
+            // },
+            // { "$unwind": "$category" },
             
         ]); 
         
+        console.log(queries);
         return res.json({
             query_list: queries,
             succes: true

@@ -5,6 +5,7 @@ const dotenv = require('dotenv')
 require('../middlewares/passport')(passport);
 const { SECRET } = require("../config");
 const SMS = require("../models/SMSMessage");
+const { nlpFunction } = require("../utils/nlp/nlp");
 
 
 // Serial port gsm
@@ -67,7 +68,7 @@ const SendSms = async (req,  res) => {
             const to = req.number;
             const text = req.text;
 
-
+            
             // Send Messages
             modem.sendSMS(to, text, false, (data)=>{
                 console.log(data);
@@ -127,23 +128,109 @@ const listenReply = (io) => {
     // });
     // Run when client connects
     io.on('connection',(socket) => {
-        modem.on('onNewMessage', messageDetails => {
-            console.log(messageDetails.message);
+        modem.on('onNewMessage', messageDetails =>{
+            console.log(messageDetails.message.includes('=>'));
+            console.log('find here =>')
             
             try {
                 modem.getOwnNumber((phone)=>{
+                   
                     const newSMS = new SMS({
                         message:messageDetails.message,
                         officer_phone:phone.data.number,
                         student_phone:messageDetails.sender,
                         type:'recieve',
                     });
-                    newSMS.save(()=>{
-                        SMS.find(function (err, sms) {
-                            modem.deleteAllSimMessages()
-                            socket.broadcast.emit("newdata", sms); 
-                        })
-                    });
+                    (async()=>{
+                        await newSMS.save();
+                        modem.deleteAllSimMessages();
+                        const newData = await SMS.find();
+                        const nlpReply = await nlpFunction(messageDetails.message);
+                        
+                        console.log(nlpReply);
+
+                        if(messageDetails.message.includes('=>')){
+                            if(nlpReply.success) {
+                                // console.log(nlpReply.answer.answer);
+                                modem.sendSMS(messageDetails.sender, nlpReply.answer.answer, false, (data)=>{
+                                    console.log(data);
+                                    if(data.request == 'SendSMS'){
+                                        try{
+                    
+                                            modem.getOwnNumber((phone)=>{
+                                                // console.log(phone.data.number);
+                    
+                                                const newSMS = new SMS({
+                                                    message:data.data.message,
+                                                    officer_phone:phone.data.number,
+                                                    student_phone:data.data.recipient,
+                                                    type:'send',
+                                                });
+                    
+                                                // console.log(newSMS);
+                                                newSMS.save((data)=>{
+                                                    // console.log(newSMS);
+                                                    modem.deleteAllSimMessages()
+                                                    socket.broadcast.emit("newdata", newData);
+                                                });
+                    
+                                            });
+                                          }catch(err){
+                                            console.log(err)
+                                          }
+                                    }
+                                    
+                                })
+                            } else {
+                                modem.sendSMS(messageDetails.sender, 'No Such keyword',  false, (data)=>{
+                                    console.log(data);
+                                    if(data.request == 'SendSMS'){
+                                        try{
+                    
+                                            modem.getOwnNumber((phone)=>{
+                                                // console.log(phone.data.number);
+                    
+                                                const newSMS = new SMS({
+                                                    message:data.data.message,
+                                                    officer_phone:phone.data.number,
+                                                    student_phone:data.data.recipient,
+                                                    type:'send',
+                                                });
+                    
+                                                // console.log(newSMS);
+                                                newSMS.save((data)=>{
+                                                    // console.log(newSMS);
+                                                    modem.deleteAllSimMessages()
+                                                    socket.broadcast.emit("newdata", newData);
+                                                });
+                    
+                                            });
+                                          }catch(err){
+                                            console.log(err)
+                                          }
+                                    }
+                                    
+                                })
+                            }
+                        } else {
+                            socket.broadcast.emit("newdata", newData);
+                        }
+
+                        
+                       
+
+
+                        
+                    })();
+                    // newSMS.save(()=>{
+                    //     SMS.find(function (err, sms) {
+                    //         console.log(sms)
+                    //         modem.deleteAllSimMessages() 
+                    //         setInterval(() => {
+                    //             socket.broadcast.emit("newdata", sms); 
+                    //         }, 1000)
+                    //     })
+                    // });
                 });
             } catch(err) {
                 console.log(err)
