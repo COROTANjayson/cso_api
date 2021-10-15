@@ -1,0 +1,258 @@
+{
+  "settings": {
+    "languages": [
+      "en"
+    ],
+    "forceNER": true,
+    "tag": "nlp",
+    "threshold": 0.5,
+    "autoLoad": true,
+    "autoSave": true,
+    "modelFileName": "model.nlp",
+    "calculateSentiment": true
+  },
+  "nluManager": {
+    "settings": {
+      "tag": "nlu-manager"
+    },
+    "locales": [
+      "en"
+    ],
+    "languageNames": {},
+    "domainManagers": {
+      "en": {
+        "settings": {
+          "locale": "en",
+          "trainByDomain": false,
+          "tag": "domain-manager-en",
+          "nluByDomain": {
+            "default": {
+              "className": "NeuralNlu",
+              "settings": {}
+            }
+          },
+          "useStemDict": true
+        },
+        "stemDict": {
+          "allow,is,next,the,when": {
+            "intent": "allowance.when",
+            "domain": "default"
+          },
+          "allow,when": {
+            "intent": "allowance.when",
+            "domain": "default"
+          },
+          "event,is,mycar,what": {
+            "intent": "events.mycare.info",
+            "domain": "default"
+          },
+          "event,mycar,what": {
+            "intent": "events.mycare.info",
+            "domain": "default"
+          }
+        },
+        "intentDict": {
+          "allowance.when": "default",
+          "events.mycare.info": "default"
+        },
+        "sentences": [
+          {
+            "domain": "default",
+            "utterance": "When is the next allowance",
+            "intent": "allowance.when"
+          },
+          {
+            "domain": "default",
+            "utterance": "Allowance when",
+            "intent": "allowance.when"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is mycare event",
+            "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "mycare event what",
+            "intent": "events.mycare.info"
+          }
+        ],
+        "domains": {
+          "master_domain": {
+            "settings": {
+              "locale": "en",
+              "tag": "nlu-en",
+              "keepStopwords": true,
+              "nonefeatureValue": 1,
+              "nonedeltaMultiplier": 1.2,
+              "spellCheck": false,
+              "spellCheckDistance": 1,
+              "filterZeros": true,
+              "log": true
+            },
+            "features": {
+              "when": 1,
+              "is": 1,
+              "the": 1,
+              "next": 1,
+              "allow": 1,
+              "what": 1,
+              "mycar": 1,
+              "event": 1
+            },
+            "intents": {
+              "allowance.when": 1,
+              "events.mycare.info": 1
+            },
+            "intentFeatures": {
+              "allowance.when": {
+                "when": 1,
+                "is": 1,
+                "the": 1,
+                "next": 1,
+                "allow": 1
+              },
+              "events.mycare.info": {
+                "what": 1,
+                "is": 1,
+                "mycar": 1,
+                "event": 1
+              }
+            },
+            "featuresToIntent": {
+              "when": [
+                "allowance.when"
+              ],
+              "is": [
+                "allowance.when",
+                "events.mycare.info"
+              ],
+              "the": [
+                "allowance.when"
+              ],
+              "next": [
+                "allowance.when"
+              ],
+              "allow": [
+                "allowance.when"
+              ],
+              "what": [
+                "events.mycare.info"
+              ],
+              "mycar": [
+                "events.mycare.info"
+              ],
+              "event": [
+                "events.mycare.info"
+              ]
+            },
+            "neuralNetwork": {
+              "settings": {
+                "locale": "en",
+                "tag": "nlu-en",
+                "keepStopwords": true,
+                "nonefeatureValue": 1,
+                "nonedeltaMultiplier": 1.2,
+                "spellCheck": false,
+                "spellCheckDistance": 1,
+                "filterZeros": true,
+                "log": true
+              },
+              "features": [
+                "when",
+                "is",
+                "the",
+                "next",
+                "allow",
+                "what",
+                "mycar",
+                "event"
+              ],
+              "intents": [
+                "allowance.when",
+                "events.mycare.info"
+              ],
+              "perceptrons": [
+                [
+                  5.857748508453369,
+                  -0.4499301612377167,
+                  0.32067376375198364,
+                  0.32067376375198364,
+                  5.857748508453369,
+                  -0.9372742772102356,
+                  -0.9372742772102356,
+                  -0.9372742772102356,
+                  2.4487428615889217
+                ],
+                [
+                  -0.832069993019104,
+                  0.29330623149871826,
+                  -0.5246382355690002,
+                  -0.5246382355690002,
+                  -0.832069993019104,
+                  4.159491062164307,
+                  4.159491062164307,
+                  4.159491062164307,
+                  1.658611911876926
+                ]
+              ]
+            }
+          }
+        }
+      }
+    },
+    "intentDomains": {},
+    "extraSentences": [
+      [
+        "en",
+        "When is the next allowance"
+      ],
+      [
+        "en",
+        "Allowance when"
+      ],
+      [
+        "en",
+        "What is mycare event"
+      ],
+      [
+        "en",
+        "mycare event what"
+      ]
+    ]
+  },
+  "ner": {
+    "settings": {
+      "tag": "ner",
+      "entityPreffix": "%",
+      "entitySuffix": "%"
+    },
+    "rules": {}
+  },
+  "nlgManager": {
+    "settings": {
+      "tag": "nlg-manager"
+    },
+    "responses": {
+      "en": {
+        "allowance.when": [
+          {
+            "answer": "November 16, 2021"
+          }
+        ],
+        "events.mycare.info": [
+          {
+            "answer": "This is an event for checking the mental health of city scholar"
+          }
+        ]
+      }
+    }
+  },
+  "actionManager": {
+    "settings": {
+      "tag": "action-manager"
+    },
+    "actions": {}
+  },
+  "slotManager": {}
+}

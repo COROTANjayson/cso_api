@@ -176,6 +176,7 @@ const getUser = async (req, id, res) => {
 
     try {
         let user = await User.findById(id).select(['-password']);
+        console.log(user);
 
         if (!user) {
             return res.status(404).json({
