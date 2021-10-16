@@ -75,6 +75,26 @@
             "domain": "default",
             "utterance": "mycare event what",
             "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "When is the next allowance",
+            "intent": "allowance.when"
+          },
+          {
+            "domain": "default",
+            "utterance": "Allowance when",
+            "intent": "allowance.when"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is mycare event",
+            "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "mycare event what",
+            "intent": "events.mycare.info"
           }
         ],
         "domains": {
@@ -174,26 +194,26 @@
               ],
               "perceptrons": [
                 [
-                  5.857748508453369,
-                  -0.4499301612377167,
-                  0.32067376375198364,
-                  0.32067376375198364,
-                  5.857748508453369,
-                  -0.9372742772102356,
-                  -0.9372742772102356,
-                  -0.9372742772102356,
-                  2.4487428615889217
+                  5.864464282989502,
+                  -0.458682656288147,
+                  0.31219571828842163,
+                  0.31219571828842163,
+                  5.864464282989502,
+                  -0.9377660155296326,
+                  -0.9377660155296326,
+                  -0.9377660155296326,
+                  2.451631199630897
                 ],
                 [
-                  -0.832069993019104,
-                  0.29330623149871826,
-                  -0.5246382355690002,
-                  -0.5246382355690002,
-                  -0.832069993019104,
-                  4.159491062164307,
-                  4.159491062164307,
-                  4.159491062164307,
-                  1.658611911876926
+                  -0.83262038230896,
+                  0.27691295742988586,
+                  -0.5251899361610413,
+                  -0.5251899361610413,
+                  -0.83262038230896,
+                  4.161988735198975,
+                  4.161988735198975,
+                  4.161988735198975,
+                  1.6595529058763892
                 ]
               ]
             }
@@ -203,6 +223,22 @@
     },
     "intentDomains": {},
     "extraSentences": [
+      [
+        "en",
+        "When is the next allowance"
+      ],
+      [
+        "en",
+        "Allowance when"
+      ],
+      [
+        "en",
+        "What is mycare event"
+      ],
+      [
+        "en",
+        "mycare event what"
+      ],
       [
         "en",
         "When is the next allowance"
