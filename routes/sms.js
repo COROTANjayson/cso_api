@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { SendSms, GetAllSms,listenReply } = require("../utils/SmsController");
+const { SendSms, GetAllSms,listenReply,GetCurrentMessage } = require("../utils/SmsController");
 
 module.exports = function(io){
     console.log('insideroute')
@@ -50,6 +50,11 @@ module.exports = function(io){
 
     router.get('/getallmessage',  /* userAuth, */ async (req,res)=> {
         await GetAllSms(req, res)
+    });
+
+    router.get('/getcurrentmessage/:phone_num', /* userAuth, */ async (req,res)=> {
+        const phone_num = req.params.phone_num;
+        await GetCurrentMessage(req, res,phone_num)
     });
 
     return router

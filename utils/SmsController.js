@@ -38,13 +38,17 @@ modem.initializeModem((data)=>{
 
 const GetAllSms = async(req, res) => {
     try {
-        await SMS.find(function (err, sms) {
-            if (err) return next(err);
-            res.json({
-                SMS_list: sms,
-                succes: true
-            });
 
+        const sms = await SMS.find().sort({_id: -1});
+        const studentNumList = findStudentNumList(sms);
+        const previewMessage = recentPreviewMessage(studentNumList);
+        // const smsONe = await SMS.findOne({student_phone:'639953856593'}).sort({_id: -1});
+        console.log(prreviewMessage);
+    
+        res.json({
+            SMS_list: sms,
+            studentNumList: studentNumList,
+            succes: true
         });
     } catch (error) {
         // Implement logger function (winston)
@@ -53,6 +57,49 @@ const GetAllSms = async(req, res) => {
             success: false
         });
     }
+}
+
+const GetCurrentMessage = async(req, res,phone_num) => {
+    try {
+        const sms = await SMS.find();
+        const currentMessageList = currentMessageStudentList(sms,phone_num);
+        res.json({
+            currentMessageList:currentMessageList,
+            succes: true
+        });
+    } catch (error) {
+        // Implement logger function (winston)
+        return res.status(500).json({
+            message: "Unable to Find Current SMS Messages",
+            success: false
+        });
+    }
+}
+
+function findStudentNumList(sms){
+    numList = [];
+    sms.forEach(element=>{
+        const found = this.numList.find(e => e == element.student_phone);
+        if(!found) {
+            numList.push(element.student_phone)
+        }
+    })
+
+
+    return numList;
+
+}
+
+function currentMessageStudentList(sms,student_num){
+    messageList = [];
+
+    sms.forEach(element=>{
+        if(element.student_phone == student_num){
+            messageList.push(element);
+        }
+    })
+
+    return messageList;
 }
 
 // Create new Sender
@@ -109,6 +156,7 @@ const SendSms = async (req,  res) => {
         console.log(err);
     }
 };
+
 
 const listenReply = (io) => {
   
@@ -177,17 +225,13 @@ const listenReply = (io) => {
                                         console.log(err)
                                         }
                                 }
-                                
                             })
                         } else {
                             modem.sendSMS(messageDetails.sender, 'No Possible Answer Found',  false, (data)=>{
                              
                                 if(data.request == 'SendSMS'){
                                     try{
-                
                                         modem.getOwnNumber((phone)=>{
-                                            // console.log(phone.data.number);
-                
                                             const newSMS = new SMS({
                                                 message:data.data.message,
                                                 officer_phone:phone.data.number,
@@ -197,7 +241,6 @@ const listenReply = (io) => {
                                                 student_id:null
                                             });
                 
-                                            // console.log(newSMS);
                                             newSMS.save((data)=>{
                                                 
                                                 const newQuery = new Query({
@@ -236,4 +279,4 @@ const listenReply = (io) => {
 
 modem.on('onMemoryFull', result => { console.log(result) })
 
-module.exports = {SendSms, GetAllSms,listenReply }
+module.exports = {SendSms, GetAllSms,listenReply,GetCurrentMessage }
