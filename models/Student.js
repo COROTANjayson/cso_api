@@ -18,6 +18,10 @@ const StudentSchema = new Schema(
             type: String,
             required: true
         },
+        middle_name: {
+            type:String,
+            required: true
+        },
         phone_number: {
             type: Number,
             required: true
@@ -34,9 +38,13 @@ const StudentSchema = new Schema(
             type: String,
             required: true
         },
-        createdAt: {
-            type: Date,
-            default: Date.now,
+        course: {
+            type: String,
+            required: true
+        },
+        year: {
+            type: String,
+            required: true
         }
     }
 );

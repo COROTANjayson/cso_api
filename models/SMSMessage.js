@@ -31,6 +31,9 @@ const SMSMessageSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Student',
     },
+    chatBotReplyID: {
+      type: Schema.Types.ObjectId,
+    },
   }
 );
 

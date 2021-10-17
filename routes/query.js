@@ -6,7 +6,8 @@ const {
     GetAllQueries,
     ShowQuery,
     EditQuery,
-    DeleteQuery
+    DeleteQuery,
+    ShowQueriesByCategory
     // SearchStudent
 } = require("../utils/QueryController");
 
@@ -45,6 +46,12 @@ router.delete("/delete/:sender_id/:session_id/:category_id", userAuth, async (re
     const session_id = req.params.session_id
     const category_id = req.params.category_id
     await DeleteQuery(send_id, session_id, category_id, req.body,res);
+});
+
+//Show FAQ ByCategory (api/FAQ/showbycategory/:cat_id)
+router.get("/showbycategory/:cat_id", userAuth, async (req, res) => {
+    const cat_id = req.params.cat_id;
+    await ShowQueriesByCategory(req.body, cat_id, res);
 });
 
 //search query (api/query/search/:id) query_id or name
