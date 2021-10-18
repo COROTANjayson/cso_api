@@ -3,6 +3,8 @@ const passport = require("passport");
 const Query = require("../models/Query");
 const Sender = require("../models/Sender");
 require('../middlewares/passport')(passport);
+mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
 const { SECRET } = require("../config");
 
 
@@ -199,6 +201,28 @@ const DeleteQuery = async (sender_id, session_id, category_id, req, res) => {
     }
 }
 
+
+const ShowQueriesByCategory = async (req, id, res) => {
+
+    try {
+        const query = await Query.find({category_id:ObjectId(id)});
+        console.log(id);
+        console.log(query);
+        return res.status(201).json({
+            query_list: query,
+            success: true
+        });
+
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
+    }
+}
+
+
 //Show Student
 
 module.exports = {
@@ -207,4 +231,5 @@ module.exports = {
     ShowQuery,
     EditQuery,
     DeleteQuery,
+    ShowQueriesByCategory
 };

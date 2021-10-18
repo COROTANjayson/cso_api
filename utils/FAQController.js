@@ -175,10 +175,31 @@ const DeleteFAQ =  async (req, faq_id, res) => {
     }
 }
 
+const ShowFAQByCategory = async (req, id, res) => {
+
+    try {
+        const faq = await FAQ.find({category_id:ObjectId(id)});
+        console.log(id);
+        console.log(faq);
+        return res.status(201).json({
+            faq_list: faq,
+            success: true
+        });
+
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
+    }
+}
+
 module.exports = {
     AddFAQ,
     ShowAllFAQ,
     ShowFAQ,
     EditFAQ,
-    DeleteFAQ
+    DeleteFAQ,
+    ShowFAQByCategory
 };

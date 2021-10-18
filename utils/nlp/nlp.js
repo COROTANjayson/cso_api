@@ -1,5 +1,6 @@
 const { NlpManager } = require('node-nlp');
 const FAQ = require("../../models/FAQ");
+const Category = require("../../models/Category");
 
 const manager = new NlpManager({ languages: ['en'], forceNER: true });
 
@@ -26,16 +27,19 @@ const nlpFunction = async (text) =>{
         data = {
             answer: response,
             success: true,
-            categoryId: null
+            categoryId: null,
+            faqID: null
         }
 
         if(findID){
             data.categoryId = findID.category_id
+            data.faqID = findID._id
         }
         
         if(response.answers.length < 1){
+            const findOthersID = await Category.findOne({category_name:'others'})
             data.success = false
-            data.categoryId = null
+            data.categoryId = findOthersID._id
             return data;
         }
 

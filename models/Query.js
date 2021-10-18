@@ -4,21 +4,17 @@ const QuerySchema = new Schema(
     sender_id: {
       // type: String,
       type: Schema.Types.ObjectId,
-      ref: 'Sender',
-      required: true
-    },
-    session_id: {
-      type: String,
-      // type: Schema.Types.ObjectId,
-      // ref: 'Session',
-      required: true
-
+      // ref: 'Student',
     },
     category_id: {
       // type: String,
       type: Schema.Types.ObjectId,
       // ref: 'Category',
       required: true
+    },
+    faq_id: {
+      // type: String,
+      type: Schema.Types.ObjectId,
     },
     query_name: {
       type: String,

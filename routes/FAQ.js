@@ -33,4 +33,5 @@ router.delete("/delete/:faq_id", userAuth, async (req, res) => {
     await DeleteFAQ(req.body, FAQ_id, res);
 });
 
+
 module.exports = router;
