@@ -7,7 +7,7 @@ module.exports = function(io){
 
     // Add Sender Route (/api/sender/add)
     router.post("/send", /* userAuth, */ async (req, res) => {
-        await SendSms(req.body.data, res);
+        await SendSms(req.body.data, res,io);
         // try {
         //     modem.initializeModem((data)=>{
         //         console.log('Modem is Initialized');

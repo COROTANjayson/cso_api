@@ -95,6 +95,146 @@
             "domain": "default",
             "utterance": "mycare event what",
             "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "When is the next allowance",
+            "intent": "allowance.when"
+          },
+          {
+            "domain": "default",
+            "utterance": "Allowance when",
+            "intent": "allowance.when"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is mycare event",
+            "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "mycare event what",
+            "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "When is the next allowance",
+            "intent": "allowance.when"
+          },
+          {
+            "domain": "default",
+            "utterance": "Allowance when",
+            "intent": "allowance.when"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is mycare event",
+            "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "mycare event what",
+            "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "When is the next allowance",
+            "intent": "allowance.when"
+          },
+          {
+            "domain": "default",
+            "utterance": "Allowance when",
+            "intent": "allowance.when"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is mycare event",
+            "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "mycare event what",
+            "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "When is the next allowance",
+            "intent": "allowance.when"
+          },
+          {
+            "domain": "default",
+            "utterance": "Allowance when",
+            "intent": "allowance.when"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is mycare event",
+            "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "mycare event what",
+            "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "When is the next allowance",
+            "intent": "allowance.when"
+          },
+          {
+            "domain": "default",
+            "utterance": "Allowance when",
+            "intent": "allowance.when"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is mycare event",
+            "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "mycare event what",
+            "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "When is the next allowance",
+            "intent": "allowance.when"
+          },
+          {
+            "domain": "default",
+            "utterance": "Allowance when",
+            "intent": "allowance.when"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is mycare event",
+            "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "mycare event what",
+            "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "When is the next allowance",
+            "intent": "allowance.when"
+          },
+          {
+            "domain": "default",
+            "utterance": "Allowance when",
+            "intent": "allowance.when"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is mycare event",
+            "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "mycare event what",
+            "intent": "events.mycare.info"
           }
         ],
         "domains": {
@@ -194,26 +334,26 @@
               ],
               "perceptrons": [
                 [
-                  5.864464282989502,
-                  -0.458682656288147,
-                  0.31219571828842163,
-                  0.31219571828842163,
-                  5.864464282989502,
-                  -0.9377660155296326,
-                  -0.9377660155296326,
-                  -0.9377660155296326,
-                  2.451631199630897
+                  5.891958713531494,
+                  -0.4940494894981384,
+                  0.2770366370677948,
+                  0.2770366370677948,
+                  5.891958713531494,
+                  -0.9381116628646851,
+                  -0.9381116628646851,
+                  -0.9381116628646851,
+                  2.4637097243601107
                 ],
                 [
-                  -0.83262038230896,
-                  0.27691295742988586,
-                  -0.5251899361610413,
-                  -0.5251899361610413,
-                  -0.83262038230896,
-                  4.161988735198975,
-                  4.161988735198975,
-                  4.161988735198975,
-                  1.6595529058763892
+                  -0.8329961895942688,
+                  0.1838110387325287,
+                  -0.5255534052848816,
+                  -0.5255534052848816,
+                  -0.8329961895942688,
+                  4.175754070281982,
+                  4.175754070281982,
+                  4.175754070281982,
+                  1.6654620840273762
                 ]
               ]
             }
@@ -223,6 +363,118 @@
     },
     "intentDomains": {},
     "extraSentences": [
+      [
+        "en",
+        "When is the next allowance"
+      ],
+      [
+        "en",
+        "Allowance when"
+      ],
+      [
+        "en",
+        "What is mycare event"
+      ],
+      [
+        "en",
+        "mycare event what"
+      ],
+      [
+        "en",
+        "When is the next allowance"
+      ],
+      [
+        "en",
+        "Allowance when"
+      ],
+      [
+        "en",
+        "What is mycare event"
+      ],
+      [
+        "en",
+        "mycare event what"
+      ],
+      [
+        "en",
+        "When is the next allowance"
+      ],
+      [
+        "en",
+        "Allowance when"
+      ],
+      [
+        "en",
+        "What is mycare event"
+      ],
+      [
+        "en",
+        "mycare event what"
+      ],
+      [
+        "en",
+        "When is the next allowance"
+      ],
+      [
+        "en",
+        "Allowance when"
+      ],
+      [
+        "en",
+        "What is mycare event"
+      ],
+      [
+        "en",
+        "mycare event what"
+      ],
+      [
+        "en",
+        "When is the next allowance"
+      ],
+      [
+        "en",
+        "Allowance when"
+      ],
+      [
+        "en",
+        "What is mycare event"
+      ],
+      [
+        "en",
+        "mycare event what"
+      ],
+      [
+        "en",
+        "When is the next allowance"
+      ],
+      [
+        "en",
+        "Allowance when"
+      ],
+      [
+        "en",
+        "What is mycare event"
+      ],
+      [
+        "en",
+        "mycare event what"
+      ],
+      [
+        "en",
+        "When is the next allowance"
+      ],
+      [
+        "en",
+        "Allowance when"
+      ],
+      [
+        "en",
+        "What is mycare event"
+      ],
+      [
+        "en",
+        "mycare event what"
+      ],
       [
         "en",
         "When is the next allowance"
