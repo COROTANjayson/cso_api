@@ -21,7 +21,12 @@ const GetAllQueries = async (req, res) => {
                     "as": "sender"
                 },
             },
-            { "$unwind": "$sender" },
+            {
+                "$unwind": {
+                    "path": "$sender",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
             {
                 "$lookup": {
                     "from": 'students',
@@ -30,26 +35,31 @@ const GetAllQueries = async (req, res) => {
                     "as": "student"
                 }
             },
-            { "$unwind": "$student" },
-            // {
-            //     "$lookup": {
-            //         "from": 'categories',
-            //         "localField": 'category_id',
-            //         "foreignField": '_id',
-            //         "as": "category"
-            //     }
-            // },
-            // { "$unwind": "$category" },
-            
-        ]); 
-        
+            {
+                "$unwind": {
+                    "path": "$student",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
+            {
+                "$lookup": {
+                    "from": 'categories',
+                    "localField": 'category_id',
+                    "foreignField": '_id',
+                    "as": "category"
+                }
+            },
+            { "$unwind": "$category" },
+
+        ]);
+
         console.log(queries);
         return res.json({
             query_list: queries,
             succes: true
         });
 
-        
+
     } catch (error) {
         console.log(error);
         return res.status(500).json({
@@ -60,16 +70,90 @@ const GetAllQueries = async (req, res) => {
 }
 
 //Show Query
-const ShowQuery = async (sender_id, session_id, category_id, req, res) => {
-
+const ShowQuery = async (sender_id, faq_id, category_id, req, res) => {
+    
+    console.log(sender_id)
     try {
-        let query = await Query.find({
-            $and: [
-                { sender_id: sender_id },
-                { session_id: session_id },
-                { category_id: category_id }
-            ]
+        var match;
+        var sender = sender_id
+        if(sender === "null") {
+            console.log("Hello")
+            match = {
+                "$match": {
+                    "$and": [
+                        { 'category_id': { $eq: ObjectId(category_id) } },
+                        { 'faq_id': { $eq: ObjectId(faq_id) } }
+                    ]
+                }
+            }
+        }else{
+            console.log("Hi")
+            match = {
+                "$match": {
+                    "$and": [
+                        { "sender_id": { $eq: ObjectId(sender_id) } },
+                        { 'category_id': { $eq: ObjectId(category_id) } },
+                        { 'faq_id': { $eq: ObjectId(faq_id) } }
+                    ]
+                }
+            }
+        }
+
+        const query = await Query.aggregate([
+            // {
+            //     "$match": {
+            //         "$and": [
+            //             { "sender_id": { $eq: ObjectId(sender_id) } },
+            //             { 'faq_id': { $eq: ObjectId(faq_id) } },
+            //             { 'category_id': { $eq: ObjectId(category_id) } }
+                        
+            //         ]
+            //     }
+            // },
+            match, 
+            {
+                "$lookup": {
+                    "from": 'senders',
+                    "localField": 'sender_id',
+                    "foreignField": '_id',
+                    "as": "sender"
+                },
+            },
+            {
+                "$unwind": {
+                    "path": "$sender",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
+            {
+                "$lookup": {
+                    "from": 'students',
+                    "localField": 'sender.student_id',
+                    "foreignField": 'student_id',
+                    "as": "student"
+                }
+            },
+            {
+                "$unwind": {
+                    "path": "$student",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
+            {
+                "$lookup": {
+                    "from": 'categories',
+                    "localField": 'category_id',
+                    "foreignField": '_id',
+                    "as": "category"
+                }
+            },
+            { "$unwind": "$category" },
+
+
+        ], function(err, user){
+            console.log(user);
         });
+
 
         if (!query.length) {
             return res.status(404).json({
@@ -84,28 +168,36 @@ const ShowQuery = async (sender_id, session_id, category_id, req, res) => {
         }
 
     } catch (err) {
-        console.error(err)
-        res.render('error/404')
+        console.log(err);
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
     }
 }
 
 // Create new Student
-const NewQuery = async (sender_id, session_id, category_id, req, res) => {
+const NewQuery = async (sender_id, faq_id, category_id, req, res) => {
     const { query_name, possible_answer, status } = req;
-
+    // var sender = 123;
     try {
-        console.log(req)
-        if (!sender_id || !session_id || !category_id || !query_name || !possible_answer || !status) {
+        // console.log(req)
+        if (!category_id || !faq_id || !query_name || !possible_answer || !status) {
             return res.status(400).json({
                 message: `Please enter all fields`,
                 success: false
             });
         }
+        // const newQuery = new Query();
+        // if (!mongoose.Types.ObjectId.isValid(sender)) {
+        //     console.log("Hello", sender)
+        //     sender = null;
+        // } 
         // create a new FAQ
         const newQuery = new Query({
             sender_id,
-            session_id,
             category_id,
+            faq_id,
             query_name,
             possible_answer,
             status
@@ -116,6 +208,8 @@ const NewQuery = async (sender_id, session_id, category_id, req, res) => {
             message: "New Query ",
             success: true
         });
+
+
     } catch (err) {
         console.log(err)
         return res.status(500).json({
@@ -126,12 +220,12 @@ const NewQuery = async (sender_id, session_id, category_id, req, res) => {
 };
 
 // Edit Query
-const EditQuery = async (sender_id, session_id, category_id, req, res) => {
+const EditQuery = async (sender_id, faq_id, category_id, req, res) => {
     try {
         let query = await Query.find({
             $and: [
                 { sender_id: sender_id },
-                { session_id: session_id },
+                { faq_id: faq_id },
                 { category_id: category_id }
             ]
         });
@@ -144,7 +238,7 @@ const EditQuery = async (sender_id, session_id, category_id, req, res) => {
         }
         await Query.findOneAndUpdate({
             sender_id: sender_id,
-            session_id: session_id,
+            faq_id: faq_id,
             category_id: category_id
         }, req, {
             new: true,
@@ -166,12 +260,12 @@ const EditQuery = async (sender_id, session_id, category_id, req, res) => {
 }
 
 // // Delete Query
-const DeleteQuery = async (sender_id, session_id, category_id, req, res) => {
+const DeleteQuery = async (sender_id, faq_id, category_id, req, res) => {
     try {
         let query = await Query.find({
             $and: [
                 { sender_id: sender_id },
-                { session_id: session_id },
+                { faq_id: faq_id },
                 { category_id: category_id }
             ]
         });
@@ -184,7 +278,7 @@ const DeleteQuery = async (sender_id, session_id, category_id, req, res) => {
         }
         await Query.remove({
             sender_id: sender_id,
-            session_id: session_id,
+            faq_id: faq_id,
             category_id: category_id
         });
 
@@ -205,7 +299,7 @@ const DeleteQuery = async (sender_id, session_id, category_id, req, res) => {
 const ShowQueriesByCategory = async (req, id, res) => {
 
     try {
-        const query = await Query.find({category_id:ObjectId(id)});
+        const query = await Query.find({ category_id: ObjectId(id) });
         console.log(id);
         console.log(query);
         return res.status(201).json({

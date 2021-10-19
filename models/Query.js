@@ -5,6 +5,7 @@ const QuerySchema = new Schema(
       // type: String,
       type: Schema.Types.ObjectId,
       // ref: 'Student',
+      // default: null
     },
     category_id: {
       // type: String,
