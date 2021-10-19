@@ -12,38 +12,38 @@ const { SECRET } = require("../config");
 const GetAllQueries = async (req, res) => {
 
     try {
-        queries = await Query.aggregate([
-            {
-                "$lookup": {
-                    "from": 'senders',
-                    "localField": 'sender_id',
-                    "foreignField": '_id',
-                    "as": "sender"
-                },
-            },
-            { "$unwind": "$sender" },
-            {
-                "$lookup": {
-                    "from": 'students',
-                    "localField": 'sender.student_id',
-                    "foreignField": 'student_id',
-                    "as": "student"
-                }
-            },
-            { "$unwind": "$student" },
-            // {
-            //     "$lookup": {
-            //         "from": 'categories',
-            //         "localField": 'category_id',
-            //         "foreignField": '_id',
-            //         "as": "category"
-            //     }
-            // },
-            // { "$unwind": "$category" },
+        // queries = await Query.aggregate([
+        //     {
+        //         "$lookup": {
+        //             "from": 'senders',
+        //             "localField": 'sender_id',
+        //             "foreignField": '_id',
+        //             "as": "sender"
+        //         },
+        //     },
+        //     { "$unwind": "$sender" },
+        //     {
+        //         "$lookup": {
+        //             "from": 'students',
+        //             "localField": 'sender.student_id',
+        //             "foreignField": 'student_id',
+        //             "as": "student"
+        //         }
+        //     },
+        //     { "$unwind": "$student" },
+        //     // {
+        //     //     "$lookup": {
+        //     //         "from": 'categories',
+        //     //         "localField": 'category_id',
+        //     //         "foreignField": '_id',
+        //     //         "as": "category"
+        //     //     }
+        //     // },
+        //     // { "$unwind": "$category" },
             
-        ]); 
+        // ]); 
         
-        console.log(queries);
+        const queries = await Query.find();
         return res.json({
             query_list: queries,
             succes: true

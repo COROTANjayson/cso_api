@@ -28,6 +28,10 @@ const QuerySchema = new Schema(
       type: String,
       required: true
     },
+    phone_num: {
+      type: String,
+      required: true
+    },
     createdAt: {
       type: Date,
       default: Date.now,
