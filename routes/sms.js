@@ -1,9 +1,10 @@
 const router = require("express").Router();
-const { SendSms, GetAllSms,listenReply,GetCurrentMessage,GetUnreadCurrentMessage } = require("../utils/SmsController");
+const { SendSms, GetAllSms,listenReply,GetCurrentMessage,GetUnreadCurrentMessage,ReadMessage,OpenAndInitializeGSMModule } = require("../utils/SmsController");
 
 module.exports = function(io){
     console.log('insideroute')
     listenReply(io);
+    OpenAndInitializeGSMModule(io);
 
     // Add Sender Route (/api/sender/add)
     router.post("/send", /* userAuth, */ async (req, res) => {
@@ -59,6 +60,11 @@ module.exports = function(io){
 
     router.get('/getunreadcurrentmessage', /* userAuth, */ async (req,res)=> {
         await GetUnreadCurrentMessage(req, res)
+    });
+
+    router.get('/changesmsstatus/:phone_num', /* userAuth, */ async (req,res)=> {
+        const phone_num = req.params.phone_num;
+        await ReadMessage(req, res,phone_num)
     });
 
     return router

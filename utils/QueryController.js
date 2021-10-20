@@ -53,7 +53,6 @@ const GetAllQueries = async (req, res) => {
 
         ]);
 
-        console.log(queries);
         return res.json({
             query_list: queries,
             succes: true
@@ -72,12 +71,11 @@ const GetAllQueries = async (req, res) => {
 //Show Query
 const ShowQuery = async (sender_id, faq_id, category_id, req, res) => {
     
-    console.log(sender_id)
     try {
         var match;
         var sender = sender_id
         if(sender === "null") {
-            console.log("Hello")
+          
             match = {
                 "$match": {
                     "$and": [
@@ -87,7 +85,7 @@ const ShowQuery = async (sender_id, faq_id, category_id, req, res) => {
                 }
             }
         }else{
-            console.log("Hi")
+        
             match = {
                 "$match": {
                     "$and": [
