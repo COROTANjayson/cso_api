@@ -1,11 +1,11 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+
 const passport = require("passport");
 const Category = require("../models/Category");
-const dotenv = require('dotenv')
+const FAQ = require("../models/FAQ");
+const Query = require("../models/Query");
 require('../middlewares/passport')(passport);
 const { SECRET } = require("../config");
-
+const ObjectId = mongoose.Types.ObjectId;
 
 //Show all Category
 const ShowAllCategory = async (req, res) => {
@@ -100,6 +100,7 @@ const AddCategory = async (req, user_id, res) => {
 // Edit Category
 const EditCategory = async (req, cat_id, res) => {
     try {
+        console.log(req)
         let category = await Category.findById(cat_id);
 
         if (!category) {
@@ -108,7 +109,7 @@ const EditCategory = async (req, cat_id, res) => {
                 success: false
             });
         }
-        faq = await Category.findOneAndUpdate({ _id: cat_id }, req, {
+        await Category.findOneAndUpdate({ _id: cat_id }, req, {
             new: true,
             runValidators: true,
         });
@@ -127,18 +128,40 @@ const EditCategory = async (req, cat_id, res) => {
 }
 
 // Delete Category
-const DeleteCategory =  async (req, cat_id, res) => {
-    console.log(req)
+const DeleteCategory = async (req, cat_id, res) => {
     try {
-        let cate = await Category.findById(cat_id);
-
-        if (!cate) {
+        let category = await Category.findById(cat_id);
+        if (!category) {
             return res.status(404).json({
                 message: "Category not Found",
                 success: false
             });
         }
-        cate = await Category.remove({ _id: cat_id });
+        // Check if the category is Others
+        if (category.category_name === "Others") {
+            return res.status(404).json({
+                message: "Unable to delete Others Category",
+                success: false
+            });
+        }
+        // Find others category, if null then create one
+        let others = await Category.findOne({category_name:"Others"});
+        if(!others){
+            const createOthers= new Category();
+            createOthers.category_name = "Others";
+            await createOthers.save();
+        }
+        //Delete category
+        await Category.deleteOne({ _id: cat_id }, async function (err, data) {
+            const category = data[0];
+            //Delete FAQ with same category
+            await FAQ.deleteMany({ category_id: ObjectId(cat_id) })
+            //Update query with others and set faq_id to null
+            await Query.updateMany(
+                { category_id: ObjectId(cat_id)},
+                { $set: { category_id: ObjectId(others._id), faq_id: null}})
+
+        });
 
         return res.status(201).json({
             message: "Deleted Successfully",
