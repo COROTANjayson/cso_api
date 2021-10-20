@@ -17,36 +17,26 @@ router.get("/show", userAuth, async (req, res) => {
 });
 
 // //Show query (api/query/show/:id) -> OBJECT ID
-router.get("/show/:sender_id/:faq_id/:category_id", userAuth, async (req, res) => {
-    const send_id = req.params.sender_id
-    const faq_id = req.params.faq_id
-    const category_id = req.params.category_id
-    await ShowQuery(send_id, faq_id, category_id, req.body, res);
+router.get("/show/:id", userAuth, async (req, res) => {
+    const query_id = req.params.id
+    await ShowQuery(query_id ,req.body, res);
 });
 
 // Add new query Route (/api/query/add)
 // :sender_id/:faq_id/:category_id
-router.post("/add/:sender_id/:faq_id/:category_id", userAuth, async (req, res) => {
-    const send_id = req.params.sender_id
-    const faq_id = req.params.faq_id
-    const category_id = req.params.category_id
-    await NewQuery(send_id, faq_id, category_id, req.body, res);
+router.post("/add", userAuth, async (req, res) => {
+    await NewQuery(req.body, res);
 });
 
 // // // Edit query Route(api/query/edit/id) -> OBJECT ID
-router.put("/edit/:sender_id/:faq_id/:category_id", userAuth, async (req, res) => {
-    const send_id = req.params.sender_id
-    const faq_id = req.params.faq_id
-    const category_id = req.params.category_id
-    await EditQuery(send_id, faq_id, category_id, req.body, res);
+router.put("/edit/:id", userAuth, async (req, res) => {
+    const query_id = req.params.id
+    await EditQuery(query_id, req.body, res);
 });
 
 // // Delete query Route(api/query/edit/id)
-router.delete("/delete/:sender_id/:faq_id/:category_id", userAuth, async (req, res) => {
-    const send_id = req.params.sender_id
-    const faq_id = req.params.faq_id
-    const category_id = req.params.category_id
-    await DeleteQuery(send_id, faq_id, category_id, req.body,res);
+router.delete("/delete/", userAuth, async (req, res) => {
+    await DeleteQuery(req.body,res);
 });
 
 //Show FAQ ByCategory (api/FAQ/showbycategory/:cat_id)

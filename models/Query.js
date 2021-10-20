@@ -2,10 +2,8 @@ const { Schema, model } = require("mongoose");
 const QuerySchema = new Schema(
   {
     sender_id: {
-      // type: String,
-      type: Schema.Types.ObjectId,
-      // ref: 'Student',
-      // default: null
+      type: String,
+      default: null
     },
     category_id: {
       // type: String,
@@ -16,6 +14,7 @@ const QuerySchema = new Schema(
     faq_id: {
       // type: String,
       type: Schema.Types.ObjectId,
+      default: null
     },
     query_name: {
       type: String,
