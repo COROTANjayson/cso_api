@@ -67,7 +67,6 @@ const GetAllQueries = async (req, res) => {
 
         ]);
 
-        console.log(queries);
         return res.json({
             query_list: queries,
             succes: true

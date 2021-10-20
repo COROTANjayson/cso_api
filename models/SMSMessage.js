@@ -34,6 +34,10 @@ const SMSMessageSchema = new Schema(
     chatBotReplyID: {
       type: Schema.Types.ObjectId,
     },
+    is_read: {
+      type: Boolean,
+      required:true
+    }
   }
 );
 

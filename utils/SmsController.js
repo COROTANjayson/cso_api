@@ -11,49 +11,55 @@ const Student = require('../models/Student');
 const serialportgsm = require('serialport-gsm')
 const modem = serialportgsm.Modem()
 
-// Opening GSM module
-const options = {
-    baudRate: 9600,
-    dataBits: 8,
-    stopBits: 1,
-    parity: 'none',
-    rtscts: false,
-    xon: false,
-    xoff: false,
-    xany: false,
-    autoDeleteOnReceive: false,
-    enableConcatenation: true,
-    incomingCallIndication: true,
-    incomingSMSIndication: true,
-    pin: '',
-    customInitCommand: '',
-    logger: console
-}
-  
-modem.open('COM4', options, (data)=>{console.log(data)});
-modem.on('open', data => {	
-    console.log('Modem is open');
-    modem.initializeModem((data)=>{
-        console.log('Modem is Initialized');
+const OpenAndInitializeGSMModule = (io) => {
+    // Opening GSM module
+    const options = {
+        baudRate: 9600,
+        dataBits: 8,
+        stopBits: 1,
+        parity: 'none',
+        rtscts: false,
+        xon: false,
+        xoff: false,
+        xany: false,
+        autoDeleteOnReceive: false,
+        enableConcatenation: true,
+        incomingCallIndication: true,
+        incomingSMSIndication: true,
+        pin: '',
+        customInitCommand: '',
+        logger: console
+    }
+    
+    modem.open('COM4', options, (data)=>{
+        console.log(data);
+    });
+    modem.on('open', data => {	
+        console.log('Modem is open');
+        modem.initializeModem((data)=>{
+            console.log('Modem is Initialized');
+        })
     })
-})
+}
 
 const GetAllSms = async(req, res) => {
     try {
 
-        const sms = await SMS.find().sort({_id: -1});
+        const sms = await SMS.find({'student_phone':{$nin:["AutoLoadMAX","TM",'8080']}}).sort({_id: -1});
+
+        console.log(sms)
+        console.log('here')
         const studentNumList = findStudentNumList(sms);
-        // const previewMessage = recentPreviewMessage(studentNumList);
-        // const smsONe = await SMS.findOne({student_phone:'639953856593'}).sort({_id: -1});
-        // console.log(prreviewMessage);
-    
+        const previewMessage = findPreviewMessages(sms);
+        
         res.json({
             SMS_list: sms,
             studentNumList: studentNumList,
+            previewMessage: previewMessage,
             succes: true
         });
     } catch (error) {
-        // Implement logger function (winston)
+        console.log(error)
         return res.status(500).json({
             message: "Unable to Find SMS Messages",
             success: false
@@ -81,7 +87,8 @@ const GetCurrentMessage = async(req, res,phone_num) => {
 const GetUnreadCurrentMessage = async(req,res) => {
     try {
 
-        const sms = await SMS.find({type:'recieve'}).limit(10).sort({$natural:-1})
+        const sms = await SMS.find({'type':'recieve','student_phone':{$nin:["AutoLoadMAX","TM",'8080']}}).limit(10).sort({$natural:-1})
+       
     
         res.json({
             SMS_list: sms,
@@ -104,10 +111,27 @@ function findStudentNumList(sms){
             numList.push(element.student_phone)
         }
     })
-
-
     return numList;
+}
 
+function findPreviewMessages(sms){
+    numList = findStudentNumList (sms);
+    prevMessageList = []
+
+    // element => element.student_phone === e && element.type === 'recieve'
+    numList.forEach(e=>{
+        let index = sms.findIndex(
+            element => element.student_phone === e
+        );
+
+        if(sms[index] == undefined){
+            prevMessageList.push('')
+        }else{
+            prevMessageList.push(sms[index])
+        }
+    })
+
+    return prevMessageList;
 }
 
 function currentMessageStudentList(sms,student_num){
@@ -148,7 +172,8 @@ const SendSms = async (req,  res, io) => {
                                 type:'send',
                                 isChatbot:false,
                                 student_id:null,
-                                chatBotReplyID:null
+                                chatBotReplyID:null,
+                                is_read:true
                             });
 
                             // console.log(newSMS);
@@ -202,6 +227,7 @@ const listenReply = (io) => {
                     isChatbot:false,
                     student_id:null,
                     chatBotReplyID:null,
+                    is_read:false
                 });
                 (async()=>{
                     
@@ -259,6 +285,7 @@ const listenReply = (io) => {
                                                 isChatbot:true,
                                                 student_id:null,
                                                 chatBotReplyID:newSMSStduent._id,
+                                                is_read:true
                                             });
                 
                                             // console.log(newSMS);
@@ -304,6 +331,7 @@ const listenReply = (io) => {
                                             isChatbot:true,
                                             student_id:null,
                                             chatBotReplyID:newSMSStduent._id,
+                                            is_read:true
                                         });
             
                                         newSMS.save((data1)=>{
@@ -677,27 +705,36 @@ const listenReply = (io) => {
     // }
 };
 
+
+const ReadMessage = async(req,res,number) => {
+    try{
+        await SMS.updateMany({student_phone:number},{$set:{"is_read":true}})
+        return res.status(200).json({
+            message: "Read All current message",
+            success: false
+        });
+    }catch(err){
+        console.log(err)
+    }
+};
+
 const findStudent = async(phone_num) => {
     try{
         const student = await Student.find({phone_number:phone_num})
-        console.log('here');
-        console.log(student)
-        console.log(student.length);
         message = {data:'123',success:false};
         if(student.length < 1){
             message.data = null;
             message.success = false
             return message
         }
-
         message.data = student[0];
         message.success = true;
-
-        console.log(message);
         return message
     }catch(err){console.log(err)}
 }
 
+
+
 modem.on('onMemoryFull', result => { console.log(result) })
 
-module.exports = {SendSms, GetAllSms,listenReply,GetCurrentMessage,GetUnreadCurrentMessage }
+module.exports = {SendSms, GetAllSms,listenReply,GetCurrentMessage,GetUnreadCurrentMessage,ReadMessage,OpenAndInitializeGSMModule }
