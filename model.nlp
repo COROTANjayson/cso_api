@@ -34,47 +34,37 @@
           "useStemDict": true
         },
         "stemDict": {
-          "allow,is,next,the,when": {
-            "intent": "allowance.when",
+          "is,requir,the,what": {
+            "intent": "What are the requirements?",
             "domain": "default"
           },
-          "allow,when": {
-            "intent": "allowance.when",
+          "requir": {
+            "intent": "What are the requirements?",
             "domain": "default"
           },
-          "event,is,mycar,what": {
-            "intent": "events.mycare.info",
-            "domain": "default"
-          },
-          "event,mycar,what": {
-            "intent": "events.mycare.info",
+          "are,need,requir,the,what": {
+            "intent": "What are the requirements?",
             "domain": "default"
           }
         },
         "intentDict": {
-          "allowance.when": "default",
-          "events.mycare.info": "default"
+          "What are the requirements?": "default"
         },
         "sentences": [
           {
             "domain": "default",
-            "utterance": "When is the next allowance",
-            "intent": "allowance.when"
+            "utterance": "What is the requirements?",
+            "intent": "What are the requirements?"
           },
           {
             "domain": "default",
-            "utterance": "Allowance when",
-            "intent": "allowance.when"
+            "utterance": "requirements?",
+            "intent": "What are the requirements?"
           },
           {
             "domain": "default",
-            "utterance": "What is mycare event",
-            "intent": "events.mycare.info"
-          },
-          {
-            "domain": "default",
-            "utterance": "mycare event what",
-            "intent": "events.mycare.info"
+            "utterance": "What are the requirements needed?",
+            "intent": "What are the requirements?"
           }
         ],
         "domains": {
@@ -91,59 +81,44 @@
               "log": true
             },
             "features": {
-              "when": 1,
+              "what": 1,
               "is": 1,
               "the": 1,
-              "next": 1,
-              "allow": 1,
-              "what": 1,
-              "mycar": 1,
-              "event": 1
+              "requir": 1,
+              "are": 1,
+              "need": 1
             },
             "intents": {
-              "allowance.when": 1,
-              "events.mycare.info": 1
+              "What are the requirements?": 1
             },
             "intentFeatures": {
-              "allowance.when": {
-                "when": 1,
-                "is": 1,
-                "the": 1,
-                "next": 1,
-                "allow": 1
-              },
-              "events.mycare.info": {
+              "What are the requirements?": {
                 "what": 1,
                 "is": 1,
-                "mycar": 1,
-                "event": 1
+                "the": 1,
+                "requir": 1,
+                "are": 1,
+                "need": 1
               }
             },
             "featuresToIntent": {
-              "when": [
-                "allowance.when"
+              "what": [
+                "What are the requirements?"
               ],
               "is": [
-                "allowance.when",
-                "events.mycare.info"
+                "What are the requirements?"
               ],
               "the": [
-                "allowance.when"
+                "What are the requirements?"
               ],
-              "next": [
-                "allowance.when"
+              "requir": [
+                "What are the requirements?"
               ],
-              "allow": [
-                "allowance.when"
+              "are": [
+                "What are the requirements?"
               ],
-              "what": [
-                "events.mycare.info"
-              ],
-              "mycar": [
-                "events.mycare.info"
-              ],
-              "event": [
-                "events.mycare.info"
+              "need": [
+                "What are the requirements?"
               ]
             },
             "neuralNetwork": {
@@ -159,41 +134,25 @@
                 "log": true
               },
               "features": [
-                "when",
+                "what",
                 "is",
                 "the",
-                "next",
-                "allow",
-                "what",
-                "mycar",
-                "event"
+                "requir",
+                "are",
+                "need"
               ],
               "intents": [
-                "allowance.when",
-                "events.mycare.info"
+                "What are the requirements?"
               ],
               "perceptrons": [
                 [
-                  5.857748508453369,
-                  -0.4499301612377167,
-                  0.32067376375198364,
-                  0.32067376375198364,
-                  5.857748508453369,
-                  -0.9372742772102356,
-                  -0.9372742772102356,
-                  -0.9372742772102356,
-                  2.4487428615889217
-                ],
-                [
-                  -0.832069993019104,
-                  0.29330623149871826,
-                  -0.5246382355690002,
-                  -0.5246382355690002,
-                  -0.832069993019104,
-                  4.159491062164307,
-                  4.159491062164307,
-                  4.159491062164307,
-                  1.658611911876926
+                  0.06524251401424408,
+                  0.06199013069272041,
+                  0.06524251401424408,
+                  9.429490089416504,
+                  0.006821596994996071,
+                  0.006821596994996071,
+                  4.7160515321113365
                 ]
               ]
             }
@@ -205,19 +164,15 @@
     "extraSentences": [
       [
         "en",
-        "When is the next allowance"
+        "What is the requirements?"
       ],
       [
         "en",
-        "Allowance when"
+        "requirements?"
       ],
       [
         "en",
-        "What is mycare event"
-      ],
-      [
-        "en",
-        "mycare event what"
+        "What are the requirements needed?"
       ]
     ]
   },
@@ -235,14 +190,9 @@
     },
     "responses": {
       "en": {
-        "allowance.when": [
+        "What are the requirements?": [
           {
-            "answer": "November 16, 2021"
-          }
-        ],
-        "events.mycare.info": [
-          {
-            "answer": "This is an event for checking the mental health of city scholar"
+            "answer": "October 23, 2021"
           }
         ]
       }
