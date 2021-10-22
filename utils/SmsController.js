@@ -88,10 +88,10 @@ const GetUnreadCurrentMessage = async(req,res) => {
     try {
 
         const sms = await SMS.find({'type':'recieve','student_phone':{$nin:["AutoLoadMAX","TM",'8080']}}).limit(10).sort({$natural:-1})
-       
-    
+        const unread_sms = await SMS.find({'is_read':false,'student_phone':{$nin:["AutoLoadMAX","TM",'8080']}}).limit(10).sort({$natural:-1})
         res.json({
             SMS_list: sms,
+            unread_sms_list: unread_sms,
             succes: true
         });
     } catch (error) {
@@ -158,7 +158,7 @@ const SendSms = async (req,  res, io) => {
 
             // Send Messages
             modem.sendSMS(to, text, false, (data)=>{
-                console.log(data);
+                // console.log(data);
                 if(data.request == 'SendSMS'){
                     try{
 
