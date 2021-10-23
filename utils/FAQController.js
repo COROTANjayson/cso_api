@@ -105,10 +105,11 @@ const AddFAQ = async (req, user_id, res) => {
             faq_title, faq_answer, faq_utterances, category_id
         });
 
-        // await newFAQ.save();
+        const newAddedFAQ = await newFAQ.save();
+        console.log('here it is')
         
         //Scan the Query collection
-        ScanQuery(faq_utterances, faq_title, faq_answer, newFAQ._id, category_id)
+        ScanQuery(faq_utterances, faq_title, faq_answer, newAddedFAQ._id, category_id)
 
         return res.status(201).json({
             message: "Added new FAQ ",
@@ -165,7 +166,14 @@ const DeleteFAQ = async (req, faq_id, res) => {
                 success: false
             });
         }
-        faq = await FAQ.remove({ _id: faq_id });
+
+        let others = await Category.findOne({category_name:"others"});
+        await Query.updateMany(
+            { faq_id: ObjectId(faq_id)},
+            { $set: { category_id: ObjectId(others._id), faq_id: null}}
+        )
+        
+        faq = await FAQ.deleteOne({ _id: faq_id });
 
         return res.status(201).json({
             message: "Deleted Successfully",
@@ -185,8 +193,6 @@ const ShowFAQByCategory = async (req, id, res) => {
 
     try {
         const faq = await FAQ.find({ category_id: ObjectId(id) });
-        console.log(id);
-        console.log(faq);
         return res.status(201).json({
             faq_list: faq,
             success: true
@@ -206,10 +212,10 @@ const ScanQuery = async (faq_utterances, faq_title, faq_answer, faq_id, category
     const manager = new NlpManager({ languages: ['en'], forceNER: true });
 
     // Get the "Others" Category
-    let others = await Category.findOne({ category_name: "Others" });
+    let others = await Category.findOne({ category_name: "others" });
     if (!others) {
         const createOthers = new Category();
-        createOthers.category_name = "Others";
+        createOthers.category_name = "others";
         await createOthers.save();
     }
 
@@ -218,7 +224,7 @@ const ScanQuery = async (faq_utterances, faq_title, faq_answer, faq_id, category
         {
             "$match": {
                 "$or": [
-                    { "category_id": ObjectId(others._id) },
+                    // { "category_id": ObjectId(others._id) },
                     { "faq_id": null }
                 ]
             }
@@ -233,24 +239,33 @@ const ScanQuery = async (faq_utterances, faq_title, faq_answer, faq_id, category
         },
         { "$unwind": "$category" },
     ]);
-    // console.log(queries)
     
     // Adds the utterances and intents for the NLP
-    faq_utterances.forEach(e => {
-        manager.addDocument('en', e, faq_title);
-        console.log(e)
-        // Train also the NLG
-        manager.addAnswer('en', faq_title, faq_answer);
-    })
+    // console.log(faq_utterances);
+    // faq_utterances.forEach(e => {
+    //     manager.addDocument('en', e.value, faq_title);
+    //     console.log(e)
+    //     // Train also the NLG
+    // })
+
+    const faq = await FAQ.find();
+    faq.forEach(element => {
+        element.faq_utterances.forEach(e=>{
+            manager.addDocument('en',e.value,element.faq_title);
+        })
+        manager.addAnswer('en', element.faq_title, element.faq_answer);
+    });
+
+    manager.addAnswer('en', faq_title, faq_answer);
 
     await manager.train();
     manager.save();
 
 
-    queries.forEach(async query => {
+    queries.forEach(async query => {      
         const response = await manager.process('en', query.query_name);
-        //console.log(response.answer)
-        if (response.answer) {
+
+        if (response.answer == faq_answer) {
             // console.log(query._id)
 
             //Update query

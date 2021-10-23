@@ -6,11 +6,14 @@ const manager = new NlpManager({ languages: ['en'], forceNER: true });
 
 const nlpFunction = async (text) =>{
 
+    console.log('here faq')
     const faq = await FAQ.find();
     faq.forEach(element => {
         // Adds the utterances and intents for the NLP
+        
         element.faq_utterances.forEach(e=>{
-            manager.addDocument('en',e,element.faq_title);
+            // console.log(e);
+            manager.addDocument('en',e.value,element.faq_title);
         })
 
         // Train also the NLG
@@ -23,7 +26,7 @@ const nlpFunction = async (text) =>{
     try{
         const response = await manager.process('en', text);
         const findID = await FAQ.findOne({faq_title:response.intent})
-
+        console.log(response);
         data = {
             answer: response,
             success: true,
@@ -43,6 +46,7 @@ const nlpFunction = async (text) =>{
             return data;
         }
 
+        console.log(data.answer);
         return data;
 
     }catch(e){

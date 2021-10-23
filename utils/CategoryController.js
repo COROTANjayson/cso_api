@@ -30,7 +30,6 @@ const ShowAllCategory = async (req, res) => {
 
 //Show Category
 const ShowCategory = async (req, cat_id, res) => {
-
     try {
         let category = await Category.findById(cat_id);
 
@@ -138,17 +137,17 @@ const DeleteCategory = async (req, cat_id, res) => {
             });
         }
         // Check if the category is Others
-        if (category.category_name === "Others") {
+        if (category.category_name === "others") {
             return res.status(404).json({
                 message: "Unable to delete Others Category",
                 success: false
             });
         }
         // Find others category, if null then create one
-        let others = await Category.findOne({category_name:"Others"});
+        let others = await Category.findOne({category_name:"others"});
         if(!others){
             const createOthers= new Category();
-            createOthers.category_name = "Others";
+            createOthers.category_name = "others";
             await createOthers.save();
         }
         //Delete category

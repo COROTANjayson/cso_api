@@ -320,7 +320,8 @@ const listenReply = (io) => {
                     } else {
                         modem.initializeModem((data)=>{
                             modem.sendSMS(messageDetails.sender, 'No Possible Answer Found',  false, (data)=>{
-                            if(data.request == 'SendSMS'){
+                                console.log(data);
+                                if(data.request == 'SendSMS'){
                                 try{
                                     modem.getOwnNumber((phone)=>{
                                         const newSMS = new SMS({
