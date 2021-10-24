@@ -47,8 +47,6 @@ const GetAllSms = async(req, res) => {
 
         const sms = await SMS.find({'student_phone':{$nin:["AutoLoadMAX","TM",'8080']}}).sort({_id: -1});
 
-        console.log(sms)
-        console.log('here')
         const studentNumList = findStudentNumList(sms);
         const previewMessage = findPreviewMessages(sms);
         
@@ -88,10 +86,10 @@ const GetUnreadCurrentMessage = async(req,res) => {
     try {
 
         const sms = await SMS.find({'type':'recieve','student_phone':{$nin:["AutoLoadMAX","TM",'8080']}}).limit(10).sort({$natural:-1})
-       
-    
+        const unread_sms = await SMS.find({'is_read':false,'student_phone':{$nin:["AutoLoadMAX","TM",'8080']}}).limit(10).sort({$natural:-1})
         res.json({
             SMS_list: sms,
+            unread_sms_list: unread_sms,
             succes: true
         });
     } catch (error) {
@@ -158,7 +156,7 @@ const SendSms = async (req,  res, io) => {
 
             // Send Messages
             modem.sendSMS(to, text, false, (data)=>{
-                console.log(data);
+                // console.log(data);
                 if(data.request == 'SendSMS'){
                     try{
 
@@ -320,39 +318,43 @@ const listenReply = (io) => {
                     } else {
                         modem.initializeModem((data)=>{
                             modem.sendSMS(messageDetails.sender, 'No Possible Answer Found',  false, (data)=>{
-                            if(data.request == 'SendSMS'){
+                                console.log(data);
+                                if(data.request == 'SendSMS'){
                                 try{
                                     modem.getOwnNumber((phone)=>{
-                                        const newSMS = new SMS({
-                                            message:data.data.message,
-                                            officer_phone:phone.data.number,
-                                            student_phone:data.data.recipient,
-                                            type:'send',
-                                            isChatbot:true,
-                                            student_id:null,
-                                            chatBotReplyID:newSMSStduent._id,
-                                            is_read:true
-                                        });
+                                        // const newSMS = new SMS({
+                                        //     message:data.data.message,
+                                        //     officer_phone:phone.data.number,
+                                        //     student_phone:data.data.recipient,
+                                        //     type:'send',
+                                        //     isChatbot:true,
+                                        //     student_id:null,
+                                        //     chatBotReplyID:newSMSStduent._id,
+                                        //     is_read:true
+                                        // });
             
-                                        newSMS.save((data1)=>{
-                                            const newQuery = new Query({
-                                                sender_id:newSMSStduent.student_id,
-                                                category_id:nlpReply.categoryId,
-                                                query_name:messageDetails.message,
-                                                possible_answer:'N/A',
-                                                faq_id:nlpReply.faqID,
-                                                status:"1",
-                                                phone_num:data.data.recipient
-                                            });
+                                        // newSMS.save((data1)=>{
+                                            
+                                        // });
 
-                                            console.log('Query Save other')
-                                            newQuery.save((data2) => {
-                                                modem.deleteAllSimMessages()
-                                                // socket.broadcast.emit("newdata", newData);
-                                                io.sockets.emit('newdata',newData);
-                                            })
+                                        const newQuery = new Query({
+                                            sender_id:newSMSStduent.student_id,
+                                            category_id:nlpReply.categoryId,
+                                            query_name:messageDetails.message,
+                                            possible_answer:'N/A',
+                                            faq_id:nlpReply.faqID,
+                                            status:"1",
+                                            phone_num:data.data.recipient
                                         });
-            
+
+                                        console.log('Query Save other')
+                                        console.log(newQuery);
+                                        newQuery.save((data2) => {
+                                            modem.deleteAllSimMessages()
+                                            // socket.broadcast.emit("newdata", newData);
+                                            io.sockets.emit('newdata',newData);
+                                        })
+                                        
                                     });
                                     }catch(err){
                                     console.log(err)
@@ -369,340 +371,6 @@ const listenReply = (io) => {
             console.log(err)
         }
     });
-
-    // // Check if socket is on or not
-    // let socketIsOff = true;
-    // // Counting how many reply
-    // let countReply = 1;
-    // console.log('here inside io');
-
-    // // Run when client connects
-    // io.on('connection',(socket) => {
-    //     socketIsOff = false
-    //     console.log('connected to WS')
-        
-        // io.emit('messageChannel', {
-        //     message:'Connected to the socket'
-        // });
-
-    //     if(countReply == 1){
-    //         console.log('inside countreply')
-    //         modem.on('onNewMessage', messageDetails =>{  
-    //             countReply++;  
-    //             console.log(`Reply count here1113: ${countReply}`)
-    //             try {
-    //                 modem.getOwnNumber((phone)=>{
-                        
-    //                     const newSMS = new SMS({
-    //                         message:messageDetails.message,
-    //                         officer_phone:phone.data.number,
-    //                         student_phone:messageDetails.sender,
-    //                         type:'recieve',
-    //                         isChatbot:false,
-    //                         student_id:null,
-    //                         chatBotReplyID:null,
-    //                     });
-    //                     (async()=>{
-                            
-    //                         modem.deleteAllSimMessages();
-    //                         const newData = await SMS.find();
-    //                         const nlpReply = await nlpFunction(messageDetails.message);
-    //                         const findStudentViaNum = await findStudent(messageDetails.sender);
-    
-    //                         if(!findStudentViaNum.success){
-    //                             try{
-    //                                 const response = await axios.get(`http://localhost:5001/api/students/show/${messageDetails.sender}`);
-                                    
-    //                                 const newStudent = new Student({
-    //                                     student_id: response.data.Student.student_id,
-    //                                     email: response.data.Student.email,
-    //                                     first_name: response.data.Student.first_name,
-    //                                     last_name: response.data.Student.last_name,
-    //                                     middle_name: response.data.Student.middle_name,
-    //                                     phone_number: response.data.Student.phone_number,
-    //                                     gender: response.data.Student.gender,
-    //                                     address: response.data.Student.address,
-    //                                     school: response.data.Student.school,
-    //                                     course: response.data.Student.course,
-    //                                     year: response.data.Student.year
-    //                                 });
-    
-    //                                 const studentNew = await newStudent.save();
-    //                                 if(response.data.succes){
-    //                                     newSMS.student_id = studentNew._id;
-    //                                 }
-    
-    //                             }catch(err){console.log(err)}
-    //                         }else{
-    //                             newSMS.student_id = findStudentViaNum.data._id;
-    //                         }
-                
-    //                         const newSMSStduent = await newSMS.save();
-    
-    //                         if(nlpReply.success) {
-    //                             // console.log(nlpReply.answer.answer);
-    //                             modem.initializeModem((data)=>{
-    //                                 modem.sendSMS(messageDetails.sender, nlpReply.answer.answer, false, (data)=>{
-    //                                     console.log(data);
-    //                                     if(data.request == 'SendSMS'){
-    //                                         try{
-                        
-    //                                             modem.getOwnNumber((phone)=>{
-    //                                                 // console.log(phone.data.number);
-                        
-    //                                                 const newSMS = new SMS({
-    //                                                     message:data.data.message,
-    //                                                     officer_phone:phone.data.number,
-    //                                                     student_phone:data.data.recipient,
-    //                                                     type:'send',
-    //                                                     isChatbot:true,
-    //                                                     student_id:null,
-    //                                                     chatBotReplyID:newSMSStduent._id,
-    //                                                 });
-                        
-    //                                                 // console.log(newSMS);
-    //                                                 newSMS.save((data1)=>{
-                                                        
-    //                                                     const newQuery = new Query({
-    //                                                         sender_id:newSMSStduent.student_id,
-    //                                                         category_id:nlpReply.categoryId,
-    //                                                         query_name:messageDetails.message,
-    //                                                         possible_answer:data.data.message,
-    //                                                         faq_id:nlpReply.faqID,
-    //                                                         status:"1",
-    //                                                         phone_num:data.data.recipient
-    //                                                     });
-        
-    //                                                     console.log('Query Save not other')
-        
-    //                                                     newQuery.save((data2) => {
-    //                                                         modem.deleteAllSimMessages()
-    //                                                         // socket.broadcast.emit("newdata", newData);
-    //                                                     })
-    //                                                 });
-                        
-    //                                             });
-    //                                             }catch(err){
-    //                                             console.log(err)
-    //                                             }
-    //                                     }
-    //                                 })
-    //                             })
-    //                         } else {
-    //                             modem.initializeModem((data)=>{
-    //                                 modem.sendSMS(messageDetails.sender, 'No Possible Answer Found',  false, (data)=>{
-    //                                 if(data.request == 'SendSMS'){
-    //                                     try{
-    //                                         modem.getOwnNumber((phone)=>{
-    //                                             const newSMS = new SMS({
-    //                                                 message:data.data.message,
-    //                                                 officer_phone:phone.data.number,
-    //                                                 student_phone:data.data.recipient,
-    //                                                 type:'send',
-    //                                                 isChatbot:true,
-    //                                                 student_id:null,
-    //                                                 chatBotReplyID:newSMSStduent._id,
-    //                                             });
-                    
-    //                                             newSMS.save((data1)=>{
-    //                                                 const newQuery = new Query({
-    //                                                     sender_id:newSMSStduent.student_id,
-    //                                                     category_id:nlpReply.categoryId,
-    //                                                     query_name:messageDetails.message,
-    //                                                     possible_answer:'N/A',
-    //                                                     faq_id:nlpReply.faqID,
-    //                                                     status:"1",
-    //                                                     phone_num:data.data.recipient
-    //                                                 });
-    
-    //                                                 console.log('Query Save other')
-    //                                                 newQuery.save((data2) => {
-    //                                                     modem.deleteAllSimMessages()
-    //                                                     // socket.broadcast.emit("newdata", newData);
-    //                                                 })
-    //                                             });
-                    
-    //                                         });
-    //                                         }catch(err){
-    //                                         console.log(err)
-    //                                         }
-    //                                 }
-                                    
-    //                             })
-    //                             })
-    //                         }
-        
-    //                     })();
-    //                 });
-    //             } catch(err) {
-    //                 console.log(err)
-    //             }
-    //         });
-    //     }
-
-    //     countReply = 0;
-    //     console.log(`Here outside reset111 ${countReply}`)
-    // });
-
-    // if(socketIsOff){
-    //     console.log('inside out')
-    //     if(countReply == 1){
-    //         modem.on('onNewMessage', messageDetails =>{  
-    //             countReply++;  
-    //             console.log(`Reply count here1113: ${countReply}`)
-    //             try {
-    //                 modem.getOwnNumber((phone)=>{
-                        
-    //                     const newSMS = new SMS({
-    //                         message:messageDetails.message,
-    //                         officer_phone:phone.data.number,
-    //                         student_phone:messageDetails.sender,
-    //                         type:'recieve',
-    //                         isChatbot:false,
-    //                         student_id:null,
-    //                         chatBotReplyID:null,
-    //                     });
-    //                     (async()=>{
-                            
-    //                         modem.deleteAllSimMessages();
-    //                         const newData = await SMS.find();
-    //                         const nlpReply = await nlpFunction(messageDetails.message);
-    //                         const findStudentViaNum = await findStudent(messageDetails.sender);
-    
-    //                         if(!findStudentViaNum.success){
-    //                             try{
-    //                                 const response = await axios.get(`http://localhost:5001/api/students/show/${messageDetails.sender}`);
-                                    
-    //                                 const newStudent = new Student({
-    //                                     student_id: response.data.Student.student_id,
-    //                                     email: response.data.Student.email,
-    //                                     first_name: response.data.Student.first_name,
-    //                                     last_name: response.data.Student.last_name,
-    //                                     middle_name: response.data.Student.middle_name,
-    //                                     phone_number: response.data.Student.phone_number,
-    //                                     gender: response.data.Student.gender,
-    //                                     address: response.data.Student.address,
-    //                                     school: response.data.Student.school,
-    //                                     course: response.data.Student.course,
-    //                                     year: response.data.Student.year
-    //                                 });
-    
-    //                                 const studentNew = await newStudent.save();
-    //                                 if(response.data.succes){
-    //                                     newSMS.student_id = studentNew._id;
-    //                                 }
-    
-    //                             }catch(err){console.log(err)}
-    //                         }else{
-    //                             newSMS.student_id = findStudentViaNum.data._id;
-    //                         }
-                
-    //                         const newSMSStduent = await newSMS.save();
-    
-    //                         if(nlpReply.success) {
-    //                             // console.log(nlpReply.answer.answer);
-    //                             modem.initializeModem((data)=>{
-    //                                 modem.sendSMS(messageDetails.sender, nlpReply.answer.answer, false, (data)=>{
-    //                                     console.log(data);
-    //                                     if(data.request == 'SendSMS'){
-    //                                         try{
-                        
-    //                                             modem.getOwnNumber((phone)=>{
-    //                                                 // console.log(phone.data.number);
-                        
-    //                                                 const newSMS = new SMS({
-    //                                                     message:data.data.message,
-    //                                                     officer_phone:phone.data.number,
-    //                                                     student_phone:data.data.recipient,
-    //                                                     type:'send',
-    //                                                     isChatbot:true,
-    //                                                     student_id:null,
-    //                                                     chatBotReplyID:newSMSStduent._id,
-    //                                                 });
-                        
-    //                                                 // console.log(newSMS);
-    //                                                 newSMS.save((data1)=>{
-                                                        
-    //                                                     const newQuery = new Query({
-    //                                                         sender_id:newSMSStduent.student_id,
-    //                                                         category_id:nlpReply.categoryId,
-    //                                                         query_name:messageDetails.message,
-    //                                                         possible_answer:data.data.message,
-    //                                                         faq_id:nlpReply.faqID,
-    //                                                         status:"1",
-    //                                                         phone_num:data.data.recipient
-    //                                                     });
-        
-    //                                                     console.log('Query Save not other')
-        
-    //                                                     newQuery.save((data2) => {
-    //                                                         modem.deleteAllSimMessages()
-                                        
-    //                                                     })
-    //                                                 });
-                        
-    //                                             });
-    //                                             }catch(err){
-    //                                             console.log(err)
-    //                                             }
-    //                                     }
-    //                                 })
-    //                             })
-    //                         } else {
-    //                             modem.initializeModem((data)=>{
-    //                                 modem.sendSMS(messageDetails.sender, 'No Possible Answer Found',  false, (data)=>{
-    //                                 if(data.request == 'SendSMS'){
-    //                                     try{
-    //                                         modem.getOwnNumber((phone)=>{
-    //                                             const newSMS = new SMS({
-    //                                                 message:data.data.message,
-    //                                                 officer_phone:phone.data.number,
-    //                                                 student_phone:data.data.recipient,
-    //                                                 type:'send',
-    //                                                 isChatbot:true,
-    //                                                 student_id:null,
-    //                                                 chatBotReplyID:newSMSStduent._id,
-    //                                             });
-                    
-    //                                             newSMS.save((data1)=>{
-    //                                                 const newQuery = new Query({
-    //                                                     sender_id:newSMSStduent.student_id,
-    //                                                     category_id:nlpReply.categoryId,
-    //                                                     query_name:messageDetails.message,
-    //                                                     possible_answer:'N/A',
-    //                                                     faq_id:nlpReply.faqID,
-    //                                                     status:"1",
-    //                                                     phone_num:data.data.recipient
-    //                                                 });
-    
-    //                                                 console.log('Query Save other')
-    //                                                 newQuery.save((data2) => {
-    //                                                     modem.deleteAllSimMessages()
-                                                       
-    //                                                 })
-    //                                             });
-                    
-    //                                         });
-    //                                         }catch(err){
-    //                                         console.log(err)
-    //                                         }
-    //                                 }
-                                    
-    //                             })
-    //                             })
-    //                         }
-        
-    //                     })();
-    //                 });
-    //             } catch(err) {
-    //                 console.log(err)
-    //             }
-    //         });
-    //     }
-
-    //     countReply = 0;
-    //     console.log(`Here outside reset111 ${countReply}`)
-    // }
 };
 
 

@@ -34,37 +34,105 @@
           "useStemDict": true
         },
         "stemDict": {
-          "is,requir,the,what": {
-            "intent": "What are the requirements?",
+          "allow,is,next,the,when": {
+            "intent": "allowance.when",
             "domain": "default"
           },
-          "requir": {
-            "intent": "What are the requirements?",
+          "allow,when": {
+            "intent": "allowance.when",
             "domain": "default"
           },
-          "are,need,requir,the,what": {
-            "intent": "What are the requirements?",
+          "is,mycar,when": {
+            "intent": "events.mycare.info",
+            "domain": "default"
+          },
+          "is,mycar,what": {
+            "intent": "events.mycare.info",
+            "domain": "default"
+          },
+          "coe,is,what": {
+            "intent": "coe.what",
+            "domain": "default"
+          },
+          "coe,get,how,to": {
+            "intent": "coe.what",
+            "domain": "default"
+          },
+          "grade,maintain": {
+            "intent": "grade_to_pass",
+            "domain": "default"
+          },
+          "grade,is,maintain,the,what": {
+            "intent": "grade_to_pass",
+            "domain": "default"
+          },
+          "websit": {
+            "intent": "website.access",
+            "domain": "default"
+          },
+          "inform,person": {
+            "intent": "personal.info",
             "domain": "default"
           }
         },
         "intentDict": {
-          "What are the requirements?": "default"
+          "allowance.when": "default",
+          "events.mycare.info": "default",
+          "coe.what": "default",
+          "grade_to_pass": "default",
+          "website.access": "default",
+          "personal.info": "default"
         },
         "sentences": [
           {
             "domain": "default",
-            "utterance": "What is the requirements?",
-            "intent": "What are the requirements?"
+            "utterance": "When is the next allowance",
+            "intent": "allowance.when"
           },
           {
             "domain": "default",
-            "utterance": "requirements?",
-            "intent": "What are the requirements?"
+            "utterance": "allowance when",
+            "intent": "allowance.when"
           },
           {
             "domain": "default",
-            "utterance": "What are the requirements needed?",
-            "intent": "What are the requirements?"
+            "utterance": "when is mycare",
+            "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "what is mycare",
+            "intent": "events.mycare.info"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is COE",
+            "intent": "coe.what"
+          },
+          {
+            "domain": "default",
+            "utterance": "How to get COE",
+            "intent": "coe.what"
+          },
+          {
+            "domain": "default",
+            "utterance": "Maintaining Grades",
+            "intent": "grade_to_pass"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is the maintaining grades",
+            "intent": "grade_to_pass"
+          },
+          {
+            "domain": "default",
+            "utterance": "website",
+            "intent": "website.access"
+          },
+          {
+            "domain": "default",
+            "utterance": "personal information ",
+            "intent": "personal.info"
           }
         ],
         "domains": {
@@ -81,44 +149,123 @@
               "log": true
             },
             "features": {
-              "what": 1,
+              "when": 1,
               "is": 1,
               "the": 1,
-              "requir": 1,
-              "are": 1,
-              "need": 1
+              "next": 1,
+              "allow": 1,
+              "mycar": 1,
+              "what": 1,
+              "coe": 1,
+              "how": 1,
+              "to": 1,
+              "get": 1,
+              "maintain": 1,
+              "grade": 1,
+              "websit": 1,
+              "person": 1,
+              "inform": 1
             },
             "intents": {
-              "What are the requirements?": 1
+              "allowance.when": 1,
+              "events.mycare.info": 1,
+              "coe.what": 1,
+              "grade_to_pass": 1,
+              "website.access": 1,
+              "personal.info": 1
             },
             "intentFeatures": {
-              "What are the requirements?": {
-                "what": 1,
+              "allowance.when": {
+                "when": 1,
                 "is": 1,
                 "the": 1,
-                "requir": 1,
-                "are": 1,
-                "need": 1
+                "next": 1,
+                "allow": 1
+              },
+              "events.mycare.info": {
+                "when": 1,
+                "is": 1,
+                "mycar": 1,
+                "what": 1
+              },
+              "coe.what": {
+                "what": 1,
+                "is": 1,
+                "coe": 1,
+                "how": 1,
+                "to": 1,
+                "get": 1
+              },
+              "grade_to_pass": {
+                "maintain": 1,
+                "grade": 1,
+                "what": 1,
+                "is": 1,
+                "the": 1
+              },
+              "website.access": {
+                "websit": 1
+              },
+              "personal.info": {
+                "person": 1,
+                "inform": 1
               }
             },
             "featuresToIntent": {
-              "what": [
-                "What are the requirements?"
+              "when": [
+                "allowance.when",
+                "events.mycare.info"
               ],
               "is": [
-                "What are the requirements?"
+                "allowance.when",
+                "events.mycare.info",
+                "coe.what",
+                "grade_to_pass"
               ],
               "the": [
-                "What are the requirements?"
+                "allowance.when",
+                "grade_to_pass"
               ],
-              "requir": [
-                "What are the requirements?"
+              "next": [
+                "allowance.when"
               ],
-              "are": [
-                "What are the requirements?"
+              "allow": [
+                "allowance.when"
               ],
-              "need": [
-                "What are the requirements?"
+              "mycar": [
+                "events.mycare.info"
+              ],
+              "what": [
+                "events.mycare.info",
+                "coe.what",
+                "grade_to_pass"
+              ],
+              "coe": [
+                "coe.what"
+              ],
+              "how": [
+                "coe.what"
+              ],
+              "to": [
+                "coe.what"
+              ],
+              "get": [
+                "coe.what"
+              ],
+              "maintain": [
+                "grade_to_pass"
+              ],
+              "grade": [
+                "grade_to_pass"
+              ],
+              "websit": [
+                "website.access"
+              ],
+              "person": [
+                "personal.info"
+              ],
+              "inform": [
+                "personal.info"
               ]
             },
             "neuralNetwork": {
@@ -134,25 +281,145 @@
                 "log": true
               },
               "features": [
-                "what",
+                "when",
                 "is",
                 "the",
-                "requir",
-                "are",
-                "need"
+                "next",
+                "allow",
+                "mycar",
+                "what",
+                "coe",
+                "how",
+                "to",
+                "get",
+                "maintain",
+                "grade",
+                "websit",
+                "person",
+                "inform"
               ],
               "intents": [
-                "What are the requirements?"
+                "allowance.when",
+                "events.mycare.info",
+                "coe.what",
+                "grade_to_pass",
+                "website.access",
+                "personal.info"
               ],
               "perceptrons": [
                 [
-                  0.06524251401424408,
-                  0.06199013069272041,
-                  0.06524251401424408,
-                  9.429490089416504,
-                  0.006821596994996071,
-                  0.006821596994996071,
-                  4.7160515321113365
+                  4.935909748077393,
+                  -2.535982847213745,
+                  1.167218804359436,
+                  1.6185598373413086,
+                  8.152162551879883,
+                  -3.426649570465088,
+                  -0.8855902552604675,
+                  -0.466972291469574,
+                  -0.1951175034046173,
+                  -0.1951175034046173,
+                  -0.1951175034046173,
+                  -0.6445809006690979,
+                  -0.6445809006690979,
+                  -0.9809691309928894,
+                  -0.5122794508934021,
+                  -0.5122794508934021,
+                  1.0314249916453504
+                ],
+                [
+                  1.3011908531188965,
+                  3.055635452270508,
+                  -2.3727447986602783,
+                  -1.2228351831436157,
+                  -2.163175582885742,
+                  9.59671401977539,
+                  0.8454607129096985,
+                  -4.256345272064209,
+                  -0.08260909467935562,
+                  -0.08260909467935562,
+                  -0.08260909467935562,
+                  -1.2223495244979858,
+                  -1.2223495244979858,
+                  -0.541655421257019,
+                  -0.32753291726112366,
+                  -0.32753291726112366,
+                  0.5058135694106642
+                ],
+                [
+                  -0.8683268427848816,
+                  1.6653138399124146,
+                  -1.5875165462493896,
+                  -0.24320758879184723,
+                  -0.4576418101787567,
+                  -4.444332122802734,
+                  2.3872883319854736,
+                  9.204244613647461,
+                  1.4855457544326782,
+                  1.4855457544326782,
+                  1.4855457544326782,
+                  -1.57119882106781,
+                  -1.57119882106781,
+                  -0.7870477437973022,
+                  -0.487149715423584,
+                  -0.487149715423584,
+                  0.7006953662097818
+                ],
+                [
+                  -1.0332361459732056,
+                  -1.0065994262695312,
+                  1.112903118133545,
+                  -0.711561381816864,
+                  -0.7710330486297607,
+                  -1.1446188688278198,
+                  0.0188135989010334,
+                  -0.9825954437255859,
+                  -0.05420491844415665,
+                  -0.05420491844415665,
+                  -0.05420491844415665,
+                  6.580150127410889,
+                  6.580150127410889,
+                  -0.992236852645874,
+                  -0.5141592025756836,
+                  -0.5141592025756836,
+                  1.0312015273389363
+                ],
+                [
+                  -1.4649713039398193,
+                  -1.168260931968689,
+                  -0.15936775505542755,
+                  -0.1312945932149887,
+                  -1.2819570302963257,
+                  -0.7591150999069214,
+                  -0.8416038751602173,
+                  -0.8733422160148621,
+                  -0.6340323686599731,
+                  -0.6340323686599731,
+                  -0.6340323686599731,
+                  -1.3694171905517578,
+                  -1.3694171905517578,
+                  11.240031242370605,
+                  -1.3796275854110718,
+                  -1.3796275854110718,
+                  2.792782894824668
+                ],
+                [
+                  -0.8074385523796082,
+                  -0.7052173614501953,
+                  -0.1434425264596939,
+                  -0.11317989975214005,
+                  -0.6640087962150574,
+                  -0.3836628496646881,
+                  -0.4299555718898773,
+                  -0.5091468691825867,
+                  -0.3444073498249054,
+                  -0.3444073498249054,
+                  -0.3444073498249054,
+                  -0.7271454930305481,
+                  -0.7271454930305481,
+                  -1.3522893190383911,
+                  6.440683841705322,
+                  6.440683841705322,
+                  1.3927224220009087
                 ]
               ]
             }
@@ -164,15 +431,43 @@
     "extraSentences": [
       [
         "en",
-        "What is the requirements?"
+        "When is the next allowance"
       ],
       [
         "en",
-        "requirements?"
+        "allowance when"
       ],
       [
         "en",
-        "What are the requirements needed?"
+        "when is mycare"
+      ],
+      [
+        "en",
+        "what is mycare"
+      ],
+      [
+        "en",
+        "What is COE"
+      ],
+      [
+        "en",
+        "How to get COE"
+      ],
+      [
+        "en",
+        "Maintaining Grades"
+      ],
+      [
+        "en",
+        "What is the maintaining grades"
+      ],
+      [
+        "en",
+        "website"
+      ],
+      [
+        "en",
+        "personal information "
       ]
     ]
   },
@@ -190,9 +485,34 @@
     },
     "responses": {
       "en": {
-        "What are the requirements?": [
+        "allowance.when": [
           {
-            "answer": "October 23, 2021"
+            "answer": "November 16, 2021"
+          }
+        ],
+        "events.mycare.info": [
+          {
+            "answer": "Event for city scholar happen this friday"
+          }
+        ],
+        "coe.what": [
+          {
+            "answer": "To get Certificate of Enrollment you must go to our website"
+          }
+        ],
+        "grade_to_pass": [
+          {
+            "answer": "2.00 is the maintaining grade"
+          }
+        ],
+        "website.access": [
+          {
+            "answer": "please click this link to visit our website"
+          }
+        ],
+        "personal.info": [
+          {
+            "answer": "To Change personal information please follow this step"
           }
         ]
       }

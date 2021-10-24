@@ -4,6 +4,7 @@ const Query = require("../models/Query");
 const Sender = require("../models/Sender");
 require('../middlewares/passport')(passport);
 mongoose = require("mongoose");
+const Category = require('../models/Category')
 const ObjectId = mongoose.Types.ObjectId;
 const { SECRET } = require("../config");
 
@@ -13,6 +14,7 @@ const GetAllQueries = async (req, res) => {
 
     try {
         queries = await Query.aggregate([
+            {"$match":{'phone_num':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]} }},
             {
                 "$lookup": {
                     "from": 'senders',
@@ -263,7 +265,68 @@ const DeleteQuery = async (query_id, req, res) => {
 const ShowQueriesByCategory = async (req, id, res) => {
 
     try {
-        const query = await Query.find({ category_id: ObjectId(id) });
+        // const query = await Query.find({ category_id: ObjectId(id) });
+        query = await Query.aggregate([
+            {"$match":{
+                    'phone_num':{
+                            $nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]
+                    },
+                    'category_id':ObjectId(id),
+                }
+            },
+            {
+                "$lookup": {
+                    "from": 'senders',
+                    "localField": 'sender_id',
+                    "foreignField": '_id',
+                    "as": "sender"
+                },
+            },
+            {
+                "$unwind": {
+                    "path": "$sender",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
+            {
+                "$lookup": {
+                    "from": 'students',
+                    "localField": 'sender.student_id',
+                    "foreignField": 'student_id',
+                    "as": "student"
+                }
+            },
+            {
+                "$unwind": {
+                    "path": "$student",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
+            {
+                "$lookup": {
+                    "from": 'categories',
+                    "localField": 'category_id',
+                    "foreignField": '_id',
+                    "as": "category"
+                }
+            },
+            { "$unwind": "$category" },
+            {
+                "$lookup": {
+                    "from": 'faqs',
+                    "localField": 'faq_id',
+                    "foreignField": '_id',
+                    "as": "faq"
+                }
+            },
+            {
+                "$unwind": {
+                    "path": "$faq",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
+
+        ]);
 
         if (!query) {
             return res.status(404).json({
@@ -271,6 +334,88 @@ const ShowQueriesByCategory = async (req, id, res) => {
                 success: false
             });
         }
+
+        console.log(query);
+        return res.status(201).json({
+            query_list: query,
+            success: true
+        });
+
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
+    }
+}
+
+const ShowUnidentifiedQuery = async (req,  res) => {
+
+    try {
+        const others = await Category.findOne({ category_name: 'others' });
+        query = await Query.aggregate([
+            {"$match":{
+                    'phone_num':{
+                            $nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]
+                    },
+                    'category_id':others._id,
+                },
+            },
+            { $sort: {_id: -1} },
+            {
+                "$lookup": {
+                    "from": 'senders',
+                    "localField": 'sender_id',
+                    "foreignField": '_id',
+                    "as": "sender"
+                },
+            },
+            {
+                "$unwind": {
+                    "path": "$sender",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
+            {
+                "$lookup": {
+                    "from": 'students',
+                    "localField": 'sender.student_id',
+                    "foreignField": 'student_id',
+                    "as": "student"
+                }
+            },
+            {
+                "$unwind": {
+                    "path": "$student",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
+            {
+                "$lookup": {
+                    "from": 'categories',
+                    "localField": 'category_id',
+                    "foreignField": '_id',
+                    "as": "category"
+                }
+            },
+            { "$unwind": "$category" },
+            {
+                "$lookup": {
+                    "from": 'faqs',
+                    "localField": 'faq_id',
+                    "foreignField": '_id',
+                    "as": "faq"
+                }
+            },
+            {
+                "$unwind": {
+                    "path": "$faq",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
+
+        ]);
 
         return res.status(201).json({
             query_list: query,
@@ -286,7 +431,6 @@ const ShowQueriesByCategory = async (req, id, res) => {
     }
 }
 
-
 //Show Student
 
 module.exports = {
@@ -295,5 +439,6 @@ module.exports = {
     ShowQuery,
     EditQuery,
     DeleteQuery,
-    ShowQueriesByCategory
+    ShowQueriesByCategory,
+    ShowUnidentifiedQuery
 };

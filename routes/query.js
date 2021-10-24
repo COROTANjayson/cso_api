@@ -7,7 +7,8 @@ const {
     ShowQuery,
     EditQuery,
     DeleteQuery,
-    ShowQueriesByCategory
+    ShowQueriesByCategory,
+    ShowUnidentifiedQuery,
     // SearchStudent
 } = require("../utils/QueryController");
 
@@ -43,6 +44,10 @@ router.delete("/delete/", userAuth, async (req, res) => {
 router.get("/showbycategory/:cat_id", userAuth, async (req, res) => {
     const cat_id = req.params.cat_id;
     await ShowQueriesByCategory(req.body, cat_id, res);
+});
+
+router.get("/unidentifiedquery", userAuth, async (req, res) => {
+    await ShowUnidentifiedQuery(req.body, res);
 });
 
 //search query (api/query/search/:id) query_id or name
