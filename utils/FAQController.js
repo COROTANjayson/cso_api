@@ -106,7 +106,6 @@ const AddFAQ = async (req, user_id, res) => {
         });
 
         const newAddedFAQ = await newFAQ.save();
-        console.log('here it is')
         
         //Scan the Query collection
         ScanQuery(faq_utterances, faq_title, faq_answer, newAddedFAQ._id, category_id)
@@ -256,7 +255,7 @@ const ScanQuery = async (faq_utterances, faq_title, faq_answer, faq_id, category
         manager.addAnswer('en', element.faq_title, element.faq_answer);
     });
 
-    manager.addAnswer('en', faq_title, faq_answer);
+    // manager.addAnswer('en', faq_title, faq_answer);
 
     await manager.train();
     manager.save();
@@ -271,7 +270,7 @@ const ScanQuery = async (faq_utterances, faq_title, faq_answer, faq_id, category
             //Update query
             await Query.updateMany(
                 { _id: ObjectId(query._id) },
-                { $set: { category_id: ObjectId(category_id), faq_id: ObjectId(faq_id) } }
+                { $set: { category_id: ObjectId(category_id), faq_id: ObjectId(faq_id),possible_answer:faq_answer } }
             )
         }
     })

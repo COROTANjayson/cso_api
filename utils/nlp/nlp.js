@@ -47,6 +47,7 @@ const nlpFunction = async (text) =>{
         }
 
         console.log(data.answer);
+        
         return data;
 
     }catch(e){

@@ -68,7 +68,6 @@ const GetAllQueries = async (req, res) => {
             },
 
         ]);
-        console.log(queries)
 
         return res.json({
             query_list: queries,
@@ -361,8 +360,9 @@ const ShowUnidentifiedQuery = async (req,  res) => {
                             $nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]
                     },
                     'category_id':others._id,
-                }
+                },
             },
+            { $sort: {_id: -1} },
             {
                 "$lookup": {
                     "from": 'senders',

@@ -58,12 +58,20 @@
             "intent": "coe.what",
             "domain": "default"
           },
-          "for,grade,is,maintain,program,scholarship,the,this,what": {
+          "grade,maintain": {
             "intent": "grade_to_pass",
             "domain": "default"
           },
-          "grade,maintain": {
+          "grade,is,maintain,the,what": {
             "intent": "grade_to_pass",
+            "domain": "default"
+          },
+          "websit": {
+            "intent": "website.access",
+            "domain": "default"
+          },
+          "inform,person": {
+            "intent": "personal.info",
             "domain": "default"
           }
         },
@@ -71,7 +79,9 @@
           "allowance.when": "default",
           "events.mycare.info": "default",
           "coe.what": "default",
-          "grade_to_pass": "default"
+          "grade_to_pass": "default",
+          "website.access": "default",
+          "personal.info": "default"
         },
         "sentences": [
           {
@@ -106,183 +116,23 @@
           },
           {
             "domain": "default",
-            "utterance": "When is the next allowance",
-            "intent": "allowance.when"
-          },
-          {
-            "domain": "default",
-            "utterance": "allowance when",
-            "intent": "allowance.when"
-          },
-          {
-            "domain": "default",
-            "utterance": "when is mycare",
-            "intent": "events.mycare.info"
-          },
-          {
-            "domain": "default",
-            "utterance": "what is mycare",
-            "intent": "events.mycare.info"
-          },
-          {
-            "domain": "default",
-            "utterance": "What is COE",
-            "intent": "coe.what"
-          },
-          {
-            "domain": "default",
-            "utterance": "How to get COE",
-            "intent": "coe.what"
-          },
-          {
-            "domain": "default",
-            "utterance": "When is the next allowance",
-            "intent": "allowance.when"
-          },
-          {
-            "domain": "default",
-            "utterance": "allowance when",
-            "intent": "allowance.when"
-          },
-          {
-            "domain": "default",
-            "utterance": "when is mycare",
-            "intent": "events.mycare.info"
-          },
-          {
-            "domain": "default",
-            "utterance": "what is mycare",
-            "intent": "events.mycare.info"
-          },
-          {
-            "domain": "default",
-            "utterance": "What is COE",
-            "intent": "coe.what"
-          },
-          {
-            "domain": "default",
-            "utterance": "How to get COE",
-            "intent": "coe.what"
-          },
-          {
-            "domain": "default",
-            "utterance": "When is the next allowance",
-            "intent": "allowance.when"
-          },
-          {
-            "domain": "default",
-            "utterance": "allowance when",
-            "intent": "allowance.when"
-          },
-          {
-            "domain": "default",
-            "utterance": "when is mycare",
-            "intent": "events.mycare.info"
-          },
-          {
-            "domain": "default",
-            "utterance": "what is mycare",
-            "intent": "events.mycare.info"
-          },
-          {
-            "domain": "default",
-            "utterance": "What is COE",
-            "intent": "coe.what"
-          },
-          {
-            "domain": "default",
-            "utterance": "How to get COE",
-            "intent": "coe.what"
-          },
-          {
-            "domain": "default",
-            "utterance": "What is the maintaining grade for this Scholarship program",
-            "intent": "grade_to_pass"
-          },
-          {
-            "domain": "default",
             "utterance": "Maintaining Grades",
             "intent": "grade_to_pass"
           },
           {
             "domain": "default",
-            "utterance": "When is the next allowance",
-            "intent": "allowance.when"
-          },
-          {
-            "domain": "default",
-            "utterance": "allowance when",
-            "intent": "allowance.when"
-          },
-          {
-            "domain": "default",
-            "utterance": "when is mycare",
-            "intent": "events.mycare.info"
-          },
-          {
-            "domain": "default",
-            "utterance": "what is mycare",
-            "intent": "events.mycare.info"
-          },
-          {
-            "domain": "default",
-            "utterance": "What is COE",
-            "intent": "coe.what"
-          },
-          {
-            "domain": "default",
-            "utterance": "How to get COE",
-            "intent": "coe.what"
-          },
-          {
-            "domain": "default",
-            "utterance": "What is the maintaining grade for this Scholarship program",
+            "utterance": "What is the maintaining grades",
             "intent": "grade_to_pass"
           },
           {
             "domain": "default",
-            "utterance": "Maintaining Grades",
-            "intent": "grade_to_pass"
+            "utterance": "website",
+            "intent": "website.access"
           },
           {
             "domain": "default",
-            "utterance": "When is the next allowance",
-            "intent": "allowance.when"
-          },
-          {
-            "domain": "default",
-            "utterance": "allowance when",
-            "intent": "allowance.when"
-          },
-          {
-            "domain": "default",
-            "utterance": "when is mycare",
-            "intent": "events.mycare.info"
-          },
-          {
-            "domain": "default",
-            "utterance": "what is mycare",
-            "intent": "events.mycare.info"
-          },
-          {
-            "domain": "default",
-            "utterance": "What is COE",
-            "intent": "coe.what"
-          },
-          {
-            "domain": "default",
-            "utterance": "How to get COE",
-            "intent": "coe.what"
-          },
-          {
-            "domain": "default",
-            "utterance": "What is the maintaining grade for this Scholarship program",
-            "intent": "grade_to_pass"
-          },
-          {
-            "domain": "default",
-            "utterance": "Maintaining Grades",
-            "intent": "grade_to_pass"
+            "utterance": "personal information ",
+            "intent": "personal.info"
           }
         ],
         "domains": {
@@ -312,16 +162,17 @@
               "get": 1,
               "maintain": 1,
               "grade": 1,
-              "for": 1,
-              "this": 1,
-              "scholarship": 1,
-              "program": 1
+              "websit": 1,
+              "person": 1,
+              "inform": 1
             },
             "intents": {
               "allowance.when": 1,
               "events.mycare.info": 1,
               "coe.what": 1,
-              "grade_to_pass": 1
+              "grade_to_pass": 1,
+              "website.access": 1,
+              "personal.info": 1
             },
             "intentFeatures": {
               "allowance.when": {
@@ -346,15 +197,18 @@
                 "get": 1
               },
               "grade_to_pass": {
-                "what": 1,
-                "is": 1,
-                "the": 1,
                 "maintain": 1,
                 "grade": 1,
-                "for": 1,
-                "this": 1,
-                "scholarship": 1,
-                "program": 1
+                "what": 1,
+                "is": 1,
+                "the": 1
+              },
+              "website.access": {
+                "websit": 1
+              },
+              "personal.info": {
+                "person": 1,
+                "inform": 1
               }
             },
             "featuresToIntent": {
@@ -404,17 +258,14 @@
               "grade": [
                 "grade_to_pass"
               ],
-              "for": [
-                "grade_to_pass"
+              "websit": [
+                "website.access"
               ],
-              "this": [
-                "grade_to_pass"
+              "person": [
+                "personal.info"
               ],
-              "scholarship": [
-                "grade_to_pass"
-              ],
-              "program": [
-                "grade_to_pass"
+              "inform": [
+                "personal.info"
               ]
             },
             "neuralNetwork": {
@@ -443,97 +294,132 @@
                 "get",
                 "maintain",
                 "grade",
-                "for",
-                "this",
-                "scholarship",
-                "program"
+                "websit",
+                "person",
+                "inform"
               ],
               "intents": [
                 "allowance.when",
                 "events.mycare.info",
                 "coe.what",
-                "grade_to_pass"
+                "grade_to_pass",
+                "website.access",
+                "personal.info"
               ],
               "perceptrons": [
                 [
-                  4.712514877319336,
-                  -2.6892213821411133,
-                  1.2109256982803345,
-                  1.5414626598358154,
-                  8.004194259643555,
-                  -3.549534320831299,
-                  -0.8715112805366516,
-                  -0.6435378193855286,
-                  -0.2945523262023926,
-                  -0.2945523262023926,
-                  -0.2945523262023926,
-                  -0.7573002576828003,
-                  -0.7573002576828003,
-                  -0.27333423495292664,
-                  -0.27333423495292664,
-                  -0.27333423495292664,
-                  -0.27333423495292664,
-                  1.5268989457420825
+                  4.935909748077393,
+                  -2.535982847213745,
+                  1.167218804359436,
+                  1.6185598373413086,
+                  8.152162551879883,
+                  -3.426649570465088,
+                  -0.8855902552604675,
+                  -0.466972291469574,
+                  -0.1951175034046173,
+                  -0.1951175034046173,
+                  -0.1951175034046173,
+                  -0.6445809006690979,
+                  -0.6445809006690979,
+                  -0.9809691309928894,
+                  -0.5122794508934021,
+                  -0.5122794508934021,
+                  1.0314249916453504
                 ],
                 [
-                  1.0768741369247437,
-                  2.906630039215088,
-                  -2.0857419967651367,
-                  -1.415094017982483,
-                  -2.392392158508301,
-                  9.494236946105957,
-                  0.878830075263977,
-                  -4.60666036605835,
-                  -0.09491394460201263,
-                  -0.09491394460201263,
-                  -0.09491394460201263,
-                  -0.6205768585205078,
-                  -0.6205768585205078,
-                  -0.5484562516212463,
-                  -0.5484562516212463,
-                  -0.5484562516212463,
-                  -0.5484562516212463,
-                  0.8846396055024509
+                  1.3011908531188965,
+                  3.055635452270508,
+                  -2.3727447986602783,
+                  -1.2228351831436157,
+                  -2.163175582885742,
+                  9.59671401977539,
+                  0.8454607129096985,
+                  -4.256345272064209,
+                  -0.08260909467935562,
+                  -0.08260909467935562,
+                  -0.08260909467935562,
+                  -1.2223495244979858,
+                  -1.2223495244979858,
+                  -0.541655421257019,
+                  -0.32753291726112366,
+                  -0.32753291726112366,
+                  0.5058135694106642
                 ],
                 [
-                  -1.0738805532455444,
-                  1.5228561162948608,
-                  -1.0482711791992188,
-                  -0.33052492141723633,
-                  -0.5949230194091797,
-                  -5.050938129425049,
-                  2.403618335723877,
-                  9.008726119995117,
-                  1.354995846748352,
-                  1.354995846748352,
-                  1.354995846748352,
-                  -0.8182388544082642,
-                  -0.8182388544082642,
-                  -0.6273658871650696,
-                  -0.6273658871650696,
-                  -0.6273658871650696,
-                  -0.6273658871650696,
-                  1.237754683514155
+                  -0.8683268427848816,
+                  1.6653138399124146,
+                  -1.5875165462493896,
+                  -0.24320758879184723,
+                  -0.4576418101787567,
+                  -4.444332122802734,
+                  2.3872883319854736,
+                  9.204244613647461,
+                  1.4855457544326782,
+                  1.4855457544326782,
+                  1.4855457544326782,
+                  -1.57119882106781,
+                  -1.57119882106781,
+                  -0.7870477437973022,
+                  -0.487149715423584,
+                  -0.487149715423584,
+                  0.7006953662097818
                 ],
                 [
-                  -1.0072838068008423,
-                  -1.468235969543457,
-                  0.08510486036539078,
-                  -0.44111207127571106,
-                  -0.7571038603782654,
-                  -0.8869029879570007,
-                  -0.7220824956893921,
-                  -0.9197470545768738,
-                  -0.2850731611251831,
-                  -0.2850731611251831,
-                  -0.2850731611251831,
-                  6.164331436157227,
-                  6.164331436157227,
-                  0.5810782313346863,
-                  0.5810782313346863,
-                  0.5810782313346863,
-                  0.5810782313346863,
-                  1.7881117404315987
+                  -1.0332361459732056,
+                  -1.0065994262695312,
+                  1.112903118133545,
+                  -0.711561381816864,
+                  -0.7710330486297607,
+                  -1.1446188688278198,
+                  0.0188135989010334,
+                  -0.9825954437255859,
+                  -0.05420491844415665,
+                  -0.05420491844415665,
+                  -0.05420491844415665,
+                  6.580150127410889,
+                  6.580150127410889,
+                  -0.992236852645874,
+                  -0.5141592025756836,
+                  -0.5141592025756836,
+                  1.0312015273389363
+                ],
+                [
+                  -1.4649713039398193,
+                  -1.168260931968689,
+                  -0.15936775505542755,
+                  -0.1312945932149887,
+                  -1.2819570302963257,
+                  -0.7591150999069214,
+                  -0.8416038751602173,
+                  -0.8733422160148621,
+                  -0.6340323686599731,
+                  -0.6340323686599731,
+                  -0.6340323686599731,
+                  -1.3694171905517578,
+                  -1.3694171905517578,
+                  11.240031242370605,
+                  -1.3796275854110718,
+                  -1.3796275854110718,
+                  2.792782894824668
+                ],
+                [
+                  -0.8074385523796082,
+                  -0.7052173614501953,
+                  -0.1434425264596939,
+                  -0.11317989975214005,
+                  -0.6640087962150574,
+                  -0.3836628496646881,
+                  -0.4299555718898773,
+                  -0.5091468691825867,
+                  -0.3444073498249054,
+                  -0.3444073498249054,
+                  -0.3444073498249054,
+                  -0.7271454930305481,
+                  -0.7271454930305481,
+                  -1.3522893190383911,
+                  6.440683841705322,
+                  6.440683841705322,
+                  1.3927224220009087
                 ]
               ]
             }
@@ -569,147 +455,19 @@
       ],
       [
         "en",
-        "When is the next allowance"
-      ],
-      [
-        "en",
-        "allowance when"
-      ],
-      [
-        "en",
-        "when is mycare"
-      ],
-      [
-        "en",
-        "what is mycare"
-      ],
-      [
-        "en",
-        "What is COE"
-      ],
-      [
-        "en",
-        "How to get COE"
-      ],
-      [
-        "en",
-        "When is the next allowance"
-      ],
-      [
-        "en",
-        "allowance when"
-      ],
-      [
-        "en",
-        "when is mycare"
-      ],
-      [
-        "en",
-        "what is mycare"
-      ],
-      [
-        "en",
-        "What is COE"
-      ],
-      [
-        "en",
-        "How to get COE"
-      ],
-      [
-        "en",
-        "When is the next allowance"
-      ],
-      [
-        "en",
-        "allowance when"
-      ],
-      [
-        "en",
-        "when is mycare"
-      ],
-      [
-        "en",
-        "what is mycare"
-      ],
-      [
-        "en",
-        "What is COE"
-      ],
-      [
-        "en",
-        "How to get COE"
-      ],
-      [
-        "en",
-        "What is the maintaining grade for this Scholarship program"
-      ],
-      [
-        "en",
         "Maintaining Grades"
       ],
       [
         "en",
-        "When is the next allowance"
+        "What is the maintaining grades"
       ],
       [
         "en",
-        "allowance when"
+        "website"
       ],
       [
         "en",
-        "when is mycare"
-      ],
-      [
-        "en",
-        "what is mycare"
-      ],
-      [
-        "en",
-        "What is COE"
-      ],
-      [
-        "en",
-        "How to get COE"
-      ],
-      [
-        "en",
-        "What is the maintaining grade for this Scholarship program"
-      ],
-      [
-        "en",
-        "Maintaining Grades"
-      ],
-      [
-        "en",
-        "When is the next allowance"
-      ],
-      [
-        "en",
-        "allowance when"
-      ],
-      [
-        "en",
-        "when is mycare"
-      ],
-      [
-        "en",
-        "what is mycare"
-      ],
-      [
-        "en",
-        "What is COE"
-      ],
-      [
-        "en",
-        "How to get COE"
-      ],
-      [
-        "en",
-        "What is the maintaining grade for this Scholarship program"
-      ],
-      [
-        "en",
-        "Maintaining Grades"
+        "personal information "
       ]
     ]
   },
@@ -745,6 +503,16 @@
         "grade_to_pass": [
           {
             "answer": "2.00 is the maintaining grade"
+          }
+        ],
+        "website.access": [
+          {
+            "answer": "please click this link to visit our website"
+          }
+        ],
+        "personal.info": [
+          {
+            "answer": "To Change personal information please follow this step"
           }
         ]
       }
