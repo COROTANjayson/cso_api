@@ -153,6 +153,7 @@ const SendSms = async (req,  res, io) => {
             
             const to = req.number;
             const text = req.text;
+            
 
             // Send Messages
             modem.sendSMS(to, text, false, (data)=>{
