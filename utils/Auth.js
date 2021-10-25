@@ -299,7 +299,229 @@ const editUser = async (req, id, res) => {
     }
 };
 
+const editUserInfo = async (req,id,res)=>{
+    const { employee_id, first_name, last_name, email, gender, position, user_role } = req;
 
+    try{
+        let user = await User.findById(id);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not Found",
+                success: false
+            });
+        }
+
+        //Check required fields
+        if (!employee_id || !first_name || !last_name || !email || !gender || !position || !user_role) {
+            return res.status(400).json({
+                message: `Please enter all required fields`,
+                success: false
+            });
+        }
+
+        // validate the email
+        let emailNotRegistered = await validateEmail(req.email);
+        if (email === user.email) {
+            checkEmail = true;
+        } else if (!emailNotRegistered) {
+            return res.status(400).json({
+                message: `Email is already registered.`,
+                success: false
+            });
+        }
+
+        await User.updateOne({_id:id},{$set:{
+            employee_id:employee_id,
+            first_name:first_name,
+            last_name:last_name,
+            email:email,
+            gender:gender,
+            position:position,
+            user_role:user_role}})
+
+        return res.status(201).json({
+            message: "User Successfully updated ",
+            success: true
+        });
+
+
+
+
+    }catch(e){
+        console.log(err)
+        // Implement logger function (winston)
+        return res.status(500).json({
+            message: "Unable to edit information",
+            success: false
+        });
+    }
+}
+
+const editUserContact = async (req,id,res)=>{
+    const { address, phone_num} = req;
+
+    try{
+        let user = await User.findById(id);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not Found",
+                success: false
+            });
+        }
+
+        //Check required fields
+        if (!address || !phone_num) {
+            return res.status(400).json({
+                message: `Please enter all required fields`,
+                success: false
+            });
+        }
+
+        await User.updateOne({_id:id},{$set:{
+            address:address,
+            phone_num:phone_num
+        }})
+
+        return res.status(201).json({
+            message: "User Successfully updated ",
+            success: true
+        });
+
+
+
+
+    }catch(e){
+        console.log(err)
+        // Implement logger function (winston)
+        return res.status(500).json({
+            message: "Unable to edit information",
+            success: false
+        });
+    }
+}
+
+const editUsername = async (req,id,res)=>{
+    const { username} = req
+
+    try{
+        let user = await User.findById(id);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not Found",
+                success: false
+            });
+        }
+
+        //Check required fields
+        if (!username) {
+            return res.status(400).json({
+                message: `Please enter all required fields`,
+                success: false
+            });
+        }
+
+        // Validate the username
+        let checkUser = false;
+        let usernameNotTaken = await validateUsername(username);
+
+
+        if (username === user.username) {
+            checkUser = true;
+        } else if (!usernameNotTaken) {
+            return res.status(400).json({
+                message: `Username is already taken.`,
+                success: false
+            });
+        }
+
+        await User.updateOne({_id:id},{$set:{
+            username:username,
+        }})
+
+        return res.status(201).json({
+            message: "User Successfully updated ",
+            success: true
+        });
+
+
+
+
+    }catch(e){
+        console.log(err)
+        // Implement logger function (winston)
+        return res.status(500).json({
+            message: "Unable to edit information",
+            success: false
+        });
+    }
+}
+
+const editPassword = async (req,id,res)=>{
+    const { oldpassword, newpassword} = req
+
+    try{
+        let user = await User.findById(id);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not Found",
+                success: false
+            });
+        }
+
+        //Check required fields
+        if (!oldpassword || !newpassword) {
+            return res.status(400).json({
+                message: `Please enter all required fields`,
+                success: false
+            });
+        }
+
+        let isMatch = await bcrypt.compare(oldpassword, user.password);
+
+        if(!isMatch){
+            return res.status(404).json({
+                message: `Old Password is Invalid`,
+                success: false
+            });
+        }
+
+        if (newpassword.length < 8) {
+            return res.status(400).json({
+                message: `Password must be at least 8 characters`,
+                success: false
+            });
+        }
+
+         // Get the hashed password
+        const salt = bcrypt.genSaltSync(10);
+        const hashpassword = await bcrypt.hash(newpassword, salt);
+
+        await User.updateOne({_id:id},{$set:{
+            password:hashpassword,
+        }})
+
+        
+        return res.status(201).json({
+            message: "User Successfully updated ",
+            success: true
+        });
+
+
+
+
+    }catch(e){
+        console.log(err)
+        // Implement logger function (winston)
+        return res.status(500).json({
+            message: "Unable to edit information",
+            success: false
+        });
+    }
+}
 
 const validateUsername = async username => {
     let user = await User.findOne({ username });
@@ -350,5 +572,9 @@ module.exports = {
     serializeUser,
     editUser,
     getAllUsers,
-    getUser
+    getUser,
+    editUserInfo,
+    editUserContact,
+    editUsername,
+    editPassword
 };

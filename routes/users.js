@@ -7,7 +7,11 @@ const {
   userRegister,
   serializeUser,
   getAllUsers,
-  getUser
+  getUser,
+  editUserInfo,
+  editUserContact,
+  editUsername,
+  editPassword
 } = require("../utils/Auth");
 
 // Users Registeration Route (/api/users/register-user)
@@ -25,6 +29,34 @@ router.post("/login-user", async (req, res) => {
 router.post("/edit/:id", userAuth, async (req, res) => {
   const id = req.params.id;
   await editUser(req.body.data,id, res);
+  // await editUser(req.body,id, res);
+});
+
+// Users Edit info Route (api/users/edit)
+router.post("/editinfo/:id", userAuth, async (req, res) => {
+  const id = req.params.id;
+  await editUserInfo(req.body.data,id, res);
+  // await editUser(req.body,id, res);
+});
+
+// Users Edit Contact Route (api/users/edit)
+router.post("/editcontact/:id", userAuth, async (req, res) => {
+  const id = req.params.id;
+  await editUserContact(req.body.data,id, res);
+  // await editUser(req.body,id, res);
+});
+
+// Users Edit Username Route (api/users/edit)
+router.post("/editusername/:id", userAuth, async (req, res) => {
+  const id = req.params.id;
+  await editUsername(req.body.data,id, res);
+  // await editUser(req.body,id, res);
+});
+
+// Users Edit Username Route (api/users/edit)
+router.post("/editpassword/:id", userAuth, async (req, res) => {
+  const id = req.params.id;
+  await editPassword(req.body.data,id, res);
   // await editUser(req.body,id, res);
 });
 
