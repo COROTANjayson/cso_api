@@ -37,6 +37,9 @@ const nlpFunction = async (text) =>{
         if(findID){
             data.categoryId = findID.category_id
             data.faqID = findID._id
+
+            // Add the query of student to the array of faq_utterances
+            await FAQ.updateOne({_id:findID._id},{$push:{faq_utterances:{value:text}}})
         }
         
         if(response.answers.length < 1){
