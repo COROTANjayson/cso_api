@@ -26,7 +26,7 @@ const nlpFunction = async (text) =>{
     manager.save();
 
     try{
-        const response = await manager.process('en', translation);
+        const response = await manager.process('en', translation.text);
         const findID = await FAQ.findOne({faq_title:response.intent})
         console.log(response);
         data = {

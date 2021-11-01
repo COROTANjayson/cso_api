@@ -146,15 +146,57 @@ function currentMessageStudentList(sms,student_num){
 
 // Create new Sender
 const SendSms = async (req,  res, io) => {
-    try {
+    try {    
+        const to = req.number;
+        let text = req.text;
         
-        modem.initializeModem((data)=>{
-            console.log('Modem is Initialized');
-            
-            const to = req.number;
-            const text = req.text;
-            
+        if(text.length > 140){
 
+            const tempWord = text;
+            const wordArr = [];
+
+            while(text.length != 0){
+                wordArr.push(text.substr(0,140))
+                if(text.length < 140){
+                    text = text.slice(text.length);
+                }else{
+                    text = text.slice(140);
+                }
+            }
+            
+            wordArr.forEach(e=>{
+                modem.sendSMS(to, e, false, (data)=>{
+                    console.log(data);
+                })
+
+                modem.on('onSendingMessage', result => { 
+                    console.log(result);
+                 })
+            })
+
+            modem.getOwnNumber(phone=>{
+                const newSMS = new SMS({
+                    message:tempWord,
+                    officer_phone:phone.data.number,
+                    student_phone:to,
+                    type:'send',
+                    isChatbot:false,
+                    student_id:null,
+                    chatBotReplyID:null,
+                    is_read:true
+                });
+
+                newSMS.save((data)=>{
+                    // console.log(newSMS);
+                    modem.deleteAllSimMessages()
+                    io.sockets.emit('newSMSFromOfficer');
+                    return res.status(201).json({
+                        message: newSMS,
+                        success: true
+                    });
+                });
+            })
+        }else{
             // Send Messages
             modem.sendSMS(to, text, false, (data)=>{
                 // console.log(data);
@@ -187,18 +229,20 @@ const SendSms = async (req,  res, io) => {
                             });
 
                         });
-                      }catch(err){
+                        }catch(err){
                         return res.status(500).json({
                             message: "Send SMS Error",
                             success: false
                         });
-                      }
+                        }
                 }
             })
-        })
-        modem.on('onSendingMessage', result => { 
-            console.log(result);
-         })
+
+            modem.on('onSendingMessage', result => { 
+                console.log(result);
+             })
+        }
+
     } catch (err) {
         console.log(err);
     }
@@ -267,7 +311,71 @@ const listenReply = (io) => {
 
                     if(nlpReply.success) {
                         // console.log(nlpReply.answer.answer);
-                        modem.initializeModem((data)=>{
+                        let text = nlpReply.answer.answer;
+                        if(text.length > 140){
+
+                            const tempWord = text;
+                            const wordArr = [];
+                
+                            while(text.length != 0){
+                                wordArr.push(text.substr(0,140))
+                                if(text.length < 140){
+                                    text = text.slice(text.length);
+                                }else{
+                                    text = text.slice(140);
+                                }
+                            }
+                            
+                            wordArr.forEach(e=>{
+                                modem.sendSMS(messageDetails.sender, e, false, (data)=>{
+                                    console.log(data);
+                                })
+                
+                                modem.on('onSendingMessage', result => { 
+                                    console.log(result);
+                                 })
+                            })
+
+                            modem.getOwnNumber((phone)=>{
+                                // console.log(phone.data.number);
+    
+                                const newSMS = new SMS({
+                                    message:tempWord,
+                                    officer_phone:phone.data.number,
+                                    student_phone:messageDetails.sender,
+                                    type:'send',
+                                    isChatbot:true,
+                                    student_id:null,
+                                    chatBotReplyID:newSMSStduent._id,
+                                    is_read:true
+                                });
+    
+                                // console.log(newSMS);
+                                newSMS.save((data1)=>{
+                                    
+                                    const newQuery = new Query({
+                                        sender_id:newSMSStduent.student_id,
+                                        category_id:nlpReply.categoryId,
+                                        query_name:messageDetails.message,
+                                        possible_answer:tempWord,
+                                        faq_id:nlpReply.faqID,
+                                        status:"1",
+                                        phone_num:messageDetails.sender
+                                    });
+
+                                    console.log('Query Save not other')
+
+                                    newQuery.save((data2) => {
+                                        modem.deleteAllSimMessages()
+                                        // socket.broadcast.emit("newdata", newData);
+                                        io.sockets.emit('newdata',newData);  
+                                    })
+                                });
+    
+                            });
+                
+                            
+                        }else{
                             modem.sendSMS(messageDetails.sender, nlpReply.answer.answer, false, (data)=>{
                                 console.log(data);
                                 if(data.request == 'SendSMS'){
@@ -299,9 +407,9 @@ const listenReply = (io) => {
                                                     status:"1",
                                                     phone_num:data.data.recipient
                                                 });
-
+    
                                                 console.log('Query Save not other')
-
+    
                                                 newQuery.save((data2) => {
                                                     modem.deleteAllSimMessages()
                                                     // socket.broadcast.emit("newdata", newData);
@@ -310,60 +418,67 @@ const listenReply = (io) => {
                                             });
                 
                                         });
-                                        }catch(err){
+                                    }catch(err){
                                         console.log(err)
-                                        }
+                                    }
                                 }
                             })
-                        })
+                
+                            modem.on('onSendingMessage', result => { 
+                                console.log(result);
+                             })
+                        }
+                      
+                        
+                       
                     } else {
-                        modem.initializeModem((data)=>{
-                            modem.sendSMS(messageDetails.sender, 'No Possible Answer Found',  false, (data)=>{
-                                console.log(data);
-                                if(data.request == 'SendSMS'){
-                                try{
-                                    modem.getOwnNumber((phone)=>{
-                                        // const newSMS = new SMS({
-                                        //     message:data.data.message,
-                                        //     officer_phone:phone.data.number,
-                                        //     student_phone:data.data.recipient,
-                                        //     type:'send',
-                                        //     isChatbot:true,
-                                        //     student_id:null,
-                                        //     chatBotReplyID:newSMSStduent._id,
-                                        //     is_read:true
-                                        // });
-            
-                                        // newSMS.save((data1)=>{
-                                            
-                                        // });
-
-                                        const newQuery = new Query({
-                                            sender_id:newSMSStduent.student_id,
-                                            category_id:nlpReply.categoryId,
-                                            query_name:messageDetails.message,
-                                            possible_answer:'N/A',
-                                            faq_id:nlpReply.faqID,
-                                            status:"1",
-                                            phone_num:data.data.recipient
-                                        });
-
-                                        console.log('Query Save other')
-                                        console.log(newQuery);
-                                        newQuery.save((data2) => {
-                                            modem.deleteAllSimMessages()
-                                            // socket.broadcast.emit("newdata", newData);
-                                            io.sockets.emit('newdata',newData);
-                                        })
+                        
+                        modem.sendSMS(messageDetails.sender, 'No Possible Answer Found',  false, (data)=>{
+                            console.log(data);
+                            if(data.request == 'SendSMS'){
+                            try{
+                                modem.getOwnNumber((phone)=>{
+                                    // const newSMS = new SMS({
+                                    //     message:data.data.message,
+                                    //     officer_phone:phone.data.number,
+                                    //     student_phone:data.data.recipient,
+                                    //     type:'send',
+                                    //     isChatbot:true,
+                                    //     student_id:null,
+                                    //     chatBotReplyID:newSMSStduent._id,
+                                    //     is_read:true
+                                    // });
+        
+                                    // newSMS.save((data1)=>{
                                         
+                                    // });
+
+                                    const newQuery = new Query({
+                                        sender_id:newSMSStduent.student_id,
+                                        category_id:nlpReply.categoryId,
+                                        query_name:messageDetails.message,
+                                        possible_answer:'N/A',
+                                        faq_id:nlpReply.faqID,
+                                        status:"1",
+                                        phone_num:data.data.recipient
                                     });
-                                    }catch(err){
-                                    console.log(err)
-                                    }
+
+                                    console.log('Query Save other')
+                                    console.log(newQuery);
+                                    newQuery.save((data2) => {
+                                        modem.deleteAllSimMessages()
+                                        // socket.broadcast.emit("newdata", newData);
+                                        io.sockets.emit('newdata',newData);
+                                    })
+                                    
+                                });
+                                }catch(err){
+                                console.log(err)
+                                }
                             }
                             
                         })
-                        })
+                       
                     }
 
                 })();
