@@ -1,6 +1,7 @@
 const { NlpManager } = require('node-nlp');
 const FAQ = require("../../models/FAQ");
 const Category = require("../../models/Category");
+const translate = require('@vitalets/google-translate-api');
 
 const manager = new NlpManager({ languages: ['en'], forceNER: true });
 
@@ -20,11 +21,12 @@ const nlpFunction = async (text) =>{
         manager.addAnswer('en', element.faq_title, element.faq_answer);
     });
 
+    const translation =  await translate(text, {to: 'en'});
     await manager.train();
     manager.save();
 
     try{
-        const response = await manager.process('en', text);
+        const response = await manager.process('en', translation);
         const findID = await FAQ.findOne({faq_title:response.intent})
         console.log(response);
         data = {
