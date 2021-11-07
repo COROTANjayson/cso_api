@@ -17,12 +17,14 @@ router.get("/show/:cat_id", userAuth, async (req, res) => {
 router.post("/add", userAuth, async (req, res) => {
     user_id = req.user
     await AddCategory(req.body.data, user_id._id, res);
+    // await AddCategory(req.body, user_id._id, res);
 });
 
 // Edit Category Route(api/category/edit/cat_id)
 router.put("/edit/:cat_id", userAuth, async (req, res) => {
     const cat_id = req.params.cat_id;
     await EditCategory(req.body.data, cat_id, res);
+    // await EditCategory(req.body, cat_id, res);
 });
 
 // Delete Category Route(api/category/edit/cat_id)

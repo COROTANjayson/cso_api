@@ -1,12 +1,14 @@
 
 const passport = require("passport");
 const Query = require("../models/Query");
-const Sender = require("../models/Sender");
+const FAQ = require("../models/FAQ");
 require('../middlewares/passport')(passport);
 mongoose = require("mongoose");
 const Category = require('../models/Category')
 const ObjectId = mongoose.Types.ObjectId;
 const { SECRET } = require("../config");
+const { NlpManager } = require('node-nlp');
+var compromise = require('compromise');
 
 
 // //Show all Queries
@@ -167,7 +169,7 @@ const NewQuery = async ( req, res) => {
     const { sender_id, faq_id, category_id, query_name, possible_answer, status, phone_num } = req;
 
     try {
-        if (!category_id || !query_name || !possible_answer || !status) {
+        if (!category_id || !query_name || !possible_answer || !status || !phone_num) {
             return res.status(400).json({
                 message: `Please enter all fields`,
                 success: false
@@ -431,6 +433,122 @@ const ShowUnidentifiedQuery = async (req,  res) => {
     }
 }
 
+const ShowPossibleCategory = async (req,  res) => {
+    const manager = new NlpManager({ languages: ['en'], forceNER: true });
+    sw = require('stopword')
+
+    
+    try {
+
+        const others = await Category.findOne({ category_name: 'others' });
+        queries = await Query.aggregate([
+            {"$match":{
+                    'category_id':others._id,
+                },
+            },
+            {
+                "$lookup": {
+                    "from": 'senders',
+                    "localField": 'sender_id',
+                    "foreignField": '_id',
+                    "as": "sender"
+                },
+            },
+            {
+                "$unwind": {
+                    "path": "$sender",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
+            {
+                "$lookup": {
+                    "from": 'students',
+                    "localField": 'sender.student_id',
+                    "foreignField": 'student_id',
+                    "as": "student"
+                }
+            },
+            {
+                "$unwind": {
+                    "path": "$student",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
+            {
+                "$lookup": {
+                    "from": 'categories',
+                    "localField": 'category_id',
+                    "foreignField": '_id',
+                    "as": "category"
+                }
+            },
+            { "$unwind": "$category" },
+            {
+                "$lookup": {
+                    "from": 'faqs',
+                    "localField": 'faq_id',
+                    "foreignField": '_id',
+                    "as": "faq"
+                }
+            },
+            {
+                "$unwind": {
+                    "path": "$faq",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
+           
+        ]);
+
+        const category = await Category.find()
+   
+        category.forEach(element => {
+            console.log(element.category_name)
+        
+            manager.addDocument('en', element.category_name, element.category_name);
+            manager.addAnswer('en', element.categoryname, element.category_name);
+        });
+
+        await manager.train();
+        manager.save();
+
+        
+       await Promise.all(queries.map(async function(query)  {    
+            let string
+            let key_word
+            string = query.query_name.toString().split(' ')
+            key_word = sw.removeStopwords(string)
+            // //const response = await manager.process('en', sw.removeStopwords(string).join(" "));
+            const response =  await manager.process('en', query.query_name);
+            
+            let answer = []
+            await response.classifications.forEach((item) => {
+               
+                score = item.score
+                if (item.score > 0){
+                    answer.push(item.intent)
+                }
+                
+            })
+
+            query.intent = answer
+            query.key_words = key_word
+
+           return query
+        }))
+        return res.status(201).json({
+            query_list: queries,
+            success: true
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
+    }
+}
+
 //Show Student
 
 module.exports = {
@@ -440,5 +558,6 @@ module.exports = {
     EditQuery,
     DeleteQuery,
     ShowQueriesByCategory,
-    ShowUnidentifiedQuery
+    ShowUnidentifiedQuery,
+    ShowPossibleCategory
 };

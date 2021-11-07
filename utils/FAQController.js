@@ -4,7 +4,7 @@ const Category = require("../models/Category");
 const Query = require("../models/Query");
 mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
-const { NlpManager, SimilarSearch } = require('node-nlp');
+const { NlpManager } = require('node-nlp');
 
 require('../middlewares/passport')(passport);
 //Show all FAQ
@@ -82,8 +82,9 @@ const ShowFAQ = async (req, faq_id, res) => {
 
 // Create new FAQ
 const AddFAQ = async (req, user_id, res) => {
-    const { faq_title, faq_answer, faq_utterances, category_id } = req;
+    
     try {
+        const { faq_title, faq_answer, faq_utterances, category_id } = req;
         // Check required fields
         if (!faq_title || !faq_answer || !faq_utterances) {
             return res.status(400).json({
@@ -115,7 +116,6 @@ const AddFAQ = async (req, user_id, res) => {
             success: true
         });
     } catch (err) {
-        console.log(err)
         // Implement logger function (winston)
         return res.status(500).json({
             message: "Server Error",
@@ -249,12 +249,11 @@ const ScanQuery = async (faq_utterances, faq_title, faq_answer, faq_id, category
     const faq = await FAQ.find();
     faq.forEach(element => {
         element.faq_utterances.forEach(e=>{
-            manager.addDocument('en',e.value,element.faq_title);
+            manager.addDocument('en', e, element.faq_title);
         })
         manager.addAnswer('en', element.faq_title, element.faq_answer);
     });
 
-    // manager.addAnswer('en', faq_title, faq_answer);
 
     await manager.train();
     manager.save();
