@@ -16,7 +16,7 @@ router.get("/show/:faq_id", userAuth, async (req, res) => {
 // Add FAQ Route (/api/FAQ/add)
 router.post("/add", userAuth, async (req, res) => {
     user_id = req.user
-    await AddFAQ(req.body.data, user_id._id, res);
+    await AddFAQ(req.body, user_id._id, res);
     // await AddFAQ(req.body, user_id._id, res);
 });
 

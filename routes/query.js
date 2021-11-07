@@ -9,6 +9,7 @@ const {
     DeleteQuery,
     ShowQueriesByCategory,
     ShowUnidentifiedQuery,
+    ShowPossibleCategory
     // SearchStudent
 } = require("../utils/QueryController");
 
@@ -27,12 +28,15 @@ router.get("/show/:id", userAuth, async (req, res) => {
 // :sender_id/:faq_id/:category_id
 router.post("/add", userAuth, async (req, res) => {
     await NewQuery(req.body, res);
+    // await NewQuery(req.body.data, res);
 });
 
 // // // Edit query Route(api/query/edit/id) -> OBJECT ID
 router.put("/edit/:id", userAuth, async (req, res) => {
     const query_id = req.params.id
     await EditQuery(query_id, req.body, res);
+    // await EditQuery(query_id, req.body.data, res);
+    
 });
 
 // // Delete query Route(api/query/edit/id)
@@ -48,6 +52,10 @@ router.get("/showbycategory/:cat_id", userAuth, async (req, res) => {
 
 router.get("/unidentifiedquery", userAuth, async (req, res) => {
     await ShowUnidentifiedQuery(req.body, res);
+});
+
+router.get("/showpossiblecategory", userAuth, async (req, res) => {
+    await ShowPossibleCategory(req.body, res);
 });
 
 //search query (api/query/search/:id) query_id or name
