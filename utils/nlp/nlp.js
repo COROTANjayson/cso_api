@@ -135,12 +135,11 @@ const nlpFunctionV2 = async (text) =>{
                 
               
                 e.faq_utterances.forEach(u=>{
-                    manager1.addDocument('en', u, e._id.toString());
+                    console.log(u);
+                    manager1.addDocument('en', u, e.faq_title);
                 })
 
-                manager1.addAnswer('en', e._id.toString(), e.faq_answer);
-
-                console.log(manager1.container);
+                manager1.addAnswer('en', e.faq_title, e.faq_answer)
             })
 
             // manager1.train().then(() => {

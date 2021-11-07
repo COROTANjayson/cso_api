@@ -444,6 +444,7 @@ const ShowPossibleCategory = async (req,  res) => {
         queries = await Query.aggregate([
             {"$match":{
                     'category_id':others._id,
+                    'phone_num':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]},
                 },
             },
             {
@@ -463,8 +464,8 @@ const ShowPossibleCategory = async (req,  res) => {
             {
                 "$lookup": {
                     "from": 'students',
-                    "localField": 'sender.student_id',
-                    "foreignField": 'student_id',
+                    "localField": 'sender_id',
+                    "foreignField": '_id',
                     "as": "student"
                 }
             },
@@ -501,6 +502,7 @@ const ShowPossibleCategory = async (req,  res) => {
         ]);
 
         const category = await Category.find()
+        console.log(queries);
    
         category.forEach(element => {
             console.log(element.category_name)

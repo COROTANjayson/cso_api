@@ -14,6 +14,7 @@
     "@vitalets/google-translate-api": "^7.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "compromise": "^13.11.4",
     "consola": "^2.15.3",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",

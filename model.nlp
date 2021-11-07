@@ -4,9 +4,6 @@
       "en"
     ],
     "forceNER": true,
-    "nlu": {
-      "useNoneFeature": false
-    },
     "tag": "nlp",
     "threshold": 0.5,
     "autoLoad": true,
@@ -16,8 +13,7 @@
   },
   "nluManager": {
     "settings": {
-      "tag": "nlu-manager",
-      "useNoneFeature": false
+      "tag": "nlu-manager"
     },
     "locales": [
       "en"
@@ -27,7 +23,6 @@
       "en": {
         "settings": {
           "locale": "en",
-          "useNoneFeature": false,
           "trainByDomain": false,
           "tag": "domain-manager-en",
           "nluByDomain": {
@@ -39,56 +34,99 @@
           "useStemDict": true
         },
         "stemDict": {
-          "next,when": {
-            "intent": "6172605a85334817dcb30e29",
+          "allow": {
+            "intent": "allowance",
             "domain": "default"
           },
-          "when": {
-            "intent": "6172605a85334817dcb30e29",
+          "scholarship": {
+            "intent": "Scholarship",
             "domain": "default"
           },
-          "next,of,releas,when": {
-            "intent": "6172605a85334817dcb30e29",
+          "inform": {
+            "intent": "Information",
             "domain": "default"
           },
-          "how,much": {
-            "intent": "61861a8d3a6035337cb7b8dc",
+          "websit": {
+            "intent": "Website",
             "domain": "default"
           },
-          "how,month,much,of,releas": {
-            "intent": "61861a8d3a6035337cb7b8dc",
+          "grade": {
+            "intent": "Grades",
+            "domain": "default"
+          },
+          "cours": {
+            "intent": "Course",
+            "domain": "default"
+          },
+          "coe": {
+            "intent": "COE",
+            "domain": "default"
+          },
+          "other": {
+            "intent": "others",
+            "domain": "default"
+          },
+          "event": {
+            "intent": "Event",
             "domain": "default"
           }
         },
         "intentDict": {
-          "6172605a85334817dcb30e29": "default",
-          "61861a8d3a6035337cb7b8dc": "default"
+          "allowance": "default",
+          "Scholarship": "default",
+          "Information": "default",
+          "Website": "default",
+          "Grades": "default",
+          "Course": "default",
+          "COE": "default",
+          "others": "default",
+          "Event": "default"
         },
         "sentences": [
           {
             "domain": "default",
-            "utterance": "when   next",
-            "intent": "6172605a85334817dcb30e29"
+            "utterance": "allowance",
+            "intent": "allowance"
           },
           {
             "domain": "default",
-            "utterance": "when",
-            "intent": "6172605a85334817dcb30e29"
+            "utterance": "Scholarship",
+            "intent": "Scholarship"
           },
           {
             "domain": "default",
-            "utterance": "when   release of next",
-            "intent": "6172605a85334817dcb30e29"
+            "utterance": "Information",
+            "intent": "Information"
           },
           {
             "domain": "default",
-            "utterance": "how much",
-            "intent": "61861a8d3a6035337cb7b8dc"
+            "utterance": "Website",
+            "intent": "Website"
           },
           {
             "domain": "default",
-            "utterance": "how much   monthly release of",
-            "intent": "61861a8d3a6035337cb7b8dc"
+            "utterance": "Grades",
+            "intent": "Grades"
+          },
+          {
+            "domain": "default",
+            "utterance": "Course",
+            "intent": "Course"
+          },
+          {
+            "domain": "default",
+            "utterance": "COE",
+            "intent": "COE"
+          },
+          {
+            "domain": "default",
+            "utterance": "others",
+            "intent": "others"
+          },
+          {
+            "domain": "default",
+            "utterance": "Event",
+            "intent": "Event"
           }
         ],
         "domains": {
@@ -105,61 +143,87 @@
               "log": true
             },
             "features": {
-              "when": 1,
-              "next": 1,
-              "releas": 1,
-              "of": 1,
-              "how": 1,
-              "much": 1,
-              "month": 1
+              "allow": 1,
+              "scholarship": 1,
+              "inform": 1,
+              "websit": 1,
+              "grade": 1,
+              "cours": 1,
+              "coe": 1,
+              "other": 1,
+              "event": 1
             },
             "intents": {
-              "6172605a85334817dcb30e29": 1,
-              "61861a8d3a6035337cb7b8dc": 1
+              "allowance": 1,
+              "Scholarship": 1,
+              "Information": 1,
+              "Website": 1,
+              "Grades": 1,
+              "Course": 1,
+              "COE": 1,
+              "others": 1,
+              "Event": 1
             },
             "intentFeatures": {
-              "6172605a85334817dcb30e29": {
-                "when": 1,
-                "next": 1,
-                "releas": 1,
-                "of": 1
+              "allowance": {
+                "allow": 1
               },
-              "61861a8d3a6035337cb7b8dc": {
-                "how": 1,
-                "much": 1,
-                "month": 1,
-                "releas": 1,
-                "of": 1
+              "Scholarship": {
+                "scholarship": 1
+              },
+              "Information": {
+                "inform": 1
+              },
+              "Website": {
+                "websit": 1
+              },
+              "Grades": {
+                "grade": 1
+              },
+              "Course": {
+                "cours": 1
+              },
+              "COE": {
+                "coe": 1
+              },
+              "others": {
+                "other": 1
+              },
+              "Event": {
+                "event": 1
               }
             },
             "featuresToIntent": {
-              "when": [
-                "6172605a85334817dcb30e29"
+              "allow": [
+                "allowance"
               ],
-              "next": [
-                "6172605a85334817dcb30e29"
+              "scholarship": [
+                "Scholarship"
               ],
-              "releas": [
-                "6172605a85334817dcb30e29",
-                "61861a8d3a6035337cb7b8dc"
+              "inform": [
+                "Information"
               ],
-              "of": [
-                "6172605a85334817dcb30e29",
-                "61861a8d3a6035337cb7b8dc"
+              "websit": [
+                "Website"
               ],
-              "how": [
-                "61861a8d3a6035337cb7b8dc"
+              "grade": [
+                "Grades"
               ],
-              "much": [
-                "61861a8d3a6035337cb7b8dc"
+              "cours": [
+                "Course"
               ],
-              "month": [
-                "61861a8d3a6035337cb7b8dc"
+              "coe": [
+                "COE"
+              ],
+              "other": [
+                "others"
+              ],
+              "event": [
+                "Event"
               ]
             },
             "neuralNetwork": {
               "settings": {
-                "useNoneFeature": false,
                 "locale": "en",
                 "tag": "nlu-en",
                 "keepStopwords": true,
@@ -171,38 +235,135 @@
                 "log": true
               },
               "features": [
-                "when",
-                "next",
-                "releas",
-                "of",
-                "how",
-                "much",
-                "month"
+                "allow",
+                "scholarship",
+                "inform",
+                "websit",
+                "grade",
+                "cours",
+                "coe",
+                "other",
+                "event"
               ],
               "intents": [
-                "6172605a85334817dcb30e29",
-                "61861a8d3a6035337cb7b8dc"
+                "allowance",
+                "Scholarship",
+                "Information",
+                "Website",
+                "Grades",
+                "Course",
+                "COE",
+                "others",
+                "Event"
               ],
               "perceptrons": [
                 [
-                  10.055770874023438,
-                  0.40914255380630493,
-                  -0.12050929665565491,
-                  -0.12050929665565491,
-                  -2.007617712020874,
-                  -2.007617712020874,
-                  -0.9663063287734985,
-                  4.025912852868341
+                  12.755775451660156,
+                  -1.2890907526016235,
+                  -1.284517765045166,
+                  -1.2796958684921265,
+                  -1.2746307849884033,
+                  -1.2693272829055786,
+                  -1.2637903690338135,
+                  -1.2580257654190063,
+                  -1.2520382404327393,
+                  1.2929484470500052
                 ],
                 [
-                  -2.0387027263641357,
-                  -1.3110812902450562,
-                  -0.39002326130867004,
-                  -0.39002326130867004,
-                  6.120550155639648,
-                  6.120550155639648,
-                  0.7851935029029846,
-                  2.040829331064026
+                  -1.247748613357544,
+                  12.75576114654541,
+                  -1.289104700088501,
+                  -1.2845324277877808,
+                  -1.279711365699768,
+                  -1.2746466398239136,
+                  -1.269343376159668,
+                  -1.2638070583343506,
+                  -1.2580424547195435,
+                  1.2948459906012773
+                ],
+                [
+                  -1.2541582584381104,
+                  -1.2477619647979736,
+                  12.755746841430664,
+                  -1.289119005203247,
+                  -1.284547209739685,
+                  -1.2797266244888306,
+                  -1.2746624946594238,
+                  -1.2693594694137573,
+                  -1.2638235092163086,
+                  1.2965540596832366
+                ],
+                [
+                  -1.2603428363800049,
+                  -1.2541710138320923,
+                  -1.2477749586105347,
+                  12.755733489990234,
+                  -1.2891333103179932,
+                  -1.2845617532730103,
+                  -1.279741644859314,
+                  -1.2746778726577759,
+                  -1.2693758010864258,
+                  1.2980738415534727
+                ],
+                [
+                  -1.2662960290908813,
+                  -1.260354995727539,
+                  -1.2541837692260742,
+                  -1.2477881908416748,
+                  12.755719184875488,
+                  -1.2891476154327393,
+                  -1.2845765352249146,
+                  -1.279757022857666,
+                  -1.2746937274932861,
+                  1.2994075742320699
+                ],
+                [
+                  -1.2720118761062622,
+                  -1.2663078308105469,
+                  -1.2603672742843628,
+                  -1.2541965246200562,
+                  -1.2478017807006836,
+                  12.755704879760742,
+                  -1.289162039756775,
+                  -1.284591794013977,
+                  -1.2797727584838867,
+                  1.3005574186607771
+                ],
+                [
+                  -1.2774839401245117,
+                  -1.2720226049423218,
+                  -1.2663191556930542,
+                  -1.2603791952133179,
+                  -1.254209041595459,
+                  -1.2478147745132446,
+                  12.755690574645996,
+                  -1.289176106452942,
+                  -1.2846062183380127,
+                  1.3015251980174314
+                ],
+                [
+                  -1.282706618309021,
+                  -1.277494192123413,
+                  -1.2720335721969604,
+                  -1.2663304805755615,
+                  -1.260391354560852,
+                  -1.254221796989441,
+                  -1.2478280067443848,
+                  12.755678176879883,
+                  -1.289190411567688,
+                  1.3023142066705704
+                ],
+                [
+                  -1.2876744270324707,
+                  -1.282716155052185,
+                  -1.277504563331604,
+                  -1.2720446586608887,
+                  -1.266342282295227,
+                  -1.2604036331176758,
+                  -1.2542344331741333,
+                  -1.2478411197662354,
+                  12.755663871765137,
+                  1.3029278906612107
                 ]
               ]
             }
@@ -214,23 +375,39 @@
     "extraSentences": [
       [
         "en",
-        "when   next"
+        "allowance"
       ],
       [
         "en",
-        "when"
+        "Scholarship"
       ],
       [
         "en",
-        "when   release of next"
+        "Information"
       ],
       [
         "en",
-        "how much"
+        "Website"
       ],
       [
         "en",
-        "how much   monthly release of"
+        "Grades"
+      ],
+      [
+        "en",
+        "Course"
+      ],
+      [
+        "en",
+        "COE"
+      ],
+      [
+        "en",
+        "others"
+      ],
+      [
+        "en",
+        "Event"
       ]
     ]
   },
@@ -248,14 +425,33 @@
     },
     "responses": {
       "en": {
-        "6172605a85334817dcb30e29": [
+        "undefined": [
           {
-            "answer": "November 16, 2021"
-          }
-        ],
-        "61861a8d3a6035337cb7b8dc": [
+            "answer": "allowance"
+          },
           {
-            "answer": "3500"
+            "answer": "Scholarship"
+          },
+          {
+            "answer": "Information"
+          },
+          {
+            "answer": "Website"
+          },
+          {
+            "answer": "Grades"
+          },
+          {
+            "answer": "Course"
+          },
+          {
+            "answer": "COE"
+          },
+          {
+            "answer": "others"
+          },
+          {
+            "answer": "Event"
           }
         ]
       }
