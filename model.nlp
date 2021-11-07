@@ -4,6 +4,9 @@
       "en"
     ],
     "forceNER": true,
+    "nlu": {
+      "useNoneFeature": false
+    },
     "tag": "nlp",
     "threshold": 0.5,
     "autoLoad": true,
@@ -13,7 +16,8 @@
   },
   "nluManager": {
     "settings": {
-      "tag": "nlu-manager"
+      "tag": "nlu-manager",
+      "useNoneFeature": false
     },
     "locales": [
       "en"
@@ -23,6 +27,7 @@
       "en": {
         "settings": {
           "locale": "en",
+          "useNoneFeature": false,
           "trainByDomain": false,
           "tag": "domain-manager-en",
           "nluByDomain": {
@@ -34,155 +39,56 @@
           "useStemDict": true
         },
         "stemDict": {
-          "allow,is,next,the,when": {
-            "intent": "allowance.when",
+          "next,when": {
+            "intent": "6172605a85334817dcb30e29",
             "domain": "default"
           },
-          "allow,when": {
-            "intent": "allowance.when",
+          "when": {
+            "intent": "6172605a85334817dcb30e29",
             "domain": "default"
           },
-          "a,allow,among,kanus,makuha,namo": {
-            "intent": "allowance.when",
+          "next,of,releas,when": {
+            "intent": "6172605a85334817dcb30e29",
             "domain": "default"
           },
-          "allow,ang,kailan": {
-            "intent": "allowance.when",
+          "how,much": {
+            "intent": "61861a8d3a6035337cb7b8dc",
             "domain": "default"
           },
-          "allow": {
-            "intent": "allowance.when",
-            "domain": "default"
-          },
-          "is,mycar,when": {
-            "intent": "events.mycare.info",
-            "domain": "default"
-          },
-          "is,mycar,what": {
-            "intent": "events.mycare.info",
-            "domain": "default"
-          },
-          "mycar": {
-            "intent": "events.mycare.info",
-            "domain": "default"
-          },
-          "coe,is,what": {
-            "intent": "coe.what",
-            "domain": "default"
-          },
-          "coe,get,how,to": {
-            "intent": "coe.what",
-            "domain": "default"
-          },
-          "grade,maintain": {
-            "intent": "grade_to_pass",
-            "domain": "default"
-          },
-          "grade,is,maintain,the,what": {
-            "intent": "grade_to_pass",
-            "domain": "default"
-          },
-          "websit": {
-            "intent": "website.access",
-            "domain": "default"
-          },
-          "inform,person": {
-            "intent": "personal.info",
-            "domain": "default"
-          },
-          "info,person": {
-            "intent": "personal.info",
+          "how,month,much,of,releas": {
+            "intent": "61861a8d3a6035337cb7b8dc",
             "domain": "default"
           }
         },
         "intentDict": {
-          "allowance.when": "default",
-          "events.mycare.info": "default",
-          "coe.what": "default",
-          "grade_to_pass": "default",
-          "website.access": "default",
-          "personal.info": "default"
+          "6172605a85334817dcb30e29": "default",
+          "61861a8d3a6035337cb7b8dc": "default"
         },
         "sentences": [
           {
             "domain": "default",
-            "utterance": "When is the next allowance",
-            "intent": "allowance.when"
+            "utterance": "when   next",
+            "intent": "6172605a85334817dcb30e29"
           },
           {
             "domain": "default",
-            "utterance": "allowance when",
-            "intent": "allowance.when"
+            "utterance": "when",
+            "intent": "6172605a85334817dcb30e29"
           },
           {
             "domain": "default",
-            "utterance": "kanus a namo makuha among allowance? ",
-            "intent": "allowance.when"
+            "utterance": "when   release of next",
+            "intent": "6172605a85334817dcb30e29"
           },
           {
             "domain": "default",
-            "utterance": "Kailan ang allowance",
-            "intent": "allowance.when"
+            "utterance": "how much",
+            "intent": "61861a8d3a6035337cb7b8dc"
           },
           {
             "domain": "default",
-            "utterance": "Allowance",
-            "intent": "allowance.when"
-          },
-          {
-            "domain": "default",
-            "utterance": "when is mycare",
-            "intent": "events.mycare.info"
-          },
-          {
-            "domain": "default",
-            "utterance": "what is mycare",
-            "intent": "events.mycare.info"
-          },
-          {
-            "domain": "default",
-            "utterance": "what is mycare",
-            "intent": "events.mycare.info"
-          },
-          {
-            "domain": "default",
-            "utterance": "mycare",
-            "intent": "events.mycare.info"
-          },
-          {
-            "domain": "default",
-            "utterance": "What is COE",
-            "intent": "coe.what"
-          },
-          {
-            "domain": "default",
-            "utterance": "How to get COE",
-            "intent": "coe.what"
-          },
-          {
-            "domain": "default",
-            "utterance": "Maintaining Grades",
-            "intent": "grade_to_pass"
-          },
-          {
-            "domain": "default",
-            "utterance": "What is the maintaining grades",
-            "intent": "grade_to_pass"
-          },
-          {
-            "domain": "default",
-            "utterance": "website",
-            "intent": "website.access"
-          },
-          {
-            "domain": "default",
-            "utterance": "personal information ",
-            "intent": "personal.info"
-          },
-          {
-            "domain": "default",
-            "utterance": "Personal info",
-            "intent": "personal.info"
+            "utterance": "how much   monthly release of",
+            "intent": "61861a8d3a6035337cb7b8dc"
           }
         ],
         "domains": {
@@ -200,166 +106,60 @@
             },
             "features": {
               "when": 1,
-              "is": 1,
-              "the": 1,
               "next": 1,
-              "allow": 1,
-              "kanus": 1,
-              "a": 1,
-              "namo": 1,
-              "makuha": 1,
-              "among": 1,
-              "kailan": 1,
-              "ang": 1,
-              "mycar": 1,
-              "what": 1,
-              "coe": 1,
+              "releas": 1,
+              "of": 1,
               "how": 1,
-              "to": 1,
-              "get": 1,
-              "maintain": 1,
-              "grade": 1,
-              "websit": 1,
-              "person": 1,
-              "inform": 1,
-              "info": 1
+              "much": 1,
+              "month": 1
             },
             "intents": {
-              "allowance.when": 1,
-              "events.mycare.info": 1,
-              "coe.what": 1,
-              "grade_to_pass": 1,
-              "website.access": 1,
-              "personal.info": 1
+              "6172605a85334817dcb30e29": 1,
+              "61861a8d3a6035337cb7b8dc": 1
             },
             "intentFeatures": {
-              "allowance.when": {
+              "6172605a85334817dcb30e29": {
                 "when": 1,
-                "is": 1,
-                "the": 1,
                 "next": 1,
-                "allow": 1,
-                "kanus": 1,
-                "a": 1,
-                "namo": 1,
-                "makuha": 1,
-                "among": 1,
-                "kailan": 1,
-                "ang": 1
+                "releas": 1,
+                "of": 1
               },
-              "events.mycare.info": {
-                "when": 1,
-                "is": 1,
-                "mycar": 1,
-                "what": 1
-              },
-              "coe.what": {
-                "what": 1,
-                "is": 1,
-                "coe": 1,
+              "61861a8d3a6035337cb7b8dc": {
                 "how": 1,
-                "to": 1,
-                "get": 1
-              },
-              "grade_to_pass": {
-                "maintain": 1,
-                "grade": 1,
-                "what": 1,
-                "is": 1,
-                "the": 1
-              },
-              "website.access": {
-                "websit": 1
-              },
-              "personal.info": {
-                "person": 1,
-                "inform": 1,
-                "info": 1
+                "much": 1,
+                "month": 1,
+                "releas": 1,
+                "of": 1
               }
             },
             "featuresToIntent": {
               "when": [
-                "allowance.when",
-                "events.mycare.info"
-              ],
-              "is": [
-                "allowance.when",
-                "events.mycare.info",
-                "coe.what",
-                "grade_to_pass"
-              ],
-              "the": [
-                "allowance.when",
-                "grade_to_pass"
+                "6172605a85334817dcb30e29"
               ],
               "next": [
-                "allowance.when"
+                "6172605a85334817dcb30e29"
               ],
-              "allow": [
-                "allowance.when"
+              "releas": [
+                "6172605a85334817dcb30e29",
+                "61861a8d3a6035337cb7b8dc"
               ],
-              "kanus": [
-                "allowance.when"
-              ],
-              "a": [
-                "allowance.when"
-              ],
-              "namo": [
-                "allowance.when"
-              ],
-              "makuha": [
-                "allowance.when"
-              ],
-              "among": [
-                "allowance.when"
-              ],
-              "kailan": [
-                "allowance.when"
-              ],
-              "ang": [
-                "allowance.when"
-              ],
-              "mycar": [
-                "events.mycare.info"
-              ],
-              "what": [
-                "events.mycare.info",
-                "coe.what",
-                "grade_to_pass"
-              ],
-              "coe": [
-                "coe.what"
+              "of": [
+                "6172605a85334817dcb30e29",
+                "61861a8d3a6035337cb7b8dc"
               ],
               "how": [
-                "coe.what"
+                "61861a8d3a6035337cb7b8dc"
               ],
-              "to": [
-                "coe.what"
+              "much": [
+                "61861a8d3a6035337cb7b8dc"
               ],
-              "get": [
-                "coe.what"
-              ],
-              "maintain": [
-                "grade_to_pass"
-              ],
-              "grade": [
-                "grade_to_pass"
-              ],
-              "websit": [
-                "website.access"
-              ],
-              "person": [
-                "personal.info"
-              ],
-              "inform": [
-                "personal.info"
-              ],
-              "info": [
-                "personal.info"
+              "month": [
+                "61861a8d3a6035337cb7b8dc"
               ]
             },
             "neuralNetwork": {
               "settings": {
+                "useNoneFeature": false,
                 "locale": "en",
                 "tag": "nlu-en",
                 "keepStopwords": true,
@@ -372,200 +172,37 @@
               },
               "features": [
                 "when",
-                "is",
-                "the",
                 "next",
-                "allow",
-                "kanus",
-                "a",
-                "namo",
-                "makuha",
-                "among",
-                "kailan",
-                "ang",
-                "mycar",
-                "what",
-                "coe",
+                "releas",
+                "of",
                 "how",
-                "to",
-                "get",
-                "maintain",
-                "grade",
-                "websit",
-                "person",
-                "inform",
-                "info"
+                "much",
+                "month"
               ],
               "intents": [
-                "allowance.when",
-                "events.mycare.info",
-                "coe.what",
-                "grade_to_pass",
-                "website.access",
-                "personal.info"
+                "6172605a85334817dcb30e29",
+                "61861a8d3a6035337cb7b8dc"
               ],
               "perceptrons": [
                 [
-                  1.0809135437011719,
-                  -1.8118025064468384,
-                  0.6067952513694763,
-                  0.8243497610092163,
-                  11.545629501342773,
-                  0.15733473002910614,
-                  0.15733473002910614,
-                  0.15733473002910614,
-                  0.15733473002910614,
-                  0.15733473002910614,
-                  0.44939178228378296,
-                  0.44939178228378296,
-                  -2.4848480224609375,
-                  -0.9285137057304382,
-                  -0.7326963543891907,
-                  -0.4418697655200958,
-                  -0.4418697655200958,
-                  -0.4418697655200958,
-                  -1.0002540349960327,
-                  -1.0002540349960327,
-                  -1.948848843574524,
-                  -1.3357958793640137,
-                  -0.6692215204238892,
-                  -0.6653159260749817,
-                  2.0142404163579006
+                  10.055770874023438,
+                  0.40914255380630493,
+                  -0.12050929665565491,
+                  -0.12050929665565491,
+                  -2.007617712020874,
+                  -2.007617712020874,
+                  -0.9663063287734985,
+                  4.025912852868341
                 ],
                 [
-                  -0.12114188075065613,
-                  0.47197607159614563,
-                  -1.9994388818740845,
-                  -0.7585216164588928,
-                  -1.8260093927383423,
-                  -0.058732736855745316,
-                  -0.058732736855745316,
-                  -0.058732736855745316,
-                  -0.058732736855745316,
-                  -0.058732736855745316,
-                  -0.0725172758102417,
-                  -0.0725172758102417,
-                  12.376704216003418,
-                  -0.1637789011001587,
-                  -3.121210813522339,
-                  -0.15173842012882233,
-                  -0.15173842012882233,
-                  -0.15173842012882233,
-                  -1.3560489416122437,
-                  -1.3560489416122437,
-                  -1.5832759141921997,
-                  -1.0872572660446167,
-                  -0.5448657274246216,
-                  -0.5414456725120544,
-                  1.638521820218359
-                ],
-                [
-                  -0.5912911891937256,
-                  1.8302110433578491,
-                  -1.5578457117080688,
-                  -0.18830519914627075,
-                  -0.7902657389640808,
-                  -0.09725497663021088,
-                  -0.09725497663021088,
-                  -0.09725497663021088,
-                  -0.09725497663021088,
-                  -0.09725497663021088,
-                  -0.12678386270999908,
-                  -0.12678386270999908,
-                  -4.700948715209961,
-                  2.3370418548583984,
-                  9.464488983154297,
-                  1.424114465713501,
-                  1.424114465713501,
-                  1.424114465713501,
-                  -1.5835860967636108,
-                  -1.5835860967636108,
-                  -0.6333402395248413,
-                  -0.600348711013794,
-                  -0.30245548486709595,
-                  -0.272747278213501,
-                  0.5691737653057745
-                ],
-                [
-                  -0.9085761308670044,
-                  -1.0075427293777466,
-                  1.1669660806655884,
-                  -0.6768408417701721,
-                  -0.9486640095710754,
-                  -0.047893740236759186,
-                  -0.047893740236759186,
-                  -0.047893740236759186,
-                  -0.047893740236759186,
-                  -0.047893740236759186,
-                  -0.045754484832286835,
-                  -0.045754484832286835,
-                  -1.3459537029266357,
-                  -0.11458464711904526,
-                  -0.848340630531311,
-                  -0.04139309749007225,
-                  -0.04139309749007225,
-                  -0.04139309749007225,
-                  6.649905681610107,
-                  6.649905681610107,
-                  -0.9391478300094604,
-                  -0.6349506974220276,
-                  -0.3181479573249817,
-                  -0.3167826235294342,
-                  0.9521963024012969
-                ],
-                [
-                  -0.5355110764503479,
-                  -0.7813101410865784,
-                  -0.08917286992073059,
-                  -0.07015404850244522,
-                  -2.139357805252075,
-                  -0.13836771249771118,
-                  -0.13836771249771118,
-                  -0.13836771249771118,
-                  -0.13836771249771118,
-                  -0.13836771249771118,
-                  -0.28771838545799255,
-                  -0.28771838545799255,
-                  -2.1196281909942627,
-                  -0.5869070887565613,
-                  -0.8109486103057861,
-                  -0.45630326867103577,
-                  -0.45630326867103577,
-                  -0.45630326867103577,
-                  -1.0876398086547852,
-                  -1.0876398086547852,
-                  11.986624717712402,
-                  -1.4584159851074219,
-                  -0.7320435047149658,
-                  -0.726271390914917,
-                  2.1854032091507256
-                ],
-                [
-                  -0.5809144377708435,
-                  -0.7682235836982727,
-                  -0.14678741991519928,
-                  -0.11421387642621994,
-                  -1.5138121843338013,
-                  -0.16716572642326355,
-                  -0.16716572642326355,
-                  -0.16716572642326355,
-                  -0.16716572642326355,
-                  -0.16716572642326355,
-                  -0.28137585520744324,
-                  -0.28137585520744324,
-                  -1.4259345531463623,
-                  -0.4736897349357605,
-                  -0.5851774215698242,
-                  -0.3940216302871704,
-                  -0.3940216302871704,
-                  -0.3940216302871704,
-                  -0.7744860649108887,
-                  -0.7744860649108887,
-                  -1.4137046337127686,
-                  8.576831817626953,
-                  4.28652811050415,
-                  4.290126323699951,
-                  1.4196529490769119
+                  -2.0387027263641357,
+                  -1.3110812902450562,
+                  -0.39002326130867004,
+                  -0.39002326130867004,
+                  6.120550155639648,
+                  6.120550155639648,
+                  0.7851935029029846,
+                  2.040829331064026
                 ]
               ]
             }
@@ -577,67 +214,23 @@
     "extraSentences": [
       [
         "en",
-        "When is the next allowance"
+        "when   next"
       ],
       [
         "en",
-        "allowance when"
+        "when"
       ],
       [
         "en",
-        "kanus a namo makuha among allowance? "
+        "when   release of next"
       ],
       [
         "en",
-        "Kailan ang allowance"
+        "how much"
       ],
       [
         "en",
-        "Allowance"
-      ],
-      [
-        "en",
-        "when is mycare"
-      ],
-      [
-        "en",
-        "what is mycare"
-      ],
-      [
-        "en",
-        "what is mycare"
-      ],
-      [
-        "en",
-        "mycare"
-      ],
-      [
-        "en",
-        "What is COE"
-      ],
-      [
-        "en",
-        "How to get COE"
-      ],
-      [
-        "en",
-        "Maintaining Grades"
-      ],
-      [
-        "en",
-        "What is the maintaining grades"
-      ],
-      [
-        "en",
-        "website"
-      ],
-      [
-        "en",
-        "personal information "
-      ],
-      [
-        "en",
-        "Personal info"
+        "how much   monthly release of"
       ]
     ]
   },
@@ -655,34 +248,14 @@
     },
     "responses": {
       "en": {
-        "allowance.when": [
+        "6172605a85334817dcb30e29": [
           {
             "answer": "November 16, 2021"
           }
         ],
-        "events.mycare.info": [
+        "61861a8d3a6035337cb7b8dc": [
           {
-            "answer": "Event for city scholar happen this friday"
-          }
-        ],
-        "coe.what": [
-          {
-            "answer": "To get Certificate of Enrollment you must go to our website"
-          }
-        ],
-        "grade_to_pass": [
-          {
-            "answer": "2.00 is the maintaining grade"
-          }
-        ],
-        "website.access": [
-          {
-            "answer": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. Aaaaaaaaaaaaaaaaaaa1234 It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. Aaaaaaaaaaaaaaaaaaa1234wqewqewq\n\n"
-          }
-        ],
-        "personal.info": [
-          {
-            "answer": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. Aaaaaaaaaaaaaaaaaaa1234 It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. Aaaaaaaaaaaaaaaaaaa1234wqewqewq"
+            "answer": "3500"
           }
         ]
       }

@@ -127,7 +127,6 @@ const AddFAQ = async (req, user_id, res) => {
 // Edit FAQ
 const EditFAQ = async (req, faq_id, res) => {
     try {
-        console.log(req)
         let faq = await FAQ.findById(faq_id);
 
         if (!faq) {

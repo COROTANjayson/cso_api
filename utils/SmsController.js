@@ -1,7 +1,7 @@
 const passport = require("passport");
 require('../middlewares/passport')(passport);
 const SMS = require("../models/SMSMessage");
-const { nlpFunction } = require("../utils/nlp/nlp");
+const { nlpFunction,nlpFunctionV2 } = require("../utils/nlp/nlp");
 const Query = require("../models/Query");
 const axios = require('axios');
 const Student = require('../models/Student');
@@ -238,6 +238,7 @@ const SendSms = async (req,  res, io) => {
                 }
             })
 
+            
             modem.on('onSendingMessage', result => { 
                 console.log(result);
              })
@@ -276,210 +277,206 @@ const listenReply = (io) => {
                     
                     modem.deleteAllSimMessages();
                     const newData = await SMS.find();
-                    const nlpReply = await nlpFunction(messageDetails.message);
+                    const nlpReply = await nlpFunctionV2(messageDetails.message);
                     const findStudentViaNum = await findStudent(messageDetails.sender);
+                    let newContactNumber  = '0'+messageDetails.sender.substring(2);
 
-                    if(!findStudentViaNum.success){
-                        try{
-                            const response = await axios.get(`http://localhost:5001/api/students/show/${messageDetails.sender}`);
+                    console.log(nlpReply); 
+
+                    // if(!findStudentViaNum.success){
+                    //     try{
+                    //         const response = await axios.get(`http://student-server-dummy.herokuapp.com/${newContactNumber}`);
                             
-                            const newStudent = new Student({
-                                student_id: response.data.Student.student_id,
-                                email: response.data.Student.email,
-                                first_name: response.data.Student.first_name,
-                                last_name: response.data.Student.last_name,
-                                middle_name: response.data.Student.middle_name,
-                                phone_number: response.data.Student.phone_number,
-                                gender: response.data.Student.gender,
-                                address: response.data.Student.address,
-                                school: response.data.Student.school,
-                                course: response.data.Student.course,
-                                year: response.data.Student.year
-                            });
+                    //         const newStudent = new Student({
+                    //             student_id: response.data.Student.student_id,
+                    //             phone_number: messageDetails.sender,
+                    //             school: response.data.Student.school,
+                    //             course: response.data.Student.course
+                    //         });
 
-                            const studentNew = await newStudent.save();
-                            if(response.data.succes){
-                                newSMS.student_id = studentNew._id;
-                            }
+                    //         const studentNew = await newStudent.save();
+                    //         if(response.data.succes){
+                    //             newSMS.student_id = studentNew._id;
+                    //         }
 
-                        }catch(err){console.log(err)}
-                    }else{
-                        newSMS.student_id = findStudentViaNum.data._id;
-                    }
+                    //     }catch(err){console.log(err)}
+                    // }else{
+                    //     newSMS.student_id = findStudentViaNum.data._id;
+                    // }
         
-                    const newSMSStduent = await newSMS.save();
+                    // const newSMSStduent = await newSMS.save();
 
-                    if(nlpReply.success) {
-                        // console.log(nlpReply.answer.answer);
-                        let text = nlpReply.answer.answer;
-                        if(text.length > 140){
+                    // if(nlpReply.success) {
+                    //     // console.log(nlpReply.answer.answer);
+                    //     let text = nlpReply.answer.answer;
+                    //     if(text.length > 140){
 
-                            const tempWord = text;
-                            const wordArr = [];
+                    //         const tempWord = text;
+                    //         const wordArr = [];
                 
-                            while(text.length != 0){
-                                wordArr.push(text.substr(0,140))
-                                if(text.length < 140){
-                                    text = text.slice(text.length);
-                                }else{
-                                    text = text.slice(140);
-                                }
-                            }
+                    //         while(text.length != 0){
+                    //             wordArr.push(text.substr(0,140))
+                    //             if(text.length < 140){
+                    //                 text = text.slice(text.length);
+                    //             }else{
+                    //                 text = text.slice(140);
+                    //             }
+                    //         }
                             
-                            wordArr.forEach(e=>{
-                                modem.sendSMS(messageDetails.sender, e, false, (data)=>{
-                                    console.log(data);
-                                })
+                    //         wordArr.forEach(e=>{
+                    //             modem.sendSMS(messageDetails.sender, e, false, (data)=>{
+                    //                 console.log(data);
+                    //             })
                 
-                                modem.on('onSendingMessage', result => { 
-                                    console.log(result);
-                                 })
-                            })
+                    //             modem.on('onSendingMessage', result => { 
+                    //                 console.log(result);
+                    //              })
+                    //         })
 
-                            modem.getOwnNumber((phone)=>{
-                                // console.log(phone.data.number);
+                    //         modem.getOwnNumber((phone)=>{
+                    //             // console.log(phone.data.number);
     
-                                const newSMS = new SMS({
-                                    message:tempWord,
-                                    officer_phone:phone.data.number,
-                                    student_phone:messageDetails.sender,
-                                    type:'send',
-                                    isChatbot:true,
-                                    student_id:null,
-                                    chatBotReplyID:newSMSStduent._id,
-                                    is_read:true
-                                });
+                    //             const newSMS = new SMS({
+                    //                 message:tempWord,
+                    //                 officer_phone:phone.data.number,
+                    //                 student_phone:messageDetails.sender,
+                    //                 type:'send',
+                    //                 isChatbot:true,
+                    //                 student_id:null,
+                    //                 chatBotReplyID:newSMSStduent._id,
+                    //                 is_read:true
+                    //             });
     
-                                // console.log(newSMS);
-                                newSMS.save((data1)=>{
+                    //             // console.log(newSMS);
+                    //             newSMS.save((data1)=>{
                                     
-                                    const newQuery = new Query({
-                                        sender_id:newSMSStduent.student_id,
-                                        category_id:nlpReply.categoryId,
-                                        query_name:messageDetails.message,
-                                        possible_answer:tempWord,
-                                        faq_id:nlpReply.faqID,
-                                        status:"1",
-                                        phone_num:messageDetails.sender
-                                    });
+                    //                 const newQuery = new Query({
+                    //                     sender_id:newSMSStduent.student_id,
+                    //                     category_id:nlpReply.categoryId,
+                    //                     query_name:messageDetails.message,
+                    //                     possible_answer:tempWord,
+                    //                     faq_id:nlpReply.faqID,
+                    //                     status:"1",
+                    //                     phone_num:messageDetails.sender
+                    //                 });
 
-                                    console.log('Query Save not other')
+                    //                 console.log('Query Save not other')
 
-                                    newQuery.save((data2) => {
-                                        modem.deleteAllSimMessages()
-                                        // socket.broadcast.emit("newdata", newData);
-                                        io.sockets.emit('newdata',newData);  
-                                    })
-                                });
+                    //                 newQuery.save((data2) => {
+                    //                     modem.deleteAllSimMessages()
+                    //                     // socket.broadcast.emit("newdata", newData);
+                    //                     io.sockets.emit('newdata',newData);  
+                    //                 })
+                    //             });
     
-                            });
+                    //         });
                 
                             
-                        }else{
-                            modem.sendSMS(messageDetails.sender, nlpReply.answer.answer, false, (data)=>{
-                                console.log(data);
-                                if(data.request == 'SendSMS'){
-                                    try{
+                    //     }else{
+                    //         modem.sendSMS(messageDetails.sender, nlpReply.answer.answer, false, (data)=>{
+                    //             console.log(data);
+                    //             if(data.request == 'SendSMS'){
+                    //                 try{
                 
-                                        modem.getOwnNumber((phone)=>{
-                                            // console.log(phone.data.number);
+                    //                     modem.getOwnNumber((phone)=>{
+                    //                         // console.log(phone.data.number);
                 
-                                            const newSMS = new SMS({
-                                                message:data.data.message,
-                                                officer_phone:phone.data.number,
-                                                student_phone:data.data.recipient,
-                                                type:'send',
-                                                isChatbot:true,
-                                                student_id:null,
-                                                chatBotReplyID:newSMSStduent._id,
-                                                is_read:true
-                                            });
+                    //                         const newSMS = new SMS({
+                    //                             message:data.data.message,
+                    //                             officer_phone:phone.data.number,
+                    //                             student_phone:data.data.recipient,
+                    //                             type:'send',
+                    //                             isChatbot:true,
+                    //                             student_id:null,
+                    //                             chatBotReplyID:newSMSStduent._id,
+                    //                             is_read:true
+                    //                         });
                 
-                                            // console.log(newSMS);
-                                            newSMS.save((data1)=>{
+                    //                         // console.log(newSMS);
+                    //                         newSMS.save((data1)=>{
                                                 
-                                                const newQuery = new Query({
-                                                    sender_id:newSMSStduent.student_id,
-                                                    category_id:nlpReply.categoryId,
-                                                    query_name:messageDetails.message,
-                                                    possible_answer:data.data.message,
-                                                    faq_id:nlpReply.faqID,
-                                                    status:"1",
-                                                    phone_num:data.data.recipient
-                                                });
+                    //                             const newQuery = new Query({
+                    //                                 sender_id:newSMSStduent.student_id,
+                    //                                 category_id:nlpReply.categoryId,
+                    //                                 query_name:messageDetails.message,
+                    //                                 possible_answer:data.data.message,
+                    //                                 faq_id:nlpReply.faqID,
+                    //                                 status:"1",
+                    //                                 phone_num:data.data.recipient
+                    //                             });
     
-                                                console.log('Query Save not other')
+                    //                             console.log('Query Save not other')
     
-                                                newQuery.save((data2) => {
-                                                    modem.deleteAllSimMessages()
-                                                    // socket.broadcast.emit("newdata", newData);
-                                                    io.sockets.emit('newdata',newData);  
-                                                })
-                                            });
+                    //                             newQuery.save((data2) => {
+                    //                                 modem.deleteAllSimMessages()
+                    //                                 // socket.broadcast.emit("newdata", newData);
+                    //                                 io.sockets.emit('newdata',newData);  
+                    //                             })
+                    //                         });
                 
-                                        });
-                                    }catch(err){
-                                        console.log(err)
-                                    }
-                                }
-                            })
+                    //                     });
+                    //                 }catch(err){
+                    //                     console.log(err)
+                    //                 }
+                    //             }
+                    //         })
                 
-                            modem.on('onSendingMessage', result => { 
-                                console.log(result);
-                             })
-                        }
+                    //         modem.on('onSendingMessage', result => { 
+                    //             console.log(result);
+                    //          })
+                    //     }
                       
                         
                        
-                    } else {
+                    // } else {
                         
-                        modem.sendSMS(messageDetails.sender, 'No Possible Answer Found',  false, (data)=>{
-                            console.log(data);
-                            if(data.request == 'SendSMS'){
-                            try{
-                                modem.getOwnNumber((phone)=>{
-                                    // const newSMS = new SMS({
-                                    //     message:data.data.message,
-                                    //     officer_phone:phone.data.number,
-                                    //     student_phone:data.data.recipient,
-                                    //     type:'send',
-                                    //     isChatbot:true,
-                                    //     student_id:null,
-                                    //     chatBotReplyID:newSMSStduent._id,
-                                    //     is_read:true
-                                    // });
+                    //     modem.sendSMS(messageDetails.sender, 'No Possible Answer Found',  false, (data)=>{
+                    //         console.log(data);
+                    //         if(data.request == 'SendSMS'){
+                    //         try{
+                    //             modem.getOwnNumber((phone)=>{
+                    //                 // const newSMS = new SMS({
+                    //                 //     message:data.data.message,
+                    //                 //     officer_phone:phone.data.number,
+                    //                 //     student_phone:data.data.recipient,
+                    //                 //     type:'send',
+                    //                 //     isChatbot:true,
+                    //                 //     student_id:null,
+                    //                 //     chatBotReplyID:newSMSStduent._id,
+                    //                 //     is_read:true
+                    //                 // });
         
-                                    // newSMS.save((data1)=>{
+                    //                 // newSMS.save((data1)=>{
                                         
-                                    // });
+                    //                 // });
 
-                                    const newQuery = new Query({
-                                        sender_id:newSMSStduent.student_id,
-                                        category_id:nlpReply.categoryId,
-                                        query_name:messageDetails.message,
-                                        possible_answer:'N/A',
-                                        faq_id:nlpReply.faqID,
-                                        status:"1",
-                                        phone_num:data.data.recipient
-                                    });
+                    //                 const newQuery = new Query({
+                    //                     sender_id:newSMSStduent.student_id,
+                    //                     category_id:nlpReply.categoryId,
+                    //                     query_name:messageDetails.message,
+                    //                     possible_answer:'N/A',
+                    //                     faq_id:nlpReply.faqID,
+                    //                     status:"1",
+                    //                     phone_num:data.data.recipient
+                    //                 });
 
-                                    console.log('Query Save other')
-                                    console.log(newQuery);
-                                    newQuery.save((data2) => {
-                                        modem.deleteAllSimMessages()
-                                        // socket.broadcast.emit("newdata", newData);
-                                        io.sockets.emit('newdata',newData);
-                                    })
+                    //                 console.log('Query Save other')
+                    //                 console.log(newQuery);
+                    //                 newQuery.save((data2) => {
+                    //                     modem.deleteAllSimMessages()
+                    //                     // socket.broadcast.emit("newdata", newData);
+                    //                     io.sockets.emit('newdata',newData);
+                    //                 })
                                     
-                                });
-                                }catch(err){
-                                console.log(err)
-                                }
-                            }
+                    //             });
+                    //             }catch(err){
+                    //             console.log(err)
+                    //             }
+                    //         }
                             
-                        })
+                    //     })
                        
-                    }
+                    // }
 
                 })();
             });
