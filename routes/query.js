@@ -27,15 +27,15 @@ router.get("/show/:id", userAuth, async (req, res) => {
 // Add new query Route (/api/query/add)
 // :sender_id/:faq_id/:category_id
 router.post("/add", userAuth, async (req, res) => {
-    await NewQuery(req.body, res);
-    // await NewQuery(req.body.data, res);
+    // await NewQuery(req.body, res);
+    await NewQuery(req.body.data, res);
 });
 
 // // // Edit query Route(api/query/edit/id) -> OBJECT ID
 router.put("/edit/:id", userAuth, async (req, res) => {
     const query_id = req.params.id
-    await EditQuery(query_id, req.body, res);
-    // await EditQuery(query_id, req.body.data, res);
+    // await EditQuery(query_id, req.body, res);
+    await EditQuery(query_id, req.body.data, res);
     
 });
 
