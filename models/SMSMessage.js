@@ -37,6 +37,9 @@ const SMSMessageSchema = new Schema(
     is_read: {
       type: Boolean,
       required:true
+    },
+    notification: {
+      type: Boolean,
     }
   }
 );
