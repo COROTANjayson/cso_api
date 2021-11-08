@@ -3,8 +3,7 @@ const FAQ = require("../../models/FAQ");
 const Category = require("../../models/Category");
 const translate = require('@vitalets/google-translate-api');
 
-const manager = new NlpManager({ languages: ['en'], forceNER: true ,nlu: { useNoneFeature: false }});
-const manager1 = new NlpManager({ languages: ['en'], forceNER: true  ,nlu: { useNoneFeature: false }});
+const manager = new NlpManager({ languages: ['en'], forceNER: true, nlu: { log: true }});
 
 const nlpFunction = async (text) =>{
 
@@ -113,14 +112,18 @@ const nlpFunctionV2 = async (text) =>{
             answer: '',
             success: false,
             categoryId: findOthersID._id,
-            faqID: null
+            faqID: null,
+            message:''
         }
 
 
         if(response.answer == undefined){
+            data.message = 'Query doesnt belong to any category'
             return data;
         }else{
+            const manager1 = new NlpManager({ languages: ['en'], forceNER: true, nlu: { log: true }});
             faq = faq.filter(e=>e.category_id == response.answer);
+            console.log(faq);
             translation.text = translation.text.replace(response.intent.toLowerCase(),'');
 
             faq.forEach(e=>{
@@ -142,10 +145,6 @@ const nlpFunctionV2 = async (text) =>{
                 manager1.addAnswer('en', e.faq_title, e.faq_answer)
             })
 
-            // manager1.train().then(() => {
-            //     manager1.process(translation.text.toLowerCase()).then(result => console.log(result)); //works
-            // });
-
             await manager1.train();
             manager1.save();
 
@@ -153,17 +152,20 @@ const nlpFunctionV2 = async (text) =>{
 
         //    console.log(faq); 
         //     console.log(response);
-            console.log(response1);
             
-            // if(response1.answer == undefined){
-            //     return data;
-            // }else{
-            //     data.answer = response1;
-            //     data.categoryId = response.answer;
-            //     data.success = true;
-            //     data.faqID = response1.intent;
-            //     return data;
-            // }
+            if(response1.answer == undefined){
+                data.message = 'The system doesnt find any FAQ that is related to your query'
+                return data;
+            }else{
+                
+                findFaq = await FAQ.findOne({faq_title:response1.intent})
+
+                data.answer = response1;
+                data.categoryId = response.answer;
+                data.success = true;
+                data.faqID = findFaq._id;
+                return data;
+            }
         }
     }catch(e){
         console.log(e);
