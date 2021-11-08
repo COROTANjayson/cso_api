@@ -447,7 +447,7 @@ const ShowPossibleCategory = async (req,  res) => {
                     'phone_num':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]},
                 },
             },
-            
+            { $sort: {_id: -1} },
             {
                 "$lookup": {
                     "from": 'senders',
@@ -504,7 +504,6 @@ const ShowPossibleCategory = async (req,  res) => {
         ]);
 
         const category = await Category.find()
-        console.log(queries);
    
         category.forEach(element => {
             console.log(element.category_name)
