@@ -2,11 +2,11 @@
 
 
 const router = require("express").Router();
-const { nlpFunction } = require("../utils/nlp/nlp");
+const { nlpFunctionV2 } = require("../utils/nlp/nlp");
 
 // Add Sender Route (/api/sender/add)
 router.post("/getresult", /* userAuth, */ async (req, res) => {
-    await nlpFunction(req.body, res);
+    await nlpFunctionV2(req.body.text, res);
 });
 
 

@@ -34,155 +34,99 @@
           "useStemDict": true
         },
         "stemDict": {
-          "allow,is,next,the,when": {
-            "intent": "allowance.when",
-            "domain": "default"
-          },
-          "allow,when": {
-            "intent": "allowance.when",
-            "domain": "default"
-          },
-          "a,allow,among,kanus,makuha,namo": {
-            "intent": "allowance.when",
-            "domain": "default"
-          },
-          "allow,ang,kailan": {
-            "intent": "allowance.when",
-            "domain": "default"
-          },
           "allow": {
-            "intent": "allowance.when",
+            "intent": "allowance",
             "domain": "default"
           },
-          "is,mycar,when": {
-            "intent": "events.mycare.info",
+          "scholarship": {
+            "intent": "Scholarship",
             "domain": "default"
           },
-          "is,mycar,what": {
-            "intent": "events.mycare.info",
-            "domain": "default"
-          },
-          "mycar": {
-            "intent": "events.mycare.info",
-            "domain": "default"
-          },
-          "coe,is,what": {
-            "intent": "coe.what",
-            "domain": "default"
-          },
-          "coe,get,how,to": {
-            "intent": "coe.what",
-            "domain": "default"
-          },
-          "grade,maintain": {
-            "intent": "grade_to_pass",
-            "domain": "default"
-          },
-          "grade,is,maintain,the,what": {
-            "intent": "grade_to_pass",
+          "inform": {
+            "intent": "Information",
             "domain": "default"
           },
           "websit": {
-            "intent": "website.access",
+            "intent": "Website",
             "domain": "default"
           },
-          "inform,person": {
-            "intent": "personal.info",
+          "grade": {
+            "intent": "Grades",
             "domain": "default"
           },
-          "info,person": {
-            "intent": "personal.info",
+          "cours": {
+            "intent": "Course",
+            "domain": "default"
+          },
+          "coe": {
+            "intent": "COE",
+            "domain": "default"
+          },
+          "other": {
+            "intent": "others",
+            "domain": "default"
+          },
+          "event": {
+            "intent": "Event",
             "domain": "default"
           }
         },
         "intentDict": {
-          "allowance.when": "default",
-          "events.mycare.info": "default",
-          "coe.what": "default",
-          "grade_to_pass": "default",
-          "website.access": "default",
-          "personal.info": "default"
+          "allowance": "default",
+          "Scholarship": "default",
+          "Information": "default",
+          "Website": "default",
+          "Grades": "default",
+          "Course": "default",
+          "COE": "default",
+          "others": "default",
+          "Event": "default"
         },
         "sentences": [
           {
             "domain": "default",
-            "utterance": "When is the next allowance",
-            "intent": "allowance.when"
+            "utterance": "allowance",
+            "intent": "allowance"
           },
           {
             "domain": "default",
-            "utterance": "allowance when",
-            "intent": "allowance.when"
+            "utterance": "Scholarship",
+            "intent": "Scholarship"
           },
           {
             "domain": "default",
-            "utterance": "kanus a namo makuha among allowance? ",
-            "intent": "allowance.when"
+            "utterance": "Information",
+            "intent": "Information"
           },
           {
             "domain": "default",
-            "utterance": "Kailan ang allowance",
-            "intent": "allowance.when"
+            "utterance": "Website",
+            "intent": "Website"
           },
           {
             "domain": "default",
-            "utterance": "Allowance",
-            "intent": "allowance.when"
+            "utterance": "Grades",
+            "intent": "Grades"
           },
           {
             "domain": "default",
-            "utterance": "when is mycare",
-            "intent": "events.mycare.info"
+            "utterance": "Course",
+            "intent": "Course"
           },
           {
             "domain": "default",
-            "utterance": "what is mycare",
-            "intent": "events.mycare.info"
+            "utterance": "COE",
+            "intent": "COE"
           },
           {
             "domain": "default",
-            "utterance": "what is mycare",
-            "intent": "events.mycare.info"
+            "utterance": "others",
+            "intent": "others"
           },
           {
             "domain": "default",
-            "utterance": "mycare",
-            "intent": "events.mycare.info"
-          },
-          {
-            "domain": "default",
-            "utterance": "What is COE",
-            "intent": "coe.what"
-          },
-          {
-            "domain": "default",
-            "utterance": "How to get COE",
-            "intent": "coe.what"
-          },
-          {
-            "domain": "default",
-            "utterance": "Maintaining Grades",
-            "intent": "grade_to_pass"
-          },
-          {
-            "domain": "default",
-            "utterance": "What is the maintaining grades",
-            "intent": "grade_to_pass"
-          },
-          {
-            "domain": "default",
-            "utterance": "website",
-            "intent": "website.access"
-          },
-          {
-            "domain": "default",
-            "utterance": "personal information ",
-            "intent": "personal.info"
-          },
-          {
-            "domain": "default",
-            "utterance": "Personal info",
-            "intent": "personal.info"
+            "utterance": "Event",
+            "intent": "Event"
           }
         ],
         "domains": {
@@ -199,163 +143,83 @@
               "log": true
             },
             "features": {
-              "when": 1,
-              "is": 1,
-              "the": 1,
-              "next": 1,
               "allow": 1,
-              "kanus": 1,
-              "a": 1,
-              "namo": 1,
-              "makuha": 1,
-              "among": 1,
-              "kailan": 1,
-              "ang": 1,
-              "mycar": 1,
-              "what": 1,
-              "coe": 1,
-              "how": 1,
-              "to": 1,
-              "get": 1,
-              "maintain": 1,
-              "grade": 1,
-              "websit": 1,
-              "person": 1,
+              "scholarship": 1,
               "inform": 1,
-              "info": 1
+              "websit": 1,
+              "grade": 1,
+              "cours": 1,
+              "coe": 1,
+              "other": 1,
+              "event": 1
             },
             "intents": {
-              "allowance.when": 1,
-              "events.mycare.info": 1,
-              "coe.what": 1,
-              "grade_to_pass": 1,
-              "website.access": 1,
-              "personal.info": 1
+              "allowance": 1,
+              "Scholarship": 1,
+              "Information": 1,
+              "Website": 1,
+              "Grades": 1,
+              "Course": 1,
+              "COE": 1,
+              "others": 1,
+              "Event": 1
             },
             "intentFeatures": {
-              "allowance.when": {
-                "when": 1,
-                "is": 1,
-                "the": 1,
-                "next": 1,
-                "allow": 1,
-                "kanus": 1,
-                "a": 1,
-                "namo": 1,
-                "makuha": 1,
-                "among": 1,
-                "kailan": 1,
-                "ang": 1
+              "allowance": {
+                "allow": 1
               },
-              "events.mycare.info": {
-                "when": 1,
-                "is": 1,
-                "mycar": 1,
-                "what": 1
+              "Scholarship": {
+                "scholarship": 1
               },
-              "coe.what": {
-                "what": 1,
-                "is": 1,
-                "coe": 1,
-                "how": 1,
-                "to": 1,
-                "get": 1
+              "Information": {
+                "inform": 1
               },
-              "grade_to_pass": {
-                "maintain": 1,
-                "grade": 1,
-                "what": 1,
-                "is": 1,
-                "the": 1
-              },
-              "website.access": {
+              "Website": {
                 "websit": 1
               },
-              "personal.info": {
-                "person": 1,
-                "inform": 1,
-                "info": 1
+              "Grades": {
+                "grade": 1
+              },
+              "Course": {
+                "cours": 1
+              },
+              "COE": {
+                "coe": 1
+              },
+              "others": {
+                "other": 1
+              },
+              "Event": {
+                "event": 1
               }
             },
             "featuresToIntent": {
-              "when": [
-                "allowance.when",
-                "events.mycare.info"
-              ],
-              "is": [
-                "allowance.when",
-                "events.mycare.info",
-                "coe.what",
-                "grade_to_pass"
-              ],
-              "the": [
-                "allowance.when",
-                "grade_to_pass"
-              ],
-              "next": [
-                "allowance.when"
-              ],
               "allow": [
-                "allowance.when"
+                "allowance"
               ],
-              "kanus": [
-                "allowance.when"
-              ],
-              "a": [
-                "allowance.when"
-              ],
-              "namo": [
-                "allowance.when"
-              ],
-              "makuha": [
-                "allowance.when"
-              ],
-              "among": [
-                "allowance.when"
-              ],
-              "kailan": [
-                "allowance.when"
-              ],
-              "ang": [
-                "allowance.when"
-              ],
-              "mycar": [
-                "events.mycare.info"
-              ],
-              "what": [
-                "events.mycare.info",
-                "coe.what",
-                "grade_to_pass"
-              ],
-              "coe": [
-                "coe.what"
-              ],
-              "how": [
-                "coe.what"
-              ],
-              "to": [
-                "coe.what"
-              ],
-              "get": [
-                "coe.what"
-              ],
-              "maintain": [
-                "grade_to_pass"
-              ],
-              "grade": [
-                "grade_to_pass"
-              ],
-              "websit": [
-                "website.access"
-              ],
-              "person": [
-                "personal.info"
+              "scholarship": [
+                "Scholarship"
               ],
               "inform": [
-                "personal.info"
+                "Information"
               ],
-              "info": [
-                "personal.info"
+              "websit": [
+                "Website"
+              ],
+              "grade": [
+                "Grades"
+              ],
+              "cours": [
+                "Course"
+              ],
+              "coe": [
+                "COE"
+              ],
+              "other": [
+                "others"
+              ],
+              "event": [
+                "Event"
               ]
             },
             "neuralNetwork": {
@@ -371,201 +235,135 @@
                 "log": true
               },
               "features": [
-                "when",
-                "is",
-                "the",
-                "next",
                 "allow",
-                "kanus",
-                "a",
-                "namo",
-                "makuha",
-                "among",
-                "kailan",
-                "ang",
-                "mycar",
-                "what",
-                "coe",
-                "how",
-                "to",
-                "get",
-                "maintain",
-                "grade",
-                "websit",
-                "person",
+                "scholarship",
                 "inform",
-                "info"
+                "websit",
+                "grade",
+                "cours",
+                "coe",
+                "other",
+                "event"
               ],
               "intents": [
-                "allowance.when",
-                "events.mycare.info",
-                "coe.what",
-                "grade_to_pass",
-                "website.access",
-                "personal.info"
+                "allowance",
+                "Scholarship",
+                "Information",
+                "Website",
+                "Grades",
+                "Course",
+                "COE",
+                "others",
+                "Event"
               ],
               "perceptrons": [
                 [
-                  1.0809135437011719,
-                  -1.8118025064468384,
-                  0.6067952513694763,
-                  0.8243497610092163,
-                  11.545629501342773,
-                  0.15733473002910614,
-                  0.15733473002910614,
-                  0.15733473002910614,
-                  0.15733473002910614,
-                  0.15733473002910614,
-                  0.44939178228378296,
-                  0.44939178228378296,
-                  -2.4848480224609375,
-                  -0.9285137057304382,
-                  -0.7326963543891907,
-                  -0.4418697655200958,
-                  -0.4418697655200958,
-                  -0.4418697655200958,
-                  -1.0002540349960327,
-                  -1.0002540349960327,
-                  -1.948848843574524,
-                  -1.3357958793640137,
-                  -0.6692215204238892,
-                  -0.6653159260749817,
-                  2.0142404163579006
+                  12.755775451660156,
+                  -1.2890907526016235,
+                  -1.284517765045166,
+                  -1.2796958684921265,
+                  -1.2746307849884033,
+                  -1.2693272829055786,
+                  -1.2637903690338135,
+                  -1.2580257654190063,
+                  -1.2520382404327393,
+                  1.2929484470500052
                 ],
                 [
-                  -0.12114188075065613,
-                  0.47197607159614563,
-                  -1.9994388818740845,
-                  -0.7585216164588928,
-                  -1.8260093927383423,
-                  -0.058732736855745316,
-                  -0.058732736855745316,
-                  -0.058732736855745316,
-                  -0.058732736855745316,
-                  -0.058732736855745316,
-                  -0.0725172758102417,
-                  -0.0725172758102417,
-                  12.376704216003418,
-                  -0.1637789011001587,
-                  -3.121210813522339,
-                  -0.15173842012882233,
-                  -0.15173842012882233,
-                  -0.15173842012882233,
-                  -1.3560489416122437,
-                  -1.3560489416122437,
-                  -1.5832759141921997,
-                  -1.0872572660446167,
-                  -0.5448657274246216,
-                  -0.5414456725120544,
-                  1.638521820218359
+                  -1.247748613357544,
+                  12.75576114654541,
+                  -1.289104700088501,
+                  -1.2845324277877808,
+                  -1.279711365699768,
+                  -1.2746466398239136,
+                  -1.269343376159668,
+                  -1.2638070583343506,
+                  -1.2580424547195435,
+                  1.2948459906012773
                 ],
                 [
-                  -0.5912911891937256,
-                  1.8302110433578491,
-                  -1.5578457117080688,
-                  -0.18830519914627075,
-                  -0.7902657389640808,
-                  -0.09725497663021088,
-                  -0.09725497663021088,
-                  -0.09725497663021088,
-                  -0.09725497663021088,
-                  -0.09725497663021088,
-                  -0.12678386270999908,
-                  -0.12678386270999908,
-                  -4.700948715209961,
-                  2.3370418548583984,
-                  9.464488983154297,
-                  1.424114465713501,
-                  1.424114465713501,
-                  1.424114465713501,
-                  -1.5835860967636108,
-                  -1.5835860967636108,
-                  -0.6333402395248413,
-                  -0.600348711013794,
-                  -0.30245548486709595,
-                  -0.272747278213501,
-                  0.5691737653057745
+                  -1.2541582584381104,
+                  -1.2477619647979736,
+                  12.755746841430664,
+                  -1.289119005203247,
+                  -1.284547209739685,
+                  -1.2797266244888306,
+                  -1.2746624946594238,
+                  -1.2693594694137573,
+                  -1.2638235092163086,
+                  1.2965540596832366
                 ],
                 [
-                  -0.9085761308670044,
-                  -1.0075427293777466,
-                  1.1669660806655884,
-                  -0.6768408417701721,
-                  -0.9486640095710754,
-                  -0.047893740236759186,
-                  -0.047893740236759186,
-                  -0.047893740236759186,
-                  -0.047893740236759186,
-                  -0.047893740236759186,
-                  -0.045754484832286835,
-                  -0.045754484832286835,
-                  -1.3459537029266357,
-                  -0.11458464711904526,
-                  -0.848340630531311,
-                  -0.04139309749007225,
-                  -0.04139309749007225,
-                  -0.04139309749007225,
-                  6.649905681610107,
-                  6.649905681610107,
-                  -0.9391478300094604,
-                  -0.6349506974220276,
-                  -0.3181479573249817,
-                  -0.3167826235294342,
-                  0.9521963024012969
+                  -1.2603428363800049,
+                  -1.2541710138320923,
+                  -1.2477749586105347,
+                  12.755733489990234,
+                  -1.2891333103179932,
+                  -1.2845617532730103,
+                  -1.279741644859314,
+                  -1.2746778726577759,
+                  -1.2693758010864258,
+                  1.2980738415534727
                 ],
                 [
-                  -0.5355110764503479,
-                  -0.7813101410865784,
-                  -0.08917286992073059,
-                  -0.07015404850244522,
-                  -2.139357805252075,
-                  -0.13836771249771118,
-                  -0.13836771249771118,
-                  -0.13836771249771118,
-                  -0.13836771249771118,
-                  -0.13836771249771118,
-                  -0.28771838545799255,
-                  -0.28771838545799255,
-                  -2.1196281909942627,
-                  -0.5869070887565613,
-                  -0.8109486103057861,
-                  -0.45630326867103577,
-                  -0.45630326867103577,
-                  -0.45630326867103577,
-                  -1.0876398086547852,
-                  -1.0876398086547852,
-                  11.986624717712402,
-                  -1.4584159851074219,
-                  -0.7320435047149658,
-                  -0.726271390914917,
-                  2.1854032091507256
+                  -1.2662960290908813,
+                  -1.260354995727539,
+                  -1.2541837692260742,
+                  -1.2477881908416748,
+                  12.755719184875488,
+                  -1.2891476154327393,
+                  -1.2845765352249146,
+                  -1.279757022857666,
+                  -1.2746937274932861,
+                  1.2994075742320699
                 ],
                 [
-                  -0.5809144377708435,
-                  -0.7682235836982727,
-                  -0.14678741991519928,
-                  -0.11421387642621994,
-                  -1.5138121843338013,
-                  -0.16716572642326355,
-                  -0.16716572642326355,
-                  -0.16716572642326355,
-                  -0.16716572642326355,
-                  -0.16716572642326355,
-                  -0.28137585520744324,
-                  -0.28137585520744324,
-                  -1.4259345531463623,
-                  -0.4736897349357605,
-                  -0.5851774215698242,
-                  -0.3940216302871704,
-                  -0.3940216302871704,
-                  -0.3940216302871704,
-                  -0.7744860649108887,
-                  -0.7744860649108887,
-                  -1.4137046337127686,
-                  8.576831817626953,
-                  4.28652811050415,
-                  4.290126323699951,
-                  1.4196529490769119
+                  -1.2720118761062622,
+                  -1.2663078308105469,
+                  -1.2603672742843628,
+                  -1.2541965246200562,
+                  -1.2478017807006836,
+                  12.755704879760742,
+                  -1.289162039756775,
+                  -1.284591794013977,
+                  -1.2797727584838867,
+                  1.3005574186607771
+                ],
+                [
+                  -1.2774839401245117,
+                  -1.2720226049423218,
+                  -1.2663191556930542,
+                  -1.2603791952133179,
+                  -1.254209041595459,
+                  -1.2478147745132446,
+                  12.755690574645996,
+                  -1.289176106452942,
+                  -1.2846062183380127,
+                  1.3015251980174314
+                ],
+                [
+                  -1.282706618309021,
+                  -1.277494192123413,
+                  -1.2720335721969604,
+                  -1.2663304805755615,
+                  -1.260391354560852,
+                  -1.254221796989441,
+                  -1.2478280067443848,
+                  12.755678176879883,
+                  -1.289190411567688,
+                  1.3023142066705704
+                ],
+                [
+                  -1.2876744270324707,
+                  -1.282716155052185,
+                  -1.277504563331604,
+                  -1.2720446586608887,
+                  -1.266342282295227,
+                  -1.2604036331176758,
+                  -1.2542344331741333,
+                  -1.2478411197662354,
+                  12.755663871765137,
+                  1.3029278906612107
                 ]
               ]
             }
@@ -577,67 +375,39 @@
     "extraSentences": [
       [
         "en",
-        "When is the next allowance"
+        "allowance"
       ],
       [
         "en",
-        "allowance when"
+        "Scholarship"
       ],
       [
         "en",
-        "kanus a namo makuha among allowance? "
+        "Information"
       ],
       [
         "en",
-        "Kailan ang allowance"
+        "Website"
       ],
       [
         "en",
-        "Allowance"
+        "Grades"
       ],
       [
         "en",
-        "when is mycare"
+        "Course"
       ],
       [
         "en",
-        "what is mycare"
+        "COE"
       ],
       [
         "en",
-        "what is mycare"
+        "others"
       ],
       [
         "en",
-        "mycare"
-      ],
-      [
-        "en",
-        "What is COE"
-      ],
-      [
-        "en",
-        "How to get COE"
-      ],
-      [
-        "en",
-        "Maintaining Grades"
-      ],
-      [
-        "en",
-        "What is the maintaining grades"
-      ],
-      [
-        "en",
-        "website"
-      ],
-      [
-        "en",
-        "personal information "
-      ],
-      [
-        "en",
-        "Personal info"
+        "Event"
       ]
     ]
   },
@@ -655,34 +425,33 @@
     },
     "responses": {
       "en": {
-        "allowance.when": [
+        "undefined": [
           {
-            "answer": "November 16, 2021"
-          }
-        ],
-        "events.mycare.info": [
+            "answer": "allowance"
+          },
           {
-            "answer": "Event for city scholar happen this friday"
-          }
-        ],
-        "coe.what": [
+            "answer": "Scholarship"
+          },
           {
-            "answer": "To get Certificate of Enrollment you must go to our website"
-          }
-        ],
-        "grade_to_pass": [
+            "answer": "Information"
+          },
           {
-            "answer": "2.00 is the maintaining grade"
-          }
-        ],
-        "website.access": [
+            "answer": "Website"
+          },
           {
-            "answer": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. Aaaaaaaaaaaaaaaaaaa1234 It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. Aaaaaaaaaaaaaaaaaaa1234wqewqewq\n\n"
-          }
-        ],
-        "personal.info": [
+            "answer": "Grades"
+          },
           {
-            "answer": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. Aaaaaaaaaaaaaaaaaaa1234 It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. Aaaaaaaaaaaaaaaaaaa1234wqewqewq"
+            "answer": "Course"
+          },
+          {
+            "answer": "COE"
+          },
+          {
+            "answer": "others"
+          },
+          {
+            "answer": "Event"
           }
         ]
       }

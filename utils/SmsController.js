@@ -1,10 +1,12 @@
 const passport = require("passport");
 require('../middlewares/passport')(passport);
 const SMS = require("../models/SMSMessage");
-const { nlpFunction } = require("../utils/nlp/nlp");
+const mongoose = require("mongoose");
+const { nlpFunction,nlpFunctionV2 } = require("../utils/nlp/nlp");
 const Query = require("../models/Query");
 const axios = require('axios');
 const Student = require('../models/Student');
+const ObjectId = mongoose.Types.ObjectId;
 
 
 // Serial port gsm
@@ -238,6 +240,7 @@ const SendSms = async (req,  res, io) => {
                 }
             })
 
+            
             modem.on('onSendingMessage', result => { 
                 console.log(result);
              })
@@ -276,33 +279,31 @@ const listenReply = (io) => {
                     
                     modem.deleteAllSimMessages();
                     const newData = await SMS.find();
-                    const nlpReply = await nlpFunction(messageDetails.message);
+                    const nlpReply = await nlpFunctionV2(messageDetails.message);
                     const findStudentViaNum = await findStudent(messageDetails.sender);
+                    console.log(findStudentViaNum)
+                    let newContactNumber  = '0'+messageDetails.sender.substring(2);
+
+                    console.log(newContactNumber); 
 
                     if(!findStudentViaNum.success){
                         try{
-                            const response = await axios.get(`http://localhost:5001/api/students/show/${messageDetails.sender}`);
-                            
+
+                            const response = await axios.get(`http://student-server-dummy.herokuapp.com/${newContactNumber}`);
+                            console.log(response.data);
                             const newStudent = new Student({
                                 student_id: response.data.Student.student_id,
-                                email: response.data.Student.email,
-                                first_name: response.data.Student.first_name,
-                                last_name: response.data.Student.last_name,
-                                middle_name: response.data.Student.middle_name,
-                                phone_number: response.data.Student.phone_number,
-                                gender: response.data.Student.gender,
-                                address: response.data.Student.address,
+                                phone_number: messageDetails.sender,
                                 school: response.data.Student.school,
-                                course: response.data.Student.course,
-                                year: response.data.Student.year
+                                course: response.data.Student.course
                             });
 
                             const studentNew = await newStudent.save();
-                            if(response.data.succes){
+                            if(response.data.success){
                                 newSMS.student_id = studentNew._id;
                             }
 
-                        }catch(err){console.log(err)}
+                        }catch(err){console.log('Student Not Found')}
                     }else{
                         newSMS.student_id = findStudentViaNum.data._id;
                     }
@@ -354,7 +355,7 @@ const listenReply = (io) => {
                                 newSMS.save((data1)=>{
                                     
                                     const newQuery = new Query({
-                                        sender_id:newSMSStduent.student_id,
+                                        sender_id:ObjectId(newSMSStduent.student_id),
                                         category_id:nlpReply.categoryId,
                                         query_name:messageDetails.message,
                                         possible_answer:tempWord,
@@ -399,7 +400,7 @@ const listenReply = (io) => {
                                             newSMS.save((data1)=>{
                                                 
                                                 const newQuery = new Query({
-                                                    sender_id:newSMSStduent.student_id,
+                                                    sender_id:ObjectId(newSMSStduent.student_id),
                                                     category_id:nlpReply.categoryId,
                                                     query_name:messageDetails.message,
                                                     possible_answer:data.data.message,
@@ -433,7 +434,7 @@ const listenReply = (io) => {
                        
                     } else {
                         
-                        modem.sendSMS(messageDetails.sender, 'No Possible Answer Found',  false, (data)=>{
+                        modem.sendSMS(messageDetails.sender, nlpReply.message,  false, (data)=>{
                             console.log(data);
                             if(data.request == 'SendSMS'){
                             try{
@@ -454,7 +455,7 @@ const listenReply = (io) => {
                                     // });
 
                                     const newQuery = new Query({
-                                        sender_id:newSMSStduent.student_id,
+                                        sender_id:ObjectId(newSMSStduent.student_id),
                                         category_id:nlpReply.categoryId,
                                         query_name:messageDetails.message,
                                         possible_answer:'N/A',
@@ -516,8 +517,6 @@ const findStudent = async(phone_num) => {
         return message
     }catch(err){console.log(err)}
 }
-
-
 
 modem.on('onMemoryFull', result => { console.log(result) })
 

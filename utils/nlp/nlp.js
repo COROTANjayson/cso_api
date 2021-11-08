@@ -3,21 +3,16 @@ const FAQ = require("../../models/FAQ");
 const Category = require("../../models/Category");
 const translate = require('@vitalets/google-translate-api');
 
-const manager = new NlpManager({ languages: ['en'], forceNER: true });
+const manager = new NlpManager({ languages: ['en'], forceNER: true, nlu: { log: true }});
 
 const nlpFunction = async (text) =>{
 
-    console.log('here faq')
     const faq = await FAQ.find();
     faq.forEach(element => {
-        // Adds the utterances and intents for the NLP
         
         element.faq_utterances.forEach(e=>{
-            // console.log(e);
             manager.addDocument('en',e.value,element.faq_title);
         })
-
-        // Train also the NLG
         manager.addAnswer('en', element.faq_title, element.faq_answer);
     });
 
@@ -92,6 +87,92 @@ const nlpFunction = async (text) =>{
     // return '123faq123';
 }
 
+const nlpFunctionV2 = async (text) =>{
+
+    let faq = await FAQ.find();
+    var stopwords = ['is','the',"myself", "ourselves", "yours", "yourself", "yourselves","himself",  "herself", "itself", "they", "them", "their", "theirs", "themselves"]
+
+    try{
+        const category = await Category.find();
+        category.forEach(e=>{
+            manager.addDocument('en', e.category_name.toLowerCase(), e.category_name.toLowerCase());
+            manager.addAnswer('en', e.category_name.toLowerCase(), e._id.toString());
+            // console.log(e._id);
+        })
+
+        const translation =  await translate(text, {to: 'en'});
+
+        await manager.train();
+        manager.save();
+
+        const response = await manager.process('en', translation.text.toLowerCase());
+        const findOthersID = await Category.findOne({category_name:'others'})
+
+        data = {
+            answer: '',
+            success: false,
+            categoryId: findOthersID._id,
+            faqID: null,
+            message:''
+        }
+
+
+        if(response.answer == undefined){
+            data.message = 'Query doesnt belong to any category'
+            return data;
+        }else{
+            const manager1 = new NlpManager({ languages: ['en'], forceNER: true, nlu: { log: true }});
+            faq = faq.filter(e=>e.category_id == response.answer);
+            console.log(faq);
+            translation.text = translation.text.replace(response.intent.toLowerCase(),'');
+
+            faq.forEach(e=>{
+                e.faq_utterances = e.faq_utterances.map(u=>u.value.toLowerCase().replace(response.intent.toLowerCase(),'').trim())
+
+                
+                stopwords.forEach(s=>{
+                    e.faq_utterances = e.faq_utterances.map(u=>u.toLowerCase().replace(s,'').trim())
+                    translation.text = translation.text.replace(s,'').trim();
+                })
+                
+                
+              
+                e.faq_utterances.forEach(u=>{
+                    console.log(u);
+                    manager1.addDocument('en', u, e.faq_title);
+                })
+
+                manager1.addAnswer('en', e.faq_title, e.faq_answer)
+            })
+
+            await manager1.train();
+            manager1.save();
+
+            let response1 = await manager1.process('en', translation.text.toLowerCase());
+
+        //    console.log(faq); 
+        //     console.log(response);
+            
+            if(response1.answer == undefined){
+                data.message = 'The system doesnt find any FAQ that is related to your query'
+                return data;
+            }else{
+                
+                findFaq = await FAQ.findOne({faq_title:response1.intent})
+
+                data.answer = response1;
+                data.categoryId = response.answer;
+                data.success = true;
+                data.faqID = findFaq._id;
+                return data;
+            }
+        }
+    }catch(e){
+        console.log(e);
+    }
+}
+
+
 module.exports = {
-    nlpFunction
+    nlpFunctionV2
 };
