@@ -118,7 +118,7 @@ const nlpFunctionV2 = async (text) =>{
 
 
         if(response.answer == undefined){
-            data.message = 'Query doesnt belong to any category'
+            data.message = `I'm sorry but your query doesn’t belong to any defined category, Please wait for our team to get on your query shortly.`
             return data;
         }else{
             const manager1 = new NlpManager({ languages: ['en'], forceNER: true, nlu: { log: true }});
@@ -154,7 +154,7 @@ const nlpFunctionV2 = async (text) =>{
         //     console.log(response);
             
             if(response1.answer == undefined){
-                data.message = 'The system doesnt find any FAQ that is related to your query'
+                data.message = `I'm sorry but your query has no related answers in its category, Please wait for our team to get on your query shortly.`
                 return data;
             }else{
                 

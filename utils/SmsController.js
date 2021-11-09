@@ -258,7 +258,7 @@ const SendSms = async (req,  res, io) => {
 
 const listenReply = (io) => {
 
-    const verificationMessage = `Does this answer satisfied your query?? please send 'yes' and if not please send 'no`;
+    const verificationMessage = `Thank you for asking! Has your query been answered? Type (Yes) for Yes or (No) if No`;
 
     modem.on('onNewMessage', messageDetails =>{  
         // countReply++;  
@@ -385,7 +385,11 @@ const listenReply = (io) => {
                                         newQuery.save((data2) => {
                                             modem.deleteAllSimMessages()
                                             // socket.broadcast.emit("newdata", newData);
-                                            io.sockets.emit('newdata',newData);  
+                                            let data = {
+                                                message:'New Query Received',
+                                                isUnkown:false
+                                            }
+                                            io.sockets.emit('newdata',data);  
                                         })
                                     });
         
@@ -429,8 +433,12 @@ const listenReply = (io) => {
         
                                                     newQuery.save((data2) => {
                                                         modem.deleteAllSimMessages()
+                                                        let data = {
+                                                            message:'New Query Received',
+                                                            isUnkown:false
+                                                        }
                                                         // socket.broadcast.emit("newdata", newData);
-                                                        io.sockets.emit('newdata',newData);  
+                                                        io.sockets.emit('newdata',data);  
                                                     })
                                                 });
                     
@@ -509,7 +517,11 @@ const listenReply = (io) => {
                                         newQuery.save((data2) => {
                                             modem.deleteAllSimMessages()
                                             // socket.broadcast.emit("newdata", newData);
-                                            io.sockets.emit('newdata',newData);
+                                            let data = {
+                                                message:'Unknown query received',
+                                                isUnkown:true
+                                            }
+                                            io.sockets.emit('newdata',data);
                                         })
                                         
                                     });
@@ -564,7 +576,7 @@ const findStudent = async(phone_num) => {
 function verificationMessageIdentify(message,io){
     (async()=>{
         const studentSms = await SMS.find({student_phone:message.sender});
-        const text = 'Please wait for the staff to process your query'
+        const text = 'Thank you for asking! please kindly wait, Please wait for our team to get on your query shortly.'
         
         if(studentSms[studentSms.length-1].notification){
             console.log('inside');
@@ -688,7 +700,11 @@ function verificationMessageIdentify(message,io){
                                         newSMS.save((data1)=>{
                                             modem.deleteAllSimMessages()
                                             // socket.broadcast.emit("newdata", newData);
-                                            io.sockets.emit('newdata',newData); 
+                                            let data = {
+                                                message:'Unknown query received',
+                                                isUnkown:true
+                                            }
+                                            io.sockets.emit('newdata',data); 
                                         });
                                     });
                                 }catch(err){
@@ -822,7 +838,11 @@ function sendCategoryList(message,io){
                             newSMS.save((data1)=>{
                                 modem.deleteAllSimMessages()
                                 // socket.broadcast.emit("newdata", newData);
-                                io.sockets.emit('newdata',newData); 
+                                let data = {
+                                    message:'New query received',
+                                    isUnkown:false
+                                }
+                                io.sockets.emit('newdata',data); 
                             });
                         });
                     }catch(err){
