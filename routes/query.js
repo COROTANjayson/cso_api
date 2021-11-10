@@ -9,7 +9,8 @@ const {
     DeleteQuery,
     ShowQueriesByCategory,
     ShowUnidentifiedQuery,
-    ShowPossibleCategory
+    ShowPossibleCategory,
+    ChangeQueryCategory
     // SearchStudent
 } = require("../utils/QueryController");
 
@@ -57,6 +58,15 @@ router.get("/unidentifiedquery", userAuth, async (req, res) => {
 router.get("/showpossiblecategory", userAuth, async (req, res) => {
     await ShowPossibleCategory(req.body, res);
 });
+
+router.post("/changequerycategory/:id", userAuth, async (req, res) => {
+    const query_id = req.params.id
+    // await ChangeQueryCategory(query_id, req.body, res);
+    await ChangeQueryCategory(query_id, req.body.data, res);
+    
+});
+
+
 
 //search query (api/query/search/:id) query_id or name
 // router.get("/search/:item", userAuth, async (req, res) => {

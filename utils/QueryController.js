@@ -2,13 +2,15 @@
 const passport = require("passport");
 const Query = require("../models/Query");
 const FAQ = require("../models/FAQ");
+const SMSMessage = require("../models/SMSMessage");
+const Category = require('../models/Category')
 require('../middlewares/passport')(passport);
 mongoose = require("mongoose");
-const Category = require('../models/Category')
+
 const ObjectId = mongoose.Types.ObjectId;
 const { SECRET } = require("../config");
 const { NlpManager } = require('node-nlp');
-var compromise = require('compromise');
+
 
 
 // //Show all Queries
@@ -21,7 +23,7 @@ const GetAllQueries = async (req, res) => {
                 "$lookup": {
                     "from": 'senders',
                     "localField": 'sender_id',
-                    "foreignField": '_id',
+                    "foreignField": 'student_id',
                     "as": "sender"
                 },
             },
@@ -95,7 +97,7 @@ const ShowQuery = async (query_id, req, res) => {
                 "$lookup": {
                     "from": 'senders',
                     "localField": 'sender_id',
-                    "foreignField": '_id',
+                    "foreignField": 'student_id',
                     "as": "sender"
                 },
             },
@@ -280,7 +282,7 @@ const ShowQueriesByCategory = async (req, id, res) => {
                 "$lookup": {
                     "from": 'senders',
                     "localField": 'sender_id',
-                    "foreignField": '_id',
+                    "foreignField": 'student_id',
                     "as": "sender"
                 },
             },
@@ -356,7 +358,7 @@ const ShowUnidentifiedQuery = async (req,  res) => {
 
     try {
         const others = await Category.findOne({ category_name: 'others' });
-        query = await Query.aggregate([
+        const query = await Query.aggregate([
             {"$match":{
                     'phone_num':{
                             $nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]
@@ -369,7 +371,7 @@ const ShowUnidentifiedQuery = async (req,  res) => {
                 "$lookup": {
                     "from": 'senders',
                     "localField": 'sender_id',
-                    "foreignField": '_id',
+                    "foreignField": 'student_id',
                     "as": "sender"
                 },
             },
@@ -452,7 +454,7 @@ const ShowPossibleCategory = async (req,  res) => {
                 "$lookup": {
                     "from": 'senders',
                     "localField": 'sender_id',
-                    "foreignField": '_id',
+                    "foreignField": 'student_id',
                     "as": "sender"
                 },
             },
@@ -552,7 +554,62 @@ const ShowPossibleCategory = async (req,  res) => {
     }
 }
 
-//Show Student
+// ChangeCategory
+const ChangeQueryCategory = async (query_id, req, res) => {
+    try {
+        const { category_name } = req;
+        
+        const query = await Query.findOne(ObjectId(query_id));
+        
+        
+       
+        if (!category_name) {
+            return res.status(404).json({
+                message: "The Category does not exist in database",
+                success: false
+            });
+        }
+        
+        const category = await Category.findOne({ category_name: category_name.toLowerCase() });
+        
+        if (!category) {
+            return res.status(404).json({
+                message: "The Category does not exist in database",
+                success: false
+            });
+        }
+        if (!query) {
+            return res.status(404).json({
+                message: "Query not Found",
+                success: false
+            });
+        }
+        await Query.findOneAndUpdate({_id: query_id }, { $set: { category_id: ObjectId(category._id)}} )
+        
+        // if(!query.category_id.equals( others._id)){
+        //     return res.status(404).json({
+        //         message: "Category id did not match",
+        //         success: false
+        //     });
+        // }
+      
+
+        return res.status(201).json({
+            message: "The query's category was changed",
+            success: true
+        });
+
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
+    }
+}
+
+
+
 
 module.exports = {
     NewQuery,
@@ -562,5 +619,6 @@ module.exports = {
     DeleteQuery,
     ShowQueriesByCategory,
     ShowUnidentifiedQuery,
-    ShowPossibleCategory
+    ShowPossibleCategory,
+    ChangeQueryCategory
 };
