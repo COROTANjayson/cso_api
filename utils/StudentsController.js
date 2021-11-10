@@ -1,12 +1,13 @@
 
 const passport = require("passport");
 const Student = require("../models/Student");
-
+const SMSMessage = require("../models/SMSMessage");
+const Query = require("../models/Query");
 require('../middlewares/passport')(passport);
 const { SECRET } = require("../config");
+const ObjectId = mongoose.Types.ObjectId;
 
-
-// //Show all FAQ
+// //Show all 
 const ShowAllStudent = async (req, res) => {
 
     try {
@@ -159,37 +160,139 @@ const DeleteStudent = async (req, id, res) => {
     }
 }
 
-//Show Student
-const SearchStudent = async (req, search_item, res) => {
-    //     try {
-    //         student = await Student.find({
-    //             $or: [
-    //                 { student_id: search_item },
-    //                 { last_name: search_item }
-    //             ]
-    //         });
+const GetAllInquirerRecords = async (req, res) => {
 
-    //         if (!student) {
-    //             return res.status(404).json({
-    //                 message: "Student not Found",
-    //                 success: false
-    //             });
-    //         } else {
-    //             return res.json({
-    //                 student: student,
-    //                 succes: true
-    //             });
-    //         }
+    try {
+        
+
+        const records = await Query.aggregate([
+            {"$match":{'phone_num':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]} }},
+        
+            {
+                "$lookup": {
+                    "from": 'students',
+                    "localField": 'phone_num',
+                    "foreignField": 'phone_number',
+                    "as": "student"
+                }
+            },
+           
+            {
+                "$unwind": {
+                    "path": "$student",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
+            
+        ]);
+
+         records.map(function(el) {
+            if(el.student === undefined) { 
+                el.student = null;
+            }
+          })
+        
+        console.log(records.length)
+        return res.json({
+            records: records,
+            succes: true
+        });
 
 
-    //     } catch (error) {
-    //         return res.status(500).json({
-    //             message: "Unable tp search for the moementr",
-    //             success: false
-    //         });
-    //     }
-
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
+    }
 }
+
+const GetInquirerRecords = async (req, phonenumber ,res) => {
+    try {
+        
+        const records = await Query.aggregate([
+            {"$match":{'phone_num':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]} }},
+            { "$match":  { "phone_num": `${phonenumber}` } }  ,
+           
+            {
+                "$lookup": {
+                    "from": 'students',
+                    "localField": 'phone_num',
+                    "foreignField": 'phone_number',
+                    "as": "student"
+                }
+            },
+           
+            {
+                "$unwind": {
+                    "path": "$student",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
+        ]);
+
+         records.map(function(el) {
+            if(el.student === undefined) { 
+                el.student = null;
+            }
+          })
+        
+        console.log(records.length)
+        return res.json({
+            records: records,
+            succes: true
+        });
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
+    }
+}
+
+const SelectBroadcast = async (req, res) => {
+
+    try {
+        
+        const {school, course } = req;
+        let records
+        if (!course && !school){
+          
+             records = await Student.aggregate([
+                {"$match":{'phone_number':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]} }},
+               
+            ]);
+        } else if (course && school){
+            records = await Student.aggregate([
+                {"$match":{'phone_number':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]} }},
+                { "$match": { "$and": [ { "school": `${school}` }, { "course": `${course}` } ] } },  
+            ]);
+        } else {
+            
+             records = await Student.aggregate([
+                {"$match":{'phone_number':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]} }},
+                { "$match": { "$or": [ { "school": `${school}` }, { "course": `${course}` } ] } },  
+            ]);
+        }
+        return res.json({
+            list: records,
+            succes: true
+        });
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
+    }
+}
+
 
 module.exports = {
     AddStudent,
@@ -197,5 +300,7 @@ module.exports = {
     ShowStudent,
     EditStudent,
     DeleteStudent,
-    SearchStudent
+    GetAllInquirerRecords,
+    GetInquirerRecords,
+    SelectBroadcast
 };

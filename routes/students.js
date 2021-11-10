@@ -7,7 +7,9 @@ const {
     ShowStudent,
     EditStudent,
     DeleteStudent,
-    SearchStudent
+    GetAllInquirerRecords,
+    GetInquirerRecords,
+    SelectBroadcast
 } = require("../utils/StudentsController");
 
 // Show all student (api/students/show)
@@ -38,10 +40,18 @@ router.delete("/delete/:id", userAuth, async (req, res) => {
     await DeleteStudent(req.body, id, res);
 });
 
-//search student (api/student/search/:id) student_id or name
-// router.get("/search/:item", userAuth, async (req, res) => {
-//     const item = req.params.item;
-//     await SearchStudent(req.body, item, res);
-// });
+router.get("/showinquirer", userAuth, async (req, res) => {
+    await GetAllInquirerRecords(req.body, res);
+});
+
+router.get("/showinquirer/:id", userAuth, async (req, res) => {
+    const id = req.params.id;
+    await GetInquirerRecords(req.body, id, res);
+});
+
+router.post("/broadcast", userAuth, async (req, res) => {
+    // await SelectBroadcast(req.body, res);
+    await SelectBroadcast(req.body.data, res);
+});
 
 module.exports = router;
