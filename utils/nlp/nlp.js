@@ -154,7 +154,7 @@ const nlpFunctionV2 = async (text) =>{
         //     console.log(response);
             
             if(response1.answer == undefined){
-                data.message = `I'm sorry but your query has no related answers in its category, Please wait for our team to get on your query shortly.`
+                data.message = `New query was received. Please wait for our team will get back to you shortly`
                 return data;
             }else{
                 

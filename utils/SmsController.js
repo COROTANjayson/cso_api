@@ -258,7 +258,7 @@ const SendSms = async (req,  res, io) => {
 
 const listenReply = (io) => {
 
-    const verificationMessage = `Thank you for asking! Has your query been answered? Type (Yes) for Yes or (No) if No`;
+    const verificationMessage = `Thank you for reaching out. Is your question was answered? Type Y for Yes and N for No`;
 
     modem.on('onNewMessage', messageDetails =>{  
         // countReply++;  
@@ -269,7 +269,7 @@ const listenReply = (io) => {
         });
 
         console.log(messageDetails);
-        if(messageDetails.message.toLowerCase() == 'no' || messageDetails.message.toLowerCase() == 'yes' || messageDetails.message.toLowerCase() == 'category'){
+        if(messageDetails.message.toLowerCase() == 'n' || messageDetails.message.toLowerCase() == 'y' || messageDetails.message.toLowerCase() == 'category'){
 
             if(messageDetails.message.toLowerCase() == 'category'){
                 sendCategoryList(messageDetails,io);
@@ -580,7 +580,7 @@ function verificationMessageIdentify(message,io){
         
         if(studentSms[studentSms.length-1].notification){
             console.log('inside');
-            if(message.message.toLowerCase() == 'yes'){
+            if(message.message.toLowerCase() == 'y'){
                 modem.getOwnNumber((phone)=>{
                     
                     const newSMS = new SMS({

@@ -249,7 +249,7 @@ const ScanQuery = async (faq_utterances, faq_title, faq_answer, faq_id, category
     const faq = await FAQ.find();
     faq.forEach(element => {
         element.faq_utterances.forEach(e=>{
-            manager.addDocument('en', e, element.faq_title);
+            manager.addDocument('en', e.value, element.faq_title);
         })
         manager.addAnswer('en', element.faq_title, element.faq_answer);
     });

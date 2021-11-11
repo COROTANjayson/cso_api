@@ -12,7 +12,6 @@ const { SECRET } = require("../config");
 const { NlpManager } = require('node-nlp');
 
 
-
 // //Show all Queries
 const GetAllQueries = async (req, res) => {
 
@@ -36,8 +35,8 @@ const GetAllQueries = async (req, res) => {
             {
                 "$lookup": {
                     "from": 'students',
-                    "localField": 'sender.student_id',
-                    "foreignField": 'student_id',
+                    "localField": 'sender_id',
+                    "foreignField": '_id',
                     "as": "student"
                 }
             },
@@ -110,8 +109,8 @@ const ShowQuery = async (query_id, req, res) => {
             {
                 "$lookup": {
                     "from": 'students',
-                    "localField": 'sender.student_id',
-                    "foreignField": 'student_id',
+                    "localField": 'sender_id',
+                    "foreignField": '_id',
                     "as": "student"
                 }
             },
@@ -296,7 +295,7 @@ const ShowQueriesByCategory = async (req, id, res) => {
                 "$lookup": {
                     "from": 'students',
                     "localField": 'sender.student_id',
-                    "foreignField": 'student_id',
+                    "foreignField": '_id',
                     "as": "student"
                 }
             },
@@ -384,8 +383,8 @@ const ShowUnidentifiedQuery = async (req,  res) => {
             {
                 "$lookup": {
                     "from": 'students',
-                    "localField": 'sender.student_id',
-                    "foreignField": 'student_id',
+                    "localField": 'sender_id',
+                    "foreignField": '_id',
                     "as": "student"
                 }
             },
@@ -561,7 +560,7 @@ const ChangeQueryCategory = async (query_id, req, res) => {
         
         const query = await Query.findOne(ObjectId(query_id));
         
-        
+        console.log(req);
        
         if (!category_name) {
             return res.status(404).json({
@@ -573,6 +572,7 @@ const ChangeQueryCategory = async (query_id, req, res) => {
         const category = await Category.findOne({ category_name: category_name.toLowerCase() });
         
         if (!category) {
+            console.log('here it is')
             return res.status(404).json({
                 message: "The Category does not exist in database",
                 success: false

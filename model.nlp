@@ -39,27 +39,27 @@
             "domain": "default"
           },
           "scholarship": {
-            "intent": "Scholarship",
+            "intent": "scholarship",
             "domain": "default"
           },
           "inform": {
-            "intent": "Information",
+            "intent": "information",
             "domain": "default"
           },
           "websit": {
-            "intent": "Website",
+            "intent": "website",
             "domain": "default"
           },
           "grade": {
-            "intent": "Grades",
+            "intent": "grades",
             "domain": "default"
           },
           "cours": {
-            "intent": "Course",
+            "intent": "course",
             "domain": "default"
           },
           "coe": {
-            "intent": "COE",
+            "intent": "coe",
             "domain": "default"
           },
           "other": {
@@ -67,20 +67,20 @@
             "domain": "default"
           },
           "event": {
-            "intent": "Event",
+            "intent": "event",
             "domain": "default"
           }
         },
         "intentDict": {
           "allowance": "default",
-          "Scholarship": "default",
-          "Information": "default",
-          "Website": "default",
-          "Grades": "default",
-          "Course": "default",
-          "COE": "default",
+          "scholarship": "default",
+          "information": "default",
+          "website": "default",
+          "grades": "default",
+          "course": "default",
+          "coe": "default",
           "others": "default",
-          "Event": "default"
+          "event": "default"
         },
         "sentences": [
           {
@@ -90,33 +90,33 @@
           },
           {
             "domain": "default",
-            "utterance": "Scholarship",
-            "intent": "Scholarship"
+            "utterance": "scholarship",
+            "intent": "scholarship"
           },
           {
             "domain": "default",
-            "utterance": "Information",
-            "intent": "Information"
+            "utterance": "information",
+            "intent": "information"
           },
           {
             "domain": "default",
-            "utterance": "Website",
-            "intent": "Website"
+            "utterance": "website",
+            "intent": "website"
           },
           {
             "domain": "default",
-            "utterance": "Grades",
-            "intent": "Grades"
+            "utterance": "grades",
+            "intent": "grades"
           },
           {
             "domain": "default",
-            "utterance": "Course",
-            "intent": "Course"
+            "utterance": "course",
+            "intent": "course"
           },
           {
             "domain": "default",
-            "utterance": "COE",
-            "intent": "COE"
+            "utterance": "coe",
+            "intent": "coe"
           },
           {
             "domain": "default",
@@ -125,8 +125,8 @@
           },
           {
             "domain": "default",
-            "utterance": "Event",
-            "intent": "Event"
+            "utterance": "event",
+            "intent": "event"
           }
         ],
         "domains": {
@@ -155,41 +155,41 @@
             },
             "intents": {
               "allowance": 1,
-              "Scholarship": 1,
-              "Information": 1,
-              "Website": 1,
-              "Grades": 1,
-              "Course": 1,
-              "COE": 1,
+              "scholarship": 1,
+              "information": 1,
+              "website": 1,
+              "grades": 1,
+              "course": 1,
+              "coe": 1,
               "others": 1,
-              "Event": 1
+              "event": 1
             },
             "intentFeatures": {
               "allowance": {
                 "allow": 1
               },
-              "Scholarship": {
+              "scholarship": {
                 "scholarship": 1
               },
-              "Information": {
+              "information": {
                 "inform": 1
               },
-              "Website": {
+              "website": {
                 "websit": 1
               },
-              "Grades": {
+              "grades": {
                 "grade": 1
               },
-              "Course": {
+              "course": {
                 "cours": 1
               },
-              "COE": {
+              "coe": {
                 "coe": 1
               },
               "others": {
                 "other": 1
               },
-              "Event": {
+              "event": {
                 "event": 1
               }
             },
@@ -198,28 +198,28 @@
                 "allowance"
               ],
               "scholarship": [
-                "Scholarship"
+                "scholarship"
               ],
               "inform": [
-                "Information"
+                "information"
               ],
               "websit": [
-                "Website"
+                "website"
               ],
               "grade": [
-                "Grades"
+                "grades"
               ],
               "cours": [
-                "Course"
+                "course"
               ],
               "coe": [
-                "COE"
+                "coe"
               ],
               "other": [
                 "others"
               ],
               "event": [
-                "Event"
+                "event"
               ]
             },
             "neuralNetwork": {
@@ -247,14 +247,14 @@
               ],
               "intents": [
                 "allowance",
-                "Scholarship",
-                "Information",
-                "Website",
-                "Grades",
-                "Course",
-                "COE",
+                "scholarship",
+                "information",
+                "website",
+                "grades",
+                "course",
+                "coe",
                 "others",
-                "Event"
+                "event"
               ],
               "perceptrons": [
                 [
@@ -379,27 +379,27 @@
       ],
       [
         "en",
-        "Scholarship"
+        "scholarship"
       ],
       [
         "en",
-        "Information"
+        "information"
       ],
       [
         "en",
-        "Website"
+        "website"
       ],
       [
         "en",
-        "Grades"
+        "grades"
       ],
       [
         "en",
-        "Course"
+        "course"
       ],
       [
         "en",
-        "COE"
+        "coe"
       ],
       [
         "en",
@@ -407,7 +407,7 @@
       ],
       [
         "en",
-        "Event"
+        "event"
       ]
     ]
   },
@@ -430,28 +430,28 @@
             "answer": "allowance"
           },
           {
-            "answer": "Scholarship"
+            "answer": "scholarship"
           },
           {
-            "answer": "Information"
+            "answer": "information"
           },
           {
-            "answer": "Website"
+            "answer": "website"
           },
           {
-            "answer": "Grades"
+            "answer": "grades"
           },
           {
-            "answer": "Course"
+            "answer": "course"
           },
           {
-            "answer": "COE"
+            "answer": "coe"
           },
           {
             "answer": "others"
           },
           {
-            "answer": "Event"
+            "answer": "event"
           }
         ]
       }

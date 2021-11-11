@@ -163,8 +163,6 @@ const DeleteStudent = async (req, id, res) => {
 const GetAllInquirerRecords = async (req, res) => {
 
     try {
-        
-
         const records = await Query.aggregate([
             {"$match":{'phone_num':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]} }},
         
@@ -192,9 +190,13 @@ const GetAllInquirerRecords = async (req, res) => {
             }
           })
         
-        console.log(records.length)
+        const key = 'phone_num';
+
+        const arrayUniqueByKey = [...new Map(records.map(item =>
+        [item[key], item])).values()];
+
         return res.json({
-            records: records,
+            records: arrayUniqueByKey,
             succes: true
         });
 
