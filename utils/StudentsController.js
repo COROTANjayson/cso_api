@@ -262,22 +262,16 @@ const SelectBroadcast = async (req, res) => {
         
         const {school, course } = req;
         let records
-        if (!course && !school){
-          
-             records = await Student.aggregate([
-                {"$match":{'phone_number':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]} }},
-               
-            ]);
-        } else if (course && school){
+        if (course.length && school.length){
             records = await Student.aggregate([
                 {"$match":{'phone_number':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]} }},
-                { "$match": { "$and": [ { "school": `${school}` }, { "course": `${course}` } ] } },  
+                 { "$match": { "$or": [ { "school": { "$in": [...school]}}, { "course": { "$in": [...course]} } ] } },  
             ]);
         } else {
-            
              records = await Student.aggregate([
                 {"$match":{'phone_number':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]} }},
-                { "$match": { "$or": [ { "school": `${school}` }, { "course": `${course}` } ] } },  
+                { "$match": { "$or": [ { "school": { "$in": [...school]}}, { "course": { "$in": [...course]} } ] } },  
+                // { "$match": { "$or": [ { "course":  { "$in": ['BSCE', 'BSIT']} } ] } },  
             ]);
         }
         return res.json({
