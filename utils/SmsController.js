@@ -259,14 +259,117 @@ const SendSms = async (req,  res, io) => {
 
 const sendBroadcastMessage = async (req,res, io) => {
     try{
+
+        let text = req.message;
         const result = await SelectBroadcast(req,res);
-        console.log(result);
+    
+        if(result.list.length == 0){
+            return res.status(404).json({
+                message: "No Contact Found",
+                success: false
+            });
+        }
 
+        result.list.forEach(e=>{
+            let tempNum = e.phone_number
+            if(tempNum.substring(0,1) == 0){
+                tempNum = '63'+e.phone_number.substring(1);
+            }
+            if(e.phone_number.substring)
+            if(text.length > 140){
 
-        return res.json({
-            message: 'Broadcast Send',
-            succes: true
-        });
+                const tempWord = text;
+                const wordArr = [];
+    
+                while(text.length != 0){
+                    wordArr.push(text.substr(0,140))
+                    if(text.length < 140){
+                        text = text.slice(text.length);
+                    }else{
+                        text = text.slice(140);
+                    }
+                }
+                
+                wordArr.forEach(e=>{
+                    modem.sendSMS(tempNum, e, false, (data)=>{
+                        console.log(data);
+                    })
+    
+                    modem.on('onSendingMessage', result => { 
+                        console.log(result);
+                     })
+                })
+    
+                modem.getOwnNumber(phone=>{
+                    const newSMS = new SMS({
+                        message:tempWord,
+                        officer_phone:phone.data.number,
+                        student_phone:tempNum,
+                        type:'send',
+                        isChatbot:false,
+                        student_id:null,
+                        chatBotReplyID:null,
+                        is_read:true
+                    });
+    
+                    newSMS.save((data)=>{
+
+                        modem.deleteAllSimMessages()
+                    });
+                })
+            }else{
+                // Send Messages
+                modem.sendSMS(tempNum, text, false, (data)=>{
+                    modem.on('onNewMessage', messageDetails =>{ console.log(messageDetails) })
+                    // console.log(data);
+                    if(data.request == 'SendSMS'){
+                        try{
+    
+                            modem.getOwnNumber((phone)=>{
+                            // console.log(phone.data.number);
+    
+                                const newSMS = new SMS({
+                                    message:data.data.message,
+                                    officer_phone:phone.data.number,
+                                    student_phone:data.data.recipient,
+                                    type:'send',
+                                    isChatbot:false,
+                                    student_id:null,
+                                    chatBotReplyID:null,
+                                    is_read:true
+                                });
+        
+                                // console.log(newSMS);
+                                newSMS.save((data)=>{
+                                    // console.log(newSMS);
+                                    modem.deleteAllSimMessages()
+                                });
+        
+                            });
+                        }catch(err){
+    
+                            return res.status(500).json({
+                                message: "Send SMS Error",
+                                success: false
+                            });
+                        }
+                    }
+                })
+    
+                
+                modem.on('onSendingMessage', result => { 
+                    console.log(result);
+                 })
+            }
+        })
+
+        setTimeout(function() {
+            return res.json({
+                message: 'Broadcast Send',
+                succes: true
+            });
+        }, 2000);
+
     }catch (err){
         console.log(err);
         return res.status(500).json({

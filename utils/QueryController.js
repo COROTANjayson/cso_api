@@ -92,6 +92,7 @@ const ShowQuery = async (query_id, req, res) => {
     try {
         const query = await Query.aggregate([
             {"$match":{"_id": ObjectId(query_id)}},
+            {"$match":{'phone_number':{$nin: [ ' ',null, '8080', 'AutoLoadMax', 'TM', '4438' ]} }},
             {
                 "$lookup": {
                     "from": 'senders',
