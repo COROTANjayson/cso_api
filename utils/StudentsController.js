@@ -261,31 +261,35 @@ const SelectBroadcast = async (req, res) => {
     try {
         
         const {school, course } = req;
+        console.log(school.length);
+        console.log(course.length);
         let records
-        if (course.length && school.length){
+        if(course.length == 0 && school.length == 0){
+            records = await Student.find();
+        }
+        else if (course.length&& school.length){
             records = await Student.aggregate([
                 {"$match":{'phone_number':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]} }},
                  { "$match": { "$or": [ { "school": { "$in": [...school]}}, { "course": { "$in": [...course]} } ] } },  
             ]);
         } else {
+            console.log('here it is')
              records = await Student.aggregate([
                 {"$match":{'phone_number':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]} }},
                 { "$match": { "$or": [ { "school": { "$in": [...school]}}, { "course": { "$in": [...course]} } ] } },  
                 // { "$match": { "$or": [ { "course":  { "$in": ['BSCE', 'BSIT']} } ] } },  
             ]);
         }
-        return res.json({
+
+        data = {
             list: records,
             succes: true
-        });
+        }
+        return data;
 
 
     } catch (error) {
         console.log(error);
-        return res.status(500).json({
-            message: "Server Error",
-            success: false
-        });
     }
 }
 

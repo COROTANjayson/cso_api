@@ -7,6 +7,7 @@ const Query = require("../models/Query");
 const Category = require("../models/Category");
 const axios = require('axios');
 const Student = require('../models/Student');
+const {SelectBroadcast} = require('./StudentsController');
 const ObjectId = mongoose.Types.ObjectId;
 
 
@@ -255,6 +256,25 @@ const SendSms = async (req,  res, io) => {
     }
 };
 
+
+const sendBroadcastMessage = async (req,res, io) => {
+    try{
+        const result = await SelectBroadcast(req,res);
+        console.log(result);
+
+
+        return res.json({
+            message: 'Broadcast Send',
+            succes: true
+        });
+    }catch (err){
+        console.log(err);
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
+    }
+}
 
 const listenReply = (io) => {
 
@@ -859,4 +879,4 @@ function sendCategoryList(message,io){
     })
 }
 
-module.exports = {SendSms, GetAllSms,listenReply,GetCurrentMessage,GetUnreadCurrentMessage,ReadMessage,OpenAndInitializeGSMModule }
+module.exports = {SendSms, GetAllSms,listenReply,GetCurrentMessage,GetUnreadCurrentMessage,ReadMessage,OpenAndInitializeGSMModule,sendBroadcastMessage }
