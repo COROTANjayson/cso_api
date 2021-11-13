@@ -4,9 +4,6 @@
       "en"
     ],
     "forceNER": true,
-    "nlu": {
-      "log": true
-    },
     "tag": "nlp",
     "threshold": 0.5,
     "autoLoad": true,
@@ -16,8 +13,7 @@
   },
   "nluManager": {
     "settings": {
-      "tag": "nlu-manager",
-      "log": true
+      "tag": "nlu-manager"
     },
     "locales": [
       "en"
@@ -38,28 +34,99 @@
           "useStemDict": true
         },
         "stemDict": {
-          "what": {
-            "intent": "coe.what",
+          "allow": {
+            "intent": "allowance",
             "domain": "default"
           },
-          "get,how,to": {
-            "intent": "coe.what",
+          "scholarship": {
+            "intent": "scholarship",
+            "domain": "default"
+          },
+          "inform": {
+            "intent": "information",
+            "domain": "default"
+          },
+          "websit": {
+            "intent": "website",
+            "domain": "default"
+          },
+          "grade": {
+            "intent": "grades",
+            "domain": "default"
+          },
+          "cours": {
+            "intent": "course",
+            "domain": "default"
+          },
+          "coe": {
+            "intent": "coe",
+            "domain": "default"
+          },
+          "other": {
+            "intent": "others",
+            "domain": "default"
+          },
+          "event": {
+            "intent": "event",
             "domain": "default"
           }
         },
         "intentDict": {
-          "coe.what": "default"
+          "allowance": "default",
+          "scholarship": "default",
+          "information": "default",
+          "website": "default",
+          "grades": "default",
+          "course": "default",
+          "coe": "default",
+          "others": "default",
+          "event": "default"
         },
         "sentences": [
           {
             "domain": "default",
-            "utterance": "what",
-            "intent": "coe.what"
+            "utterance": "allowance",
+            "intent": "allowance"
           },
           {
             "domain": "default",
-            "utterance": "how to get",
-            "intent": "coe.what"
+            "utterance": "scholarship",
+            "intent": "scholarship"
+          },
+          {
+            "domain": "default",
+            "utterance": "information",
+            "intent": "information"
+          },
+          {
+            "domain": "default",
+            "utterance": "website",
+            "intent": "website"
+          },
+          {
+            "domain": "default",
+            "utterance": "grades",
+            "intent": "grades"
+          },
+          {
+            "domain": "default",
+            "utterance": "course",
+            "intent": "course"
+          },
+          {
+            "domain": "default",
+            "utterance": "coe",
+            "intent": "coe"
+          },
+          {
+            "domain": "default",
+            "utterance": "others",
+            "intent": "others"
+          },
+          {
+            "domain": "default",
+            "utterance": "event",
+            "intent": "event"
           }
         ],
         "domains": {
@@ -76,39 +143,87 @@
               "log": true
             },
             "features": {
-              "what": 1,
-              "how": 1,
-              "to": 1,
-              "get": 1
+              "allow": 1,
+              "scholarship": 1,
+              "inform": 1,
+              "websit": 1,
+              "grade": 1,
+              "cours": 1,
+              "coe": 1,
+              "other": 1,
+              "event": 1
             },
             "intents": {
-              "coe.what": 1
+              "allowance": 1,
+              "scholarship": 1,
+              "information": 1,
+              "website": 1,
+              "grades": 1,
+              "course": 1,
+              "coe": 1,
+              "others": 1,
+              "event": 1
             },
             "intentFeatures": {
-              "coe.what": {
-                "what": 1,
-                "how": 1,
-                "to": 1,
-                "get": 1
+              "allowance": {
+                "allow": 1
+              },
+              "scholarship": {
+                "scholarship": 1
+              },
+              "information": {
+                "inform": 1
+              },
+              "website": {
+                "websit": 1
+              },
+              "grades": {
+                "grade": 1
+              },
+              "course": {
+                "cours": 1
+              },
+              "coe": {
+                "coe": 1
+              },
+              "others": {
+                "other": 1
+              },
+              "event": {
+                "event": 1
               }
             },
             "featuresToIntent": {
-              "what": [
-                "coe.what"
+              "allow": [
+                "allowance"
               ],
-              "how": [
-                "coe.what"
+              "scholarship": [
+                "scholarship"
               ],
-              "to": [
-                "coe.what"
+              "inform": [
+                "information"
               ],
-              "get": [
-                "coe.what"
+              "websit": [
+                "website"
+              ],
+              "grade": [
+                "grades"
+              ],
+              "cours": [
+                "course"
+              ],
+              "coe": [
+                "coe"
+              ],
+              "other": [
+                "others"
+              ],
+              "event": [
+                "event"
               ]
             },
             "neuralNetwork": {
               "settings": {
-                "log": true,
                 "locale": "en",
                 "tag": "nlu-en",
                 "keepStopwords": true,
@@ -116,24 +231,139 @@
                 "nonedeltaMultiplier": 1.2,
                 "spellCheck": false,
                 "spellCheckDistance": 1,
-                "filterZeros": true
+                "filterZeros": true,
+                "log": true
               },
               "features": [
-                "what",
-                "how",
-                "to",
-                "get"
+                "allow",
+                "scholarship",
+                "inform",
+                "websit",
+                "grade",
+                "cours",
+                "coe",
+                "other",
+                "event"
               ],
               "intents": [
-                "coe.what"
+                "allowance",
+                "scholarship",
+                "information",
+                "website",
+                "grades",
+                "course",
+                "coe",
+                "others",
+                "event"
               ],
               "perceptrons": [
                 [
-                  8.487215995788574,
-                  2.872195243835449,
-                  2.872195243835449,
-                  2.872195243835449,
-                  5.684821184019125
+                  12.755775451660156,
+                  -1.2890907526016235,
+                  -1.284517765045166,
+                  -1.2796958684921265,
+                  -1.2746307849884033,
+                  -1.2693272829055786,
+                  -1.2637903690338135,
+                  -1.2580257654190063,
+                  -1.2520382404327393,
+                  1.2929484470500052
+                ],
+                [
+                  -1.247748613357544,
+                  12.75576114654541,
+                  -1.289104700088501,
+                  -1.2845324277877808,
+                  -1.279711365699768,
+                  -1.2746466398239136,
+                  -1.269343376159668,
+                  -1.2638070583343506,
+                  -1.2580424547195435,
+                  1.2948459906012773
+                ],
+                [
+                  -1.2541582584381104,
+                  -1.2477619647979736,
+                  12.755746841430664,
+                  -1.289119005203247,
+                  -1.284547209739685,
+                  -1.2797266244888306,
+                  -1.2746624946594238,
+                  -1.2693594694137573,
+                  -1.2638235092163086,
+                  1.2965540596832366
+                ],
+                [
+                  -1.2603428363800049,
+                  -1.2541710138320923,
+                  -1.2477749586105347,
+                  12.755733489990234,
+                  -1.2891333103179932,
+                  -1.2845617532730103,
+                  -1.279741644859314,
+                  -1.2746778726577759,
+                  -1.2693758010864258,
+                  1.2980738415534727
+                ],
+                [
+                  -1.2662960290908813,
+                  -1.260354995727539,
+                  -1.2541837692260742,
+                  -1.2477881908416748,
+                  12.755719184875488,
+                  -1.2891476154327393,
+                  -1.2845765352249146,
+                  -1.279757022857666,
+                  -1.2746937274932861,
+                  1.2994075742320699
+                ],
+                [
+                  -1.2720118761062622,
+                  -1.2663078308105469,
+                  -1.2603672742843628,
+                  -1.2541965246200562,
+                  -1.2478017807006836,
+                  12.755704879760742,
+                  -1.289162039756775,
+                  -1.284591794013977,
+                  -1.2797727584838867,
+                  1.3005574186607771
+                ],
+                [
+                  -1.2774839401245117,
+                  -1.2720226049423218,
+                  -1.2663191556930542,
+                  -1.2603791952133179,
+                  -1.254209041595459,
+                  -1.2478147745132446,
+                  12.755690574645996,
+                  -1.289176106452942,
+                  -1.2846062183380127,
+                  1.3015251980174314
+                ],
+                [
+                  -1.282706618309021,
+                  -1.277494192123413,
+                  -1.2720335721969604,
+                  -1.2663304805755615,
+                  -1.260391354560852,
+                  -1.254221796989441,
+                  -1.2478280067443848,
+                  12.755678176879883,
+                  -1.289190411567688,
+                  1.3023142066705704
+                ],
+                [
+                  -1.2876744270324707,
+                  -1.282716155052185,
+                  -1.277504563331604,
+                  -1.2720446586608887,
+                  -1.266342282295227,
+                  -1.2604036331176758,
+                  -1.2542344331741333,
+                  -1.2478411197662354,
+                  12.755663871765137,
+                  1.3029278906612107
                 ]
               ]
             }
@@ -145,11 +375,39 @@
     "extraSentences": [
       [
         "en",
-        "what"
+        "allowance"
       ],
       [
         "en",
-        "how to get"
+        "scholarship"
+      ],
+      [
+        "en",
+        "information"
+      ],
+      [
+        "en",
+        "website"
+      ],
+      [
+        "en",
+        "grades"
+      ],
+      [
+        "en",
+        "course"
+      ],
+      [
+        "en",
+        "coe"
+      ],
+      [
+        "en",
+        "others"
+      ],
+      [
+        "en",
+        "event"
       ]
     ]
   },
@@ -167,9 +425,33 @@
     },
     "responses": {
       "en": {
-        "coe.what": [
+        "undefined": [
           {
-            "answer": "To get Certificate of Enrollment you must go to our website"
+            "answer": "allowance"
+          },
+          {
+            "answer": "scholarship"
+          },
+          {
+            "answer": "information"
+          },
+          {
+            "answer": "website"
+          },
+          {
+            "answer": "grades"
+          },
+          {
+            "answer": "course"
+          },
+          {
+            "answer": "coe"
+          },
+          {
+            "answer": "others"
+          },
+          {
+            "answer": "event"
           }
         ]
       }
