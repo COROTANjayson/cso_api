@@ -13,8 +13,13 @@ const ShowAllCategory = async (req, res) => {
     try {
         await Category.find(function (err, category) {
             if (err) return next(err);
+
+            let others = category.filter(e=>e.category_name === 'others');
+            let newCategory = category.filter(e=>e.category_name !== 'others');
+            newCategory.push(others[0]);
+         
             res.json({
-                category: category,
+                category: newCategory,
                 succes: true
             });
 
@@ -59,7 +64,7 @@ const ShowCategory = async (req, cat_id, res) => {
 
 // Create new FAQ
 const AddCategory = async (req, user_id, res) => {
-    const { category_name } = req;
+    let { category_name } = req;
     try {
         //Check required fields
         if (!category_name) {
@@ -68,6 +73,7 @@ const AddCategory = async (req, user_id, res) => {
                 success: false
             });
         }
+        category_name = category_name.toLowerCase();
         // create a new Category
         const newCategory = new Category({
             category_name
@@ -78,7 +84,7 @@ const AddCategory = async (req, user_id, res) => {
 
         if (checkCategory) {
             return res.status(400).json({
-                message: `New Category is added`,
+                message: `Category Already Exist`,
                 success: false
             });
         }

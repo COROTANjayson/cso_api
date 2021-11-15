@@ -379,6 +379,121 @@ const sendBroadcastMessage = async (req,res, io) => {
     }
 }
 
+const SendQueryAnswer = async(req,res,io)=>{
+    const {message,query_info} = req
+    console.log(req);
+    try{
+        await Query.updateOne(
+            { _id: ObjectId(query_info._id)},
+            { $set: { possible_answer:message}}
+        )
+        
+        let text = message;
+        const to = query_info.phone_num;
+        if(text.length > 140){
+
+            const tempWord = text;
+            const wordArr = [];
+
+            while(text.length != 0){
+                wordArr.push(text.substr(0,140))
+                if(text.length < 140){
+                    text = text.slice(text.length);
+                }else{
+                    text = text.slice(140);
+                }
+            }
+            
+            wordArr.forEach(e=>{
+                modem.sendSMS(to, e, false, (data)=>{
+                    console.log(data);
+                })
+
+                modem.on('onSendingMessage', result => { 
+                    console.log(result);
+                 })
+            })
+
+            modem.getOwnNumber(phone=>{
+                const newSMS = new SMS({
+                    message:tempWord,
+                    officer_phone:phone.data.number,
+                    student_phone:to,
+                    type:'send',
+                    isChatbot:false,
+                    student_id:null,
+                    chatBotReplyID:null,
+                    is_read:true
+                });
+
+                newSMS.save((data)=>{
+                    modem.getSimInbox(data=>console.log(data))
+                    modem.deleteAllSimMessages()
+                    io.sockets.emit('newSMSFromOfficer');
+                    return res.status(201).json({
+                        message: 'Message Sent',
+                        success: true
+                    });
+                });
+            })
+        }else{
+            // Send Messages
+            modem.sendSMS(to, text, false, (data)=>{
+                modem.on('onNewMessage', messageDetails =>{ console.log(messageDetails) })
+                // console.log(data);
+                if(data.request == 'SendSMS'){
+                    try{
+
+                        modem.getOwnNumber((phone)=>{
+                            // console.log(phone.data.number);
+
+                            const newSMS = new SMS({
+                                message:data.data.message,
+                                officer_phone:phone.data.number,
+                                student_phone:data.data.recipient,
+                                type:'send',
+                                isChatbot:false,
+                                student_id:null,
+                                chatBotReplyID:null,
+                                is_read:true
+                            });
+
+                            // console.log(newSMS);
+                            newSMS.save((data)=>{
+                                // console.log(newSMS);
+                                modem.deleteAllSimMessages()
+                                io.sockets.emit('newSMSFromOfficer');
+                                return res.status(201).json({
+                                    message: 'Message Sent',
+                                    success: true
+                                });
+                            });
+
+                        });
+                    }catch(err){
+
+                        return res.status(500).json({
+                            message: "Send SMS Error",
+                            success: false
+                        });
+                    }
+                }
+            })
+
+            
+            modem.on('onSendingMessage', result => { 
+                console.log(result);
+             })
+        }
+    }catch(e){
+        console.log(err);
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
+    }
+}
+
 const listenReply = (io) => {
 
     const verificationMessage = `Thank you for reaching out. Is your question was answered? Type Y for Yes and N for No`;
@@ -756,7 +871,7 @@ function verificationMessageIdentify(message,io){
 
                 await Query.updateOne(
                     { _id: ObjectId(query._id)},
-                    { $set: { category_id: ObjectId(others._id), faq_id: null}}
+                    { $set: { category_id: ObjectId(others._id), faq_id: null,possbile_answer:'N/A'}}
                 )
 
                 modem.getOwnNumber((phone)=>{
@@ -982,4 +1097,4 @@ function sendCategoryList(message,io){
     })
 }
 
-module.exports = {SendSms, GetAllSms,listenReply,GetCurrentMessage,GetUnreadCurrentMessage,ReadMessage,OpenAndInitializeGSMModule,sendBroadcastMessage }
+module.exports = {SendSms, GetAllSms,listenReply,GetCurrentMessage,GetUnreadCurrentMessage,ReadMessage,OpenAndInitializeGSMModule,sendBroadcastMessage,SendQueryAnswer }

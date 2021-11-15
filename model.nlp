@@ -42,10 +42,6 @@
             "intent": "scholarship",
             "domain": "default"
           },
-          "inform": {
-            "intent": "information",
-            "domain": "default"
-          },
           "websit": {
             "intent": "website",
             "domain": "default"
@@ -69,18 +65,22 @@
           "event": {
             "intent": "event",
             "domain": "default"
+          },
+          "inform": {
+            "intent": "information",
+            "domain": "default"
           }
         },
         "intentDict": {
           "allowance": "default",
           "scholarship": "default",
-          "information": "default",
           "website": "default",
           "grades": "default",
           "course": "default",
           "coe": "default",
           "others": "default",
-          "event": "default"
+          "event": "default",
+          "information": "default"
         },
         "sentences": [
           {
@@ -92,11 +92,6 @@
             "domain": "default",
             "utterance": "scholarship",
             "intent": "scholarship"
-          },
-          {
-            "domain": "default",
-            "utterance": "information",
-            "intent": "information"
           },
           {
             "domain": "default",
@@ -127,6 +122,11 @@
             "domain": "default",
             "utterance": "event",
             "intent": "event"
+          },
+          {
+            "domain": "default",
+            "utterance": "information",
+            "intent": "information"
           }
         ],
         "domains": {
@@ -145,24 +145,24 @@
             "features": {
               "allow": 1,
               "scholarship": 1,
-              "inform": 1,
               "websit": 1,
               "grade": 1,
               "cours": 1,
               "coe": 1,
               "other": 1,
-              "event": 1
+              "event": 1,
+              "inform": 1
             },
             "intents": {
               "allowance": 1,
               "scholarship": 1,
-              "information": 1,
               "website": 1,
               "grades": 1,
               "course": 1,
               "coe": 1,
               "others": 1,
-              "event": 1
+              "event": 1,
+              "information": 1
             },
             "intentFeatures": {
               "allowance": {
@@ -170,9 +170,6 @@
               },
               "scholarship": {
                 "scholarship": 1
-              },
-              "information": {
-                "inform": 1
               },
               "website": {
                 "websit": 1
@@ -191,6 +188,9 @@
               },
               "event": {
                 "event": 1
+              },
+              "information": {
+                "inform": 1
               }
             },
             "featuresToIntent": {
@@ -199,9 +199,6 @@
               ],
               "scholarship": [
                 "scholarship"
-              ],
-              "inform": [
-                "information"
               ],
               "websit": [
                 "website"
@@ -220,6 +217,9 @@
               ],
               "event": [
                 "event"
+              ],
+              "inform": [
+                "information"
               ]
             },
             "neuralNetwork": {
@@ -237,24 +237,24 @@
               "features": [
                 "allow",
                 "scholarship",
-                "inform",
                 "websit",
                 "grade",
                 "cours",
                 "coe",
                 "other",
-                "event"
+                "event",
+                "inform"
               ],
               "intents": [
                 "allowance",
                 "scholarship",
-                "information",
                 "website",
                 "grades",
                 "course",
                 "coe",
                 "others",
-                "event"
+                "event",
+                "information"
               ],
               "perceptrons": [
                 [
@@ -383,10 +383,6 @@
       ],
       [
         "en",
-        "information"
-      ],
-      [
-        "en",
         "website"
       ],
       [
@@ -408,6 +404,10 @@
       [
         "en",
         "event"
+      ],
+      [
+        "en",
+        "information"
       ]
     ]
   },
@@ -433,9 +433,6 @@
             "answer": "scholarship"
           },
           {
-            "answer": "information"
-          },
-          {
             "answer": "website"
           },
           {
@@ -452,6 +449,9 @@
           },
           {
             "answer": "event"
+          },
+          {
+            "answer": "information"
           }
         ]
       }
