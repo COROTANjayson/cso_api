@@ -187,10 +187,19 @@ const DeleteFAQ = async (req, faq_id, res) => {
     }
 }
 
-const ShowFAQByCategory = async (req, id, res) => {
+const ShowFAQByCategory = async (req, res) => {
 
     try {
-        const faq = await FAQ.find({ category_id: ObjectId(id) });
+       
+        //{ "$match": { "$and": [ { "school": { "$in": [...school]}}, { "course": { "$in": [...course]} } ] } },
+        const {category_id } = req
+        let faq
+        if (!category_id.length){
+            faq = await FAQ.find(  );
+        } else {
+            faq = await FAQ.aggregate( [{"$match": { "category_id": { "$in": [ ObjectId(...category_id) ] }} }] );
+        }
+        
         return res.status(201).json({
             faq_list: faq,
             success: true

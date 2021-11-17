@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 const { userAuth } = require("../utils/Auth");
-const { AddFAQ, ShowAllFAQ, ShowFAQ, EditFAQ, DeleteFAQ } = require("../utils/FAQController");
+const { AddFAQ, ShowAllFAQ, ShowFAQ, EditFAQ, DeleteFAQ, ShowFAQByCategory  } = require("../utils/FAQController");
 
 // Show all FAQ (api/FAQ/show)
 router.get("/show", userAuth, async (req, res) => {
@@ -31,6 +31,11 @@ router.put("/edit/:faq_id", userAuth, async (req, res) => {
 router.delete("/delete/:faq_id", userAuth, async (req, res) => {
     const FAQ_id = req.params.faq_id;
     await DeleteFAQ(req.body, FAQ_id, res);
+});
+
+router.get("/showfaqbycategory", userAuth, async (req, res) => {
+    // await ShowFAQByCategory(req.body.data, res);
+    await ShowFAQByCategory(req.body, res);
 });
 
 module.exports = router;
