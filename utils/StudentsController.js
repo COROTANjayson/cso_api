@@ -261,8 +261,6 @@ const SelectBroadcast = async (req, res) => {
     try {
         
         const {school, course } = req;
-        console.log(school.length);
-        console.log(course.length);
         let records
         if(course.length == 0 && school.length == 0){
             records = await Student.find();
@@ -270,10 +268,9 @@ const SelectBroadcast = async (req, res) => {
         else if (course.length&& school.length){
             records = await Student.aggregate([
                 {"$match":{'phone_number':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]} }},
-                 { "$match": { "$or": [ { "school": { "$in": [...school]}}, { "course": { "$in": [...course]} } ] } },  
+                 { "$match": { "$and": [ { "school": { "$in": [...school]}}, { "course": { "$in": [...course]} } ] } },  
             ]);
         } else {
-            console.log('here it is')
              records = await Student.aggregate([
                 {"$match":{'phone_number':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]} }},
                 { "$match": { "$or": [ { "school": { "$in": [...school]}}, { "course": { "$in": [...course]} } ] } },  

@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { SendSms, GetAllSms,listenReply,GetCurrentMessage,GetUnreadCurrentMessage,ReadMessage,OpenAndInitializeGSMModule,sendBroadcastMessage } = require("../utils/SmsController");
+const { SendSms, GetAllSms,listenReply,GetCurrentMessage,GetUnreadCurrentMessage,ReadMessage,OpenAndInitializeGSMModule,sendBroadcastMessage,SendQueryAnswer } = require("../utils/SmsController");
 
 module.exports = function(io){
     console.log('insideroute')
@@ -69,6 +69,10 @@ module.exports = function(io){
 
     router.post('/sendbroadcastmessage', /* userAuth, */ async (req,res)=>{
         await sendBroadcastMessage(req.body.data,res);
+    })
+
+    router.post('/sendqueryanswer', /* userAuth, */ async (req,res)=>{
+        await SendQueryAnswer(req.body.data,res,io);
     })
 
     return router
