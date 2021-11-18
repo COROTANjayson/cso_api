@@ -35,7 +35,7 @@ router.delete("/delete/:faq_id", userAuth, async (req, res) => {
 
 router.get("/showfaqbycategory", userAuth, async (req, res) => {
     // await ShowFAQByCategory(req.body.data, res);
-    await ShowFAQByCategory(req.body, res);
+    await ShowFAQByCategory(req.body.data, res);
 });
 
 module.exports = router;
