@@ -82,7 +82,7 @@ const ShowFAQ = async (req, faq_id, res) => {
 
 // Create new FAQ
 const AddFAQ = async (req, user_id, res) => {
-    
+
     try {
         const { faq_title, faq_answer, faq_utterances, category_id } = req;
         // Check required fields
@@ -107,7 +107,7 @@ const AddFAQ = async (req, user_id, res) => {
         });
 
         const newAddedFAQ = await newFAQ.save();
-        
+
         //Scan the Query collection
         ScanQuery(faq_utterances, faq_title, faq_answer, newAddedFAQ._id, category_id)
 
@@ -165,12 +165,12 @@ const DeleteFAQ = async (req, faq_id, res) => {
             });
         }
 
-        let others = await Category.findOne({category_name:"others"});
+        let others = await Category.findOne({ category_name: "others" });
         await Query.updateMany(
-            { faq_id: ObjectId(faq_id)},
-            { $set: { category_id: ObjectId(others._id), faq_id: null}}
+            { faq_id: ObjectId(faq_id) },
+            { $set: { category_id: ObjectId(others._id), faq_id: null } }
         )
-        
+
         faq = await FAQ.deleteOne({ _id: faq_id });
 
         return res.status(201).json({
@@ -190,16 +190,44 @@ const DeleteFAQ = async (req, faq_id, res) => {
 const ShowFAQByCategory = async (req, res) => {
 
     try {
-       
-        //{ "$match": { "$and": [ { "school": { "$in": [...school]}}, { "course": { "$in": [...course]} } ] } },
-        const {category_id } = req
-        let faq
-        if (!category_id.length){
-            faq = await FAQ.find(  );
-        } else {
-            faq = await FAQ.aggregate( [{"$match": { "category_id": { "$in": [ ObjectId(...category_id) ] }} }] );
-        }
+
+
+        const { category_id } = req
+
+        let objectid = new Array();
+        category_id.forEach(e => {
+                objectid.push(ObjectId(e))
+            });
+
+        const lookup_category = [{
+            "$lookup": {
+                "from": 'categories',
+                "localField": 'category_id',
+                "foreignField": '_id',
+                "as": "category"
+            }
+        },
+        {
+            "$unwind": {
+                "path": "$category",
+                "preserveNullAndEmptyArrays": true
+            }
+        },]
         
+        let faq
+        if (!category_id.length) {
+            faq = await FAQ.aggregate([
+                ...lookup_category
+
+            ]);
+        } else {
+            faq = await FAQ.aggregate([
+                { "$match": { "category_id": { "$in": [...objectid] } } },
+                ...lookup_category
+
+            ]);
+        }
+
         return res.status(201).json({
             faq_list: faq,
             success: true
@@ -246,7 +274,7 @@ const ScanQuery = async (faq_utterances, faq_title, faq_answer, faq_id, category
         },
         { "$unwind": "$category" },
     ]);
-    
+
     // Adds the utterances and intents for the NLP
     // console.log(faq_utterances);
     // faq_utterances.forEach(e => {
@@ -257,7 +285,7 @@ const ScanQuery = async (faq_utterances, faq_title, faq_answer, faq_id, category
 
     const faq = await FAQ.find();
     faq.forEach(element => {
-        element.faq_utterances.forEach(e=>{
+        element.faq_utterances.forEach(e => {
             manager.addDocument('en', e.value, element.faq_title);
         })
         manager.addAnswer('en', element.faq_title, element.faq_answer);
@@ -268,7 +296,7 @@ const ScanQuery = async (faq_utterances, faq_title, faq_answer, faq_id, category
     manager.save();
 
 
-    queries.forEach(async query => {      
+    queries.forEach(async query => {
         const response = await manager.process('en', query.query_name);
 
         if (response.answer == faq_answer) {
@@ -277,7 +305,7 @@ const ScanQuery = async (faq_utterances, faq_title, faq_answer, faq_id, category
             //Update query
             await Query.updateMany(
                 { _id: ObjectId(query._id) },
-                { $set: { category_id: ObjectId(category_id), faq_id: ObjectId(faq_id),possible_answer:faq_answer } }
+                { $set: { category_id: ObjectId(category_id), faq_id: ObjectId(faq_id), possible_answer: faq_answer } }
             )
         }
     })
