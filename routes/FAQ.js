@@ -33,7 +33,7 @@ router.delete("/delete/:faq_id", userAuth, async (req, res) => {
     await DeleteFAQ(req.body, FAQ_id, res);
 });
 
-router.get("/showfaqbycategory", userAuth, async (req, res) => {
+router.post("/showfaqbycategory", userAuth, async (req, res) => {
     // await ShowFAQByCategory(req.body.data, res);
     await ShowFAQByCategory(req.body.data, res);
 });

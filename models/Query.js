@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 const QuerySchema = new Schema(
   {
     sender_id: {
-      type: String,
+      type: Schema.Types.ObjectId,
       default: null
     },
     category_id: {

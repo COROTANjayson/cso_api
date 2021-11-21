@@ -1,15 +1,14 @@
 const passport = require("passport");
 require('../middlewares/passport')(passport);
 const SMS = require("../models/SMSMessage");
-const mongoose = require("mongoose");
+mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
 const { nlpFunction,nlpFunctionV2 } = require("../utils/nlp/nlp");
 const Query = require("../models/Query");
 const Category = require("../models/Category");
 const axios = require('axios');
 const Student = require('../models/Student');
 const {SelectBroadcast} = require('./StudentsController');
-const ObjectId = mongoose.Types.ObjectId;
-
 
 // Serial port gsm
 const serialportgsm = require('serialport-gsm')
@@ -535,6 +534,7 @@ const listenReply = (io) => {
                         const nlpReply = await nlpFunctionV2(messageDetails.message);
                         const findStudentViaNum = await findStudent(messageDetails.sender)
                         let newContactNumber  = '0'+messageDetails.sender.substring(2);
+                        console.log(messageDetails.message);
     
                         if(!findStudentViaNum.success){
                             try{
@@ -607,9 +607,9 @@ const listenReply = (io) => {
         
                                     // console.log(newSMS);
                                     newSMS.save((data1)=>{
-                                        
+                                        // sender_id:ObjectId(newSMSStduent.student_id),
                                         const newQuery = new Query({
-                                            sender_id:ObjectId(newSMSStduent.student_id),
+                                            sender_id:newSMSStduent.student_id,
                                             category_id:nlpReply.categoryId,
                                             query_name:messageDetails.message,
                                             possible_answer:tempWord,
@@ -658,7 +658,7 @@ const listenReply = (io) => {
                                                 newSMS.save((data1)=>{
                                                     
                                                     const newQuery = new Query({
-                                                        sender_id:ObjectId(newSMSStduent.student_id),
+                                                        sender_id:newSMSStduent.student_id,
                                                         category_id:nlpReply.categoryId,
                                                         query_name:messageDetails.message,
                                                         possible_answer:data.data.message,
@@ -691,7 +691,9 @@ const listenReply = (io) => {
                                     console.log('Verification Message Send')
 
                                     modem.getOwnNumber((phone)=>{
-                                        // console.log(phone.data.number);
+                                        // console.log('popop')
+                                        // console.log(phone.data);
+                                        // console.log(data.data);
             
                                         const newSMS = new SMS({
                                             message:data.data.message,
@@ -706,7 +708,7 @@ const listenReply = (io) => {
                                         });
 
                                         newSMS.save(data=>{
-                                            console.log(data);
+                                            console.log('SMS Save');
                                         });
                                     });
                                 })
@@ -739,9 +741,9 @@ const listenReply = (io) => {
                                         // newSMS.save((data1)=>{
                                             
                                         // });
-    
+                                    
                                         const newQuery = new Query({
-                                            sender_id:ObjectId(newSMSStduent.student_id),
+                                            sender_id:newSMSStduent.student_id,
                                             category_id:nlpReply.categoryId,
                                             query_name:messageDetails.message,
                                             possible_answer:'N/A',
@@ -751,6 +753,8 @@ const listenReply = (io) => {
                                         });
     
                                         console.log('Query Save other')
+                                        console.log(mongoose.Types.ObjectId(newSMSStduent.student_id));
+                                        console.log(ObjectId(newSMSStduent.student_id));
                                         console.log(newQuery);
                                         newQuery.save((data2) => {
                                             modem.deleteAllSimMessages()
@@ -864,15 +868,19 @@ function verificationMessageIdentify(message,io){
                     })();
                 })
             }else{
+               
                 const id = studentSms[studentSms.length-1].chatBotReplyID;
-                const smsQuery = await SMS.findOne({_id:ObjectId(id)})
-                const query = await Query.findOne({query_name:smsQuery.message});
+                const smsQuery = await SMS.findOne({_id:ObjectId(id)});
+                const query = await Query.find({query_name:smsQuery.message});
+               
                 const others = await Category.findOne({ category_name: 'others' });
 
-                await Query.updateOne(
-                    { _id: ObjectId(query._id)},
-                    { $set: { category_id: ObjectId(others._id), faq_id: null,possbile_answer:'N/A'}}
+                const queryUpdate = await Query.updateOne(
+                    { _id: ObjectId(query[query.length-1]._id)},
+                    { $set: { category_id: ObjectId(others._id), faq_id: null,possible_answer:'N/A'}}
                 )
+                console.log('update here');
+                console.log(queryUpdate);
 
                 modem.getOwnNumber((phone)=>{
                     

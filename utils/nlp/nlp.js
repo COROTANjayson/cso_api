@@ -17,13 +17,14 @@ const nlpFunction = async (text) =>{
     });
 
     const translation =  await translate(text, {to: 'en'});
+    console.log('------------------------------')
+    console.log(translation)
     await manager.train();
     manager.save();
 
     try{
         const response = await manager.process('en', translation.text);
         const findID = await FAQ.findOne({faq_title:response.intent})
-        console.log(response);
         data = {
             answer: response,
             success: true,
@@ -45,8 +46,6 @@ const nlpFunction = async (text) =>{
             data.categoryId = findOthersID._id
             return data;
         }
-
-        console.log(data.answer);
         
         return data;
 
@@ -100,7 +99,9 @@ const nlpFunctionV2 = async (text) =>{
             // console.log(e._id);
         })
 
-        const translation =  await translate(text, {to: 'en'});
+        const translation =  await translate(text, {from: 'ceb',to: 'en'});
+        console.log(translation);
+        console.log('----------------')
 
         await manager.train();
         manager.save();
@@ -123,7 +124,6 @@ const nlpFunctionV2 = async (text) =>{
         }else{
             const manager1 = new NlpManager({ languages: ['en'], forceNER: true, nlu: { log: true }});
             faq = faq.filter(e=>e.category_id == response.answer);
-            console.log(faq);
             translation.text = translation.text.replace(response.intent.toLowerCase(),'');
 
             faq.forEach(e=>{
@@ -138,7 +138,7 @@ const nlpFunctionV2 = async (text) =>{
                 
               
                 e.faq_utterances.forEach(u=>{
-                    console.log(u);
+              
                     manager1.addDocument('en', u, e.faq_title);
                 })
 
@@ -150,8 +150,6 @@ const nlpFunctionV2 = async (text) =>{
 
             let response1 = await manager1.process('en', translation.text.toLowerCase());
 
-        //    console.log(faq); 
-        //     console.log(response);
             
             if(response1.answer == undefined){
                 data.message = `New query was received. Please wait for our team will get back to you shortly`
