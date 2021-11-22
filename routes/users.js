@@ -11,7 +11,8 @@ const {
   editUserInfo,
   editUserContact,
   editUsername,
-  editPassword
+  editPassword,
+  ShowSystemLog
 } = require("../utils/Auth");
 
 // Users Registeration Route (/api/users/register-user)
@@ -76,4 +77,8 @@ router.get("/show/:id", /* userAuth, */ async (req, res) => {
   await getUser(req, id ,res);
 });
 
+router.get("/systemlog", /* userAuth, */ async (req, res) => {
+  
+  await ShowSystemLog(req,res);
+});
 module.exports = router;

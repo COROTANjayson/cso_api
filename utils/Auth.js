@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const User = require("../models/User");
+const SystemLog = require("../models/SystemLog");
 const dotenv = require('dotenv')
 require('../middlewares/passport')(passport);
 const { SECRET } = require("../config");
@@ -126,6 +127,12 @@ const userLogin = async (userCreds, res) => {
             token: `Bearer ${accessToken}`,
             expiresIn: 168
         };
+
+        const systemLog = new SystemLog({
+            user_id: user._id
+        });
+
+        await systemLog.save();
 
         return res.status(200).json({
             ...result,
@@ -523,6 +530,36 @@ const editPassword = async (req,id,res)=>{
     }
 }
 
+const ShowSystemLog = async (req, res) => {
+    try {
+
+        let systemlog = await SystemLog.aggregate([
+            { "$sort" : { "date" : -1} },
+            {
+                "$lookup": {
+                    "from": 'users',
+                    "localField": 'user_id',
+                    "foreignField": '_id',
+                    "as": "user"
+                }
+            },
+            { "$unwind": "$user" },
+
+        ]);
+
+        return res.json({
+            users: systemlog,
+            succes: true
+        });
+    } catch (error) {
+        // Implement logger function (winston)
+        return res.status(500).json({
+            message: "Unable to show FAQ",
+            success: false
+        });
+    }
+}
+
 const validateUsername = async username => {
     let user = await User.findOne({ username });
     return user ? false : true;
@@ -576,5 +613,6 @@ module.exports = {
     editUserInfo,
     editUserContact,
     editUsername,
-    editPassword
+    editPassword,
+    ShowSystemLog
 };
