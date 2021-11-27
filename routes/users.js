@@ -72,13 +72,12 @@ router.get("/show", userAuth, async (req, res) => {
 });
 
 // // Users Show Users Route (api/users/show)
-router.get("/show/:id", /* userAuth, */ async (req, res) => {
+router.get("/show/:id", userAuth,  async (req, res) => {
   const id = req.params.id;
   await getUser(req, id ,res);
 });
 
-router.get("/systemlog", /* userAuth, */ async (req, res) => {
-  
+router.get("/systemlog", userAuth, async (req, res) => {
   await ShowSystemLog(req,res);
 });
 module.exports = router;
