@@ -10,8 +10,9 @@ const {
     ShowQueriesByCategory,
     ShowUnidentifiedQuery,
     ShowPossibleCategory,
-    ChangeQueryCategory
-    // SearchStudent
+    ChangeQueryCategory,
+    ShowUnidentifiedQueryByMonth,
+    GetCurrentUnidentifiedQuery
 } = require("../utils/QueryController");
 
 // // Show all query (api/query/show)
@@ -29,7 +30,7 @@ router.get("/show/:id", userAuth, async (req, res) => {
 // :sender_id/:faq_id/:category_id
 router.post("/add", userAuth, async (req, res) => {
     // await NewQuery(req.body, res);
-    await NewQuery(req.body.data, res);
+    await NewQuery(req.body, res);
 });
 
 // // // Edit query Route(api/query/edit/id) -> OBJECT ID
@@ -63,6 +64,16 @@ router.post("/changequerycategory/:id", userAuth, async (req, res) => {
     const query_id = req.params.id
     // await ChangeQueryCategory(query_id, req.body, res);
     await ChangeQueryCategory(query_id, req.body.data, res);
+    
+});
+
+router.post("/show-unidentified-query-by-month", userAuth, async (req, res) => {
+    await ShowUnidentifiedQueryByMonth( req.body.data, res);
+    
+});
+
+router.post("/get-current-unidentified-query", userAuth, async (req, res) => {
+    await GetCurrentUnidentifiedQuery( req.body.data, res);
     
 });
 

@@ -12,64 +12,67 @@ const { SECRET } = require("../config");
 const { NlpManager } = require('node-nlp');
 
 
+const querydetails = [
+    {
+        "$lookup": {
+            "from": 'senders',
+            "localField": 'sender_id',
+            "foreignField": 'student_id',
+            "as": "sender"
+        },
+    },
+    {
+        "$unwind": {
+            "path": "$sender",
+            "preserveNullAndEmptyArrays": true
+        }
+    },
+    {
+        "$lookup": {
+            "from": 'students',
+            "localField": 'sender_id',
+            "foreignField": 'student_id',
+            "as": "student"
+        }
+    },
+    {
+        "$unwind": {
+            "path": "$student",
+            "preserveNullAndEmptyArrays": true
+        }
+    },
+    {
+        "$lookup": {
+            "from": 'categories',
+            "localField": 'category_id',
+            "foreignField": '_id',
+            "as": "category"
+        }
+    },
+    { "$unwind": "$category" },
+    {
+        "$lookup": {
+            "from": 'faqs',
+            "localField": 'faq_id',
+            "foreignField": '_id',
+            "as": "faq"
+        }
+    },
+    {
+        "$unwind": {
+            "path": "$faq",
+            "preserveNullAndEmptyArrays": true
+        }
+    },
+]
+
 // //Show all Queries
 const GetAllQueries = async (req, res) => {
 
     try {
         queries = await Query.aggregate([
-            {"$match":{'phone_num':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]} }},
-            {
-                "$lookup": {
-                    "from": 'senders',
-                    "localField": 'sender_id',
-                    "foreignField": 'student_id',
-                    "as": "sender"
-                },
-            },
-            {
-                "$unwind": {
-                    "path": "$sender",
-                    "preserveNullAndEmptyArrays": true
-                }
-            },
-            {
-                "$lookup": {
-                    "from": 'students',
-                    "localField": 'sender_id',
-                    "foreignField": '_id',
-                    "as": "student"
-                }
-            },
-            {
-                "$unwind": {
-                    "path": "$student",
-                    "preserveNullAndEmptyArrays": true
-                }
-            },
-            {
-                "$lookup": {
-                    "from": 'categories',
-                    "localField": 'category_id',
-                    "foreignField": '_id',
-                    "as": "category"
-                }
-            },
-            { "$unwind": "$category" },
-            {
-                "$lookup": {
-                    "from": 'faqs',
-                    "localField": 'faq_id',
-                    "foreignField": '_id',
-                    "as": "faq"
-                }
-            },
-            {
-                "$unwind": {
-                    "path": "$faq",
-                    "preserveNullAndEmptyArrays": true
-                }
-            },
-
+            { "$match": { 'phone_num': { $nin: [' ', null, '8080', 'AutoloadMax', 'TM', '4438'] } } },
+            ...querydetails
         ]);
 
         return res.json({
@@ -91,59 +94,9 @@ const GetAllQueries = async (req, res) => {
 const ShowQuery = async (query_id, req, res) => {
     try {
         const query = await Query.aggregate([
-            {"$match":{"_id": ObjectId(query_id)}},
-            {"$match":{'phone_number':{$nin: [ ' ',null, '8080', 'AutoLoadMax', 'TM', '4438' ]} }},
-            {
-                "$lookup": {
-                    "from": 'senders',
-                    "localField": 'sender_id',
-                    "foreignField": 'student_id',
-                    "as": "sender"
-                },
-            },
-            {
-                "$unwind": {
-                    "path": "$sender",
-                    "preserveNullAndEmptyArrays": true
-                }
-            },
-            {
-                "$lookup": {
-                    "from": 'students',
-                    "localField": 'sender_id',
-                    "foreignField": '_id',
-                    "as": "student"
-                }
-            },
-            {
-                "$unwind": {
-                    "path": "$student",
-                    "preserveNullAndEmptyArrays": true
-                }
-            },
-            {
-                "$lookup": {
-                    "from": 'categories',
-                    "localField": 'category_id',
-                    "foreignField": '_id',
-                    "as": "category"
-                }
-            },
-            { "$unwind": "$category" },
-            {
-                "$lookup": {
-                    "from": 'faqs',
-                    "localField": 'faq_id',
-                    "foreignField": '_id',
-                    "as": "faq"
-                }
-            },
-            {
-                "$unwind": {
-                    "path": "$faq",
-                    "preserveNullAndEmptyArrays": true
-                }
-            },
+            { "$match": { "_id": ObjectId(query_id) } },
+            { "$match": { 'phone_number': { $nin: [' ', null, '8080', 'AutoLoadMax', 'TM', '4438'] } } },
+            ...querydetails
         ]);
         if (!query.length) {
             return res.status(404).json({
@@ -167,7 +120,7 @@ const ShowQuery = async (query_id, req, res) => {
 }
 
 // Create new Student
-const NewQuery = async ( req, res) => {
+const NewQuery = async (req, res) => {
     const { sender_id, faq_id, category_id, query_name, possible_answer, status, phone_num } = req;
 
     try {
@@ -184,12 +137,12 @@ const NewQuery = async ( req, res) => {
             status,
             phone_num
         });
-        
-        if(sender_id){
+
+        if (sender_id) {
             newQuery.sender_id = sender_id;
         }
-        
-        if(faq_id){
+
+        if (faq_id) {
             newQuery.faq_id = ObjectId(faq_id);
         }
 
@@ -220,7 +173,7 @@ const EditQuery = async (query_id, req, res) => {
                 success: false
             });
         }
-        await Query.findOneAndUpdate({_id: query_id }, req, {
+        await Query.findOneAndUpdate({ _id: query_id }, req, {
             new: true,
             runValidators: true,
         });
@@ -270,65 +223,16 @@ const ShowQueriesByCategory = async (req, id, res) => {
 
     try {
         // const query = await Query.find({ category_id: ObjectId(id) });
-        query = await Query.aggregate([
-            {"$match":{
-                    'phone_num':{
-                            $nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]
+        const query = await Query.aggregate([
+            {
+                "$match": {
+                    'phone_num': {
+                        $nin: [' ', null, '8080', 'AutoloadMax', 'TM', '4438']
                     },
-                    'category_id':ObjectId(id),
+                    'category_id': ObjectId(id),
                 }
             },
-            {
-                "$lookup": {
-                    "from": 'senders',
-                    "localField": 'sender_id',
-                    "foreignField": 'student_id',
-                    "as": "sender"
-                },
-            },
-            {
-                "$unwind": {
-                    "path": "$sender",
-                    "preserveNullAndEmptyArrays": true
-                }
-            },
-            {
-                "$lookup": {
-                    "from": 'students',
-                    "localField": 'sender.student_id',
-                    "foreignField": '_id',
-                    "as": "student"
-                }
-            },
-            {
-                "$unwind": {
-                    "path": "$student",
-                    "preserveNullAndEmptyArrays": true
-                }
-            },
-            {
-                "$lookup": {
-                    "from": 'categories',
-                    "localField": 'category_id',
-                    "foreignField": '_id',
-                    "as": "category"
-                }
-            },
-            { "$unwind": "$category" },
-            {
-                "$lookup": {
-                    "from": 'faqs',
-                    "localField": 'faq_id',
-                    "foreignField": '_id',
-                    "as": "faq"
-                }
-            },
-            {
-                "$unwind": {
-                    "path": "$faq",
-                    "preserveNullAndEmptyArrays": true
-                }
-            },
+            ...querydetails
 
         ]);
 
@@ -354,70 +258,21 @@ const ShowQueriesByCategory = async (req, id, res) => {
     }
 }
 
-const ShowUnidentifiedQuery = async (req,  res) => {
+const ShowUnidentifiedQuery = async (req, res) => {
 
     try {
         const others = await Category.findOne({ category_name: 'others' });
         const query = await Query.aggregate([
-            {"$match":{
-                    'phone_num':{
-                            $nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]
+            {
+                "$match": {
+                    'phone_num': {
+                        $nin: [' ', null, '8080', 'AutoloadMax', 'TM', '4438']
                     },
-                    'category_id':others._id,
+                    'category_id': others._id,
                 },
             },
-            { $sort: {_id: -1} },
-            {
-                "$lookup": {
-                    "from": 'senders',
-                    "localField": 'sender_id',
-                    "foreignField": 'student_id',
-                    "as": "sender"
-                },
-            },
-            {
-                "$unwind": {
-                    "path": "$sender",
-                    "preserveNullAndEmptyArrays": true
-                }
-            },
-            {
-                "$lookup": {
-                    "from": 'students',
-                    "localField": 'sender_id',
-                    "foreignField": '_id',
-                    "as": "student"
-                }
-            },
-            {
-                "$unwind": {
-                    "path": "$student",
-                    "preserveNullAndEmptyArrays": true
-                }
-            },
-            {
-                "$lookup": {
-                    "from": 'categories',
-                    "localField": 'category_id',
-                    "foreignField": '_id',
-                    "as": "category"
-                }
-            },
-            { "$unwind": "$category" },
-            {
-                "$lookup": {
-                    "from": 'faqs',
-                    "localField": 'faq_id',
-                    "foreignField": '_id',
-                    "as": "faq"
-                }
-            },
-            {
-                "$unwind": {
-                    "path": "$faq",
-                    "preserveNullAndEmptyArrays": true
-                }
-            },
+            { $sort: { _id: -1 } },
+            ...querydetails
 
         ]);
 
@@ -435,81 +290,31 @@ const ShowUnidentifiedQuery = async (req,  res) => {
     }
 }
 
-const ShowPossibleCategory = async (req,  res) => {
+const ShowPossibleCategory = async (req, res) => {
     const manager = new NlpManager({ languages: ['en'], forceNER: true });
     sw = require('stopword')
 
-    
+
     try {
 
         const others = await Category.findOne({ category_name: 'others' });
         queries = await Query.aggregate([
-            {"$match":{
-                    'category_id':others._id,
-                    'phone_num':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]},
+            {
+                "$match": {
+                    'category_id': others._id,
+                    'phone_num': { $nin: [' ', null, '8080', 'AutoloadMax', 'TM', '4438'] },
                 },
             },
-            { $sort: {_id: -1} },
-            {
-                "$lookup": {
-                    "from": 'senders',
-                    "localField": 'sender_id',
-                    "foreignField": 'student_id',
-                    "as": "sender"
-                },
-            },
-            {
-                "$unwind": {
-                    "path": "$sender",
-                    "preserveNullAndEmptyArrays": true
-                }
-            },
-            {
-                
-                "$lookup": {
-                    "from": 'students',
-                    "localField": 'sender_id',
-                    "foreignField": '_id',
-                    "as": "student",
-                }
-            },
-            {
-                "$unwind": {
-                    "path": "$student",
-                    "preserveNullAndEmptyArrays": true
-                }
-            },
-            {
-                "$lookup": {
-                    "from": 'categories',
-                    "localField": 'category_id',
-                    "foreignField": '_id',
-                    "as": "category"
-                }
-            },
-            { "$unwind": "$category" },
-            {
-                "$lookup": {
-                    "from": 'faqs',
-                    "localField": 'faq_id',
-                    "foreignField": '_id',
-                    "as": "faq"
-                }
-            },
-            {
-                "$unwind": {
-                    "path": "$faq",
-                    "preserveNullAndEmptyArrays": true
-                }
-            },
-           
+            { $sort: { _id: -1 } },
+            ...querydetails
+
         ]);
 
         const category = await Category.find()
-   
+
         category.forEach(element => {
             console.log(element.category_name)
-        
+
             manager.addDocument('en', element.category_name, element.category_name);
             manager.addAnswer('en', element.categoryname, element.category_name);
         });
@@ -517,29 +322,29 @@ const ShowPossibleCategory = async (req,  res) => {
         await manager.train();
         manager.save();
 
-        
-       await Promise.all(queries.map(async function(query)  {    
+
+        await Promise.all(queries.map(async function (query) {
             let string
             let key_word
             string = query.query_name.toString().split(' ')
             key_word = sw.removeStopwords(string)
             // //const response = await manager.process('en', sw.removeStopwords(string).join(" "));
-            const response =  await manager.process('en', query.query_name);
-            
+            const response = await manager.process('en', query.query_name);
+
             let answer = []
             await response.classifications.forEach((item) => {
-               
+
                 score = item.score
-                if (item.score > 0){
+                if (item.score > 0) {
                     answer.push(item.intent)
                 }
-                
+
             })
 
             query.intent = answer
             query.key_words = key_word
 
-           return query
+            return query
         }))
         return res.status(201).json({
             query_list: queries,
@@ -558,20 +363,20 @@ const ShowPossibleCategory = async (req,  res) => {
 const ChangeQueryCategory = async (query_id, req, res) => {
     try {
         const { category_name } = req;
-        
+
         const query = await Query.findOne(ObjectId(query_id));
-        
+
         console.log(req);
-       
+
         if (!category_name) {
             return res.status(404).json({
                 message: "The Category does not exist in database",
                 success: false
             });
         }
-        
+
         const category = await Category.findOne({ category_name: category_name.toLowerCase() });
-        
+
         if (!category) {
             console.log('here it is')
             return res.status(404).json({
@@ -585,15 +390,15 @@ const ChangeQueryCategory = async (query_id, req, res) => {
                 success: false
             });
         }
-        await Query.findOneAndUpdate({_id: query_id }, { $set: { category_id: ObjectId(category._id)}} )
-        
+        await Query.findOneAndUpdate({ _id: query_id }, { $set: { category_id: ObjectId(category._id) } })
+
         // if(!query.category_id.equals( others._id)){
         //     return res.status(404).json({
         //         message: "Category id did not match",
         //         success: false
         //     });
         // }
-      
+
 
         return res.status(201).json({
             message: "The query's category was changed",
@@ -609,8 +414,179 @@ const ChangeQueryCategory = async (query_id, req, res) => {
     }
 }
 
+const ShowUnidentifiedQueryByMonth = async (req, res) => {
+
+    try {
+        const manager = new NlpManager({ languages: ['en'], forceNER: true });
+        const { month } = req;
+
+        const others = await Category.findOne({ category_name: 'others' });
+        const queries = await Query.aggregate([
+            {
+                "$match": {
+                    'phone_num': {
+                        $nin: [' ', null, '8080', 'AutoloadMax', 'TM', '4438']
+                    },
+                    'category_id': others._id,
+                },
+            },
+            { "$match": { "$expr": { "$eq": [{ "$month": '$createdAt' }, parseInt(month)] } } },
+
+            ...querydetails
+
+        ]);
+
+        const query_result = await IdentifyPossibleCategory(queries)
+
+        // console.log(query_result)
+        return res.status(201).json({
+            query_list: query_result,
+            success: true
+        });
+
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
+    }
+}
+
+const GetCurrentUnidentifiedQuery = async (req, res) => {
+
+    try {
+        const { category_name, date } = req;
+
+        const currentdate = new Date();
+        const currentYear = currentdate.getFullYear();
+        const today = currentdate.getDate();
+        const currentMonth = currentdate.getMonth() + 1;
+
+        const oneJan = new Date(currentdate.getFullYear(), 0, 1);
+        const numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
+        const currentWeek = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7);
+
+        const current = parseInt(date)
+        // console.log(currentYear);
+        // console.log(today);
+        // console.log(currentMonth);
+        // console.log("This is week", result);
+
+        let matchDate
+        // 1 - year
+        // 2 - month
+        // 3 - week
+        // 4 - day
+        if (current === 1) {
+            matchDate = [
+                { "$eq": [{ "$year": '$createdAt' }, currentYear] },
+            ]
+        } else if (current === 2) {
+            matchDate = [
+                { "$eq": [{ "$month": '$createdAt' }, currentMonth] },
+                { "$eq": [{ "$year": '$createdAt' }, currentYear] },
+            ]
+        } else if (current === 3) {
+            matchDate = [
+                { "$eq": [{ "$month": '$createdAt' }, currentMonth] },
+                { "$eq": [{ "$year": '$createdAt' }, currentYear] },
+                { "$eq": [{ "$week": '$createdAt' }, currentWeek] }
+            ]
+        } else if (current === 4) {
+            matchDate = [
+                { "$eq": [{ "$month": '$createdAt' }, currentMonth] },
+                { "$eq": [{ "$year": '$createdAt' }, currentYear] },
+                { "$eq": [{ "$dayOfMonth": '$createdAt' }, today] },
+            ]
+        } else {
+            matchDate = []
+        }
 
 
+        const category = await Category.findOne({ category_name: "others" });
+
+        const queries = await Query.aggregate([
+            {
+                "$match": {
+                    'phone_num': {
+                        $nin: [' ', null, '8080', 'AutoloadMax', 'TM', '4438']
+                    },
+                    'category_id': category._id,
+                    // ...matchCategory
+                },
+            },
+            {
+                "$match": {
+                    "$expr": {
+                        "$and": [
+                            ...matchDate
+                        ]
+
+                    }
+                },
+            },
+            ...querydetails
+
+        ]);
+
+        const queryWithCategory = await IdentifyPossibleCategory(queries)
+
+        let finalQuery = queryWithCategory
+
+        if (category_name !== "all") {
+            finalQuery = queryWithCategory.filter(function (query) {
+                return query.possible_category === category_name;
+            })
+        }
+
+        return res.status(201).json({
+            query_list: finalQuery,
+            success: true
+        });
+
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
+    }
+}
+
+const IdentifyPossibleCategory = async (queries) => {
+
+    const manager = new NlpManager({ languages: ['en'], forceNER: true });
+    // console.log(queries)
+    const category = await Category.find()
+
+    category.forEach(element => {
+        console.log(element.category_name)
+
+        manager.addDocument('en', element.category_name, element.category_name);
+        manager.addAnswer('en', element.categoryname, element.category_name);
+    });
+
+    await manager.train();
+    manager.save();
+
+
+    let query_result = await Promise.all(queries.map(async function (query) {
+        // //const response = await manager.process('en', sw.removeStopwords(string).join(" "));
+        const response = await manager.process('en', query.query_name);
+
+        let answer = "others"
+
+        if (response.intent !== 'None') {
+            answer = response.intent
+        }
+        query.possible_category = answer
+        return query
+    }))
+
+    return query_result;
+
+}
 
 module.exports = {
     NewQuery,
@@ -621,5 +597,7 @@ module.exports = {
     ShowQueriesByCategory,
     ShowUnidentifiedQuery,
     ShowPossibleCategory,
-    ChangeQueryCategory
+    ChangeQueryCategory,
+    ShowUnidentifiedQueryByMonth,
+    GetCurrentUnidentifiedQuery
 };
