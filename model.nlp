@@ -38,16 +38,24 @@
             "intent": "allowance",
             "domain": "default"
           },
-          "enrol": {
-            "intent": "enrollment",
+          "scholarship": {
+            "intent": "scholarship",
+            "domain": "default"
+          },
+          "websit": {
+            "intent": "website",
             "domain": "default"
           },
           "grade": {
             "intent": "grades",
             "domain": "default"
           },
-          "scholarship": {
-            "intent": "scholarship",
+          "cours": {
+            "intent": "course",
+            "domain": "default"
+          },
+          "coe": {
+            "intent": "coe",
             "domain": "default"
           },
           "other": {
@@ -61,7 +69,8 @@
         },
         "intentDict": {
           "allowance": "default",
-          "enrollment": "default",
+          "scholarship": "default",
+          "website": "default",
           "grades": "default",
           "course": "default",
           "coe": "default",
@@ -76,8 +85,13 @@
           },
           {
             "domain": "default",
-            "utterance": "enrollment",
-            "intent": "enrollment"
+            "utterance": "scholarship",
+            "intent": "scholarship"
+          },
+          {
+            "domain": "default",
+            "utterance": "website",
+            "intent": "website"
           },
           {
             "domain": "default",
@@ -86,8 +100,13 @@
           },
           {
             "domain": "default",
-            "utterance": "scholarship",
-            "intent": "scholarship"
+            "utterance": "course",
+            "intent": "course"
+          },
+          {
+            "domain": "default",
+            "utterance": "coe",
+            "intent": "coe"
           },
           {
             "domain": "default",
@@ -115,7 +134,8 @@
             },
             "features": {
               "allow": 1,
-              "enrol": 1,
+              "scholarship": 1,
+              "websit": 1,
               "grade": 1,
               "cours": 1,
               "coe": 1,
@@ -124,7 +144,8 @@
             },
             "intents": {
               "allowance": 1,
-              "enrollment": 1,
+              "scholarship": 1,
+              "website": 1,
               "grades": 1,
               "course": 1,
               "coe": 1,
@@ -135,14 +156,20 @@
               "allowance": {
                 "allow": 1
               },
-              "enrollment": {
-                "enrol": 1
+              "scholarship": {
+                "scholarship": 1
+              },
+              "website": {
+                "websit": 1
               },
               "grades": {
                 "grade": 1
               },
-              "scholarship": {
-                "scholarship": 1
+              "course": {
+                "cours": 1
+              },
+              "coe": {
+                "coe": 1
               },
               "others": {
                 "other": 1
@@ -155,14 +182,20 @@
               "allow": [
                 "allowance"
               ],
-              "enrol": [
-                "enrollment"
+              "scholarship": [
+                "scholarship"
+              ],
+              "websit": [
+                "website"
               ],
               "grade": [
                 "grades"
               ],
-              "scholarship": [
-                "scholarship"
+              "cours": [
+                "course"
+              ],
+              "coe": [
+                "coe"
               ],
               "other": [
                 "others"
@@ -185,7 +218,8 @@
               },
               "features": [
                 "allow",
-                "enrol",
+                "scholarship",
+                "websit",
                 "grade",
                 "cours",
                 "coe",
@@ -194,7 +228,8 @@
               ],
               "intents": [
                 "allowance",
-                "enrollment",
+                "scholarship",
+                "website",
                 "grades",
                 "course",
                 "coe",
@@ -304,7 +339,11 @@
       ],
       [
         "en",
-        "enrollment"
+        "scholarship"
+      ],
+      [
+        "en",
+        "website"
       ],
       [
         "en",
@@ -312,7 +351,11 @@
       ],
       [
         "en",
-        "scholarship"
+        "course"
+      ],
+      [
+        "en",
+        "coe"
       ],
       [
         "en",
@@ -343,13 +386,19 @@
             "answer": "allowance"
           },
           {
-            "answer": "enrollment"
+            "answer": "scholarship"
+          },
+          {
+            "answer": "website"
           },
           {
             "answer": "grades"
           },
           {
-            "answer": "scholarship"
+            "answer": "course"
+          },
+          {
+            "answer": "coe"
           },
           {
             "answer": "others"
