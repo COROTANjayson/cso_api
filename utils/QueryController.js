@@ -437,7 +437,7 @@ const ShowUnidentifiedQueryByMonth = async (req, res) => {
 
         ]);
 
-        const query_result = await IdentifyPossibleCategory(queries)
+        const query_result = await IdentifyPossibleCategory(queries, 0)
 
         // console.log(query_result)
         return res.status(201).json({
@@ -532,7 +532,7 @@ const GetCurrentUnidentifiedQuery = async (req, res) => {
 
         ]);
 
-        const queryWithCategory = await IdentifyPossibleCategory(queries)
+        const queryWithCategory = await IdentifyPossibleCategory(queries, 1)
 
         let finalQuery = queryWithCategory
 
@@ -556,9 +556,10 @@ const GetCurrentUnidentifiedQuery = async (req, res) => {
     }
 }
 
-const IdentifyPossibleCategory = async (queries) => {
+const IdentifyPossibleCategory = async (queries, select) => {
 
     const manager = new NlpManager({ languages: ['en'], forceNER: true });
+    sw = require('stopword')
     // console.log(queries)
     const category = await Category.find()
 
@@ -573,18 +574,52 @@ const IdentifyPossibleCategory = async (queries) => {
     manager.save();
 
 
-    let query_result = await Promise.all(queries.map(async function (query) {
-        // //const response = await manager.process('en', sw.removeStopwords(string).join(" "));
-        const response = await manager.process('en', query.query_name);
+    let query_result
+    if (select === 1) {
+        query_result = await Promise.all(queries.map(async function (query) {
+            // //const response = await manager.process('en', sw.removeStopwords(string).join(" "));
+            let string
+            let key_word
+            string = query.query_name.toString().split(' ')
+            key_word = sw.removeStopwords(string)
 
-        let answer = "others"
+            const response = await manager.process('en', query.query_name);
 
-        if (response.intent !== 'None') {
-            answer = response.intent
-        }
-        query.possible_category = answer
-        return query
-    }))
+            let category = "others"
+
+            if (response.intent !== 'None') {
+                category = response.intent
+            }
+
+            let answer = []
+            await response.classifications.forEach((item) => {
+                score = item.score
+                if (item.score > 0) {
+                    answer.push(item.intent)
+                }
+
+            })
+
+            query.intent = answer
+            query.key_words = key_word
+            query.possible_category = category
+            return query
+        }))
+    } else {
+
+        query_result = await Promise.all(queries.map(async function (query) {
+            // //const response = await manager.process('en', sw.removeStopwords(string).join(" "));
+            const response = await manager.process('en', query.query_name);
+
+            let answer = "others"
+
+            if (response.intent !== 'None') {
+                answer = response.intent
+            }
+            query.possible_category = answer
+            return query
+        }))
+    }
 
     return query_result;
 

@@ -38,44 +38,29 @@
             "intent": "allowance",
             "domain": "default"
           },
-          "scholarship": {
-            "intent": "scholarship",
-            "domain": "default"
-          },
-          "websit": {
-            "intent": "website",
+          "enrol": {
+            "intent": "enrollment",
             "domain": "default"
           },
           "grade": {
             "intent": "grades",
             "domain": "default"
           },
-          "cours": {
-            "intent": "course",
-            "domain": "default"
-          },
-          "coe": {
-            "intent": "coe",
+          "scholarship": {
+            "intent": "scholarship",
             "domain": "default"
           },
           "other": {
             "intent": "others",
             "domain": "default"
-          },
-          "event": {
-            "intent": "event",
-            "domain": "default"
           }
         },
         "intentDict": {
           "allowance": "default",
-          "scholarship": "default",
-          "website": "default",
+          "enrollment": "default",
           "grades": "default",
-          "course": "default",
-          "coe": "default",
-          "others": "default",
-          "event": "default"
+          "scholarship": "default",
+          "others": "default"
         },
         "sentences": [
           {
@@ -85,13 +70,8 @@
           },
           {
             "domain": "default",
-            "utterance": "scholarship",
-            "intent": "scholarship"
-          },
-          {
-            "domain": "default",
-            "utterance": "website",
-            "intent": "website"
+            "utterance": "enrollment",
+            "intent": "enrollment"
           },
           {
             "domain": "default",
@@ -100,23 +80,13 @@
           },
           {
             "domain": "default",
-            "utterance": "course",
-            "intent": "course"
-          },
-          {
-            "domain": "default",
-            "utterance": "coe",
-            "intent": "coe"
+            "utterance": "scholarship",
+            "intent": "scholarship"
           },
           {
             "domain": "default",
             "utterance": "others",
             "intent": "others"
-          },
-          {
-            "domain": "default",
-            "utterance": "event",
-            "intent": "event"
           }
         ],
         "domains": {
@@ -134,74 +104,50 @@
             },
             "features": {
               "allow": 1,
-              "scholarship": 1,
-              "websit": 1,
+              "enrol": 1,
               "grade": 1,
-              "cours": 1,
-              "coe": 1,
-              "other": 1,
-              "event": 1
+              "scholarship": 1,
+              "other": 1
             },
             "intents": {
               "allowance": 1,
-              "scholarship": 1,
-              "website": 1,
+              "enrollment": 1,
               "grades": 1,
-              "course": 1,
-              "coe": 1,
-              "others": 1,
-              "event": 1
+              "scholarship": 1,
+              "others": 1
             },
             "intentFeatures": {
               "allowance": {
                 "allow": 1
               },
-              "scholarship": {
-                "scholarship": 1
-              },
-              "website": {
-                "websit": 1
+              "enrollment": {
+                "enrol": 1
               },
               "grades": {
                 "grade": 1
               },
-              "course": {
-                "cours": 1
-              },
-              "coe": {
-                "coe": 1
+              "scholarship": {
+                "scholarship": 1
               },
               "others": {
                 "other": 1
-              },
-              "event": {
-                "event": 1
               }
             },
             "featuresToIntent": {
               "allow": [
                 "allowance"
               ],
-              "scholarship": [
-                "scholarship"
-              ],
-              "websit": [
-                "website"
+              "enrol": [
+                "enrollment"
               ],
               "grade": [
                 "grades"
               ],
-              "cours": [
-                "course"
-              ],
-              "coe": [
-                "coe"
+              "scholarship": [
+                "scholarship"
               ],
               "other": [
                 "others"
-              ],
-              "event": [
-                "event"
               ]
             },
             "neuralNetwork": {
@@ -218,112 +164,58 @@
               },
               "features": [
                 "allow",
-                "scholarship",
-                "websit",
+                "enrol",
                 "grade",
-                "cours",
-                "coe",
-                "other",
-                "event"
+                "scholarship",
+                "other"
               ],
               "intents": [
                 "allowance",
-                "scholarship",
-                "website",
+                "enrollment",
                 "grades",
-                "course",
-                "coe",
-                "others",
-                "event"
+                "scholarship",
+                "others"
               ],
               "perceptrons": [
                 [
-                  12.629341125488281,
-                  -1.4148672819137573,
-                  -1.4096148014068604,
-                  -1.4040913581848145,
-                  -1.3983023166656494,
-                  -1.3922535181045532,
-                  -1.385951280593872,
-                  -1.3794009685516357,
-                  1.4230298750657602
+                  12.072649002075195,
+                  -2.011578321456909,
+                  -2.004054069519043,
+                  -1.9961673021316528,
+                  -1.9879252910614014,
+                  2.0368959786168555
                 ],
                 [
-                  -1.374816656112671,
-                  12.629323959350586,
-                  -1.4148850440979004,
-                  -1.4096336364746094,
-                  -1.4041106700897217,
-                  -1.3983218669891357,
-                  -1.3922739028930664,
-                  -1.3859717845916748,
-                  1.4250547966771332
+                  -1.9827525615692139,
+                  12.072615623474121,
+                  -2.0116147994995117,
+                  -2.004091501235962,
+                  -1.9962059259414673,
+                  2.039168930149564
                 ],
                 [
-                  -1.3818365335464478,
-                  -1.374833106994629,
-                  12.629305839538574,
-                  -1.4149028062820435,
-                  -1.4096516370773315,
-                  -1.4041293859481812,
-                  -1.398341417312622,
-                  -1.3922938108444214,
-                  1.4268695422224833
+                  -1.9916290044784546,
+                  -1.9827861785888672,
+                  12.072579383850098,
+                  -2.011651039123535,
+                  -2.004128932952881,
+                  2.0411646819934144
                 ],
                 [
-                  -1.3886057138442993,
-                  -1.3818525075912476,
-                  -1.3748496770858765,
-                  12.629289627075195,
-                  -1.4149205684661865,
-                  -1.409670114517212,
-                  -1.4041483402252197,
-                  -1.398361086845398,
-                  1.4284761834250472
+                  -2.0001423358917236,
+                  -1.991661548614502,
+                  -1.98281991481781,
+                  12.072545051574707,
+                  -2.0116872787475586,
+                  2.04288687982674
                 ],
                 [
-                  -1.3951166868209839,
-                  -1.3886207342147827,
-                  -1.3818683624267578,
-                  -1.3748661279678345,
-                  12.629273414611816,
-                  -1.4149384498596191,
-                  -1.4096885919570923,
-                  -1.4041671752929688,
-                  1.4298765203108927
-                ],
-                [
-                  -1.4013636112213135,
-                  -1.3951313495635986,
-                  -1.3886361122131348,
-                  -1.3818843364715576,
-                  -1.3748829364776611,
-                  12.629255294799805,
-                  -1.4149565696716309,
-                  -1.4097070693969727,
-                  1.4310735960150722
-                ],
-                [
-                  -1.4073387384414673,
-                  -1.4013770818710327,
-                  -1.3951456546783447,
-                  -1.3886511325836182,
-                  -1.3818999528884888,
-                  -1.3748992681503296,
-                  12.629239082336426,
-                  -1.4149740934371948,
-                  1.4320693500863109
-                ],
-                [
-                  -1.4130359888076782,
-                  -1.4073514938354492,
-                  -1.401390790939331,
-                  -1.39516019821167,
-                  -1.3886661529541016,
-                  -1.381915807723999,
-                  -1.3749158382415771,
-                  12.629220962524414,
-                  1.4328676653514774
+                  -2.0082836151123047,
+                  -2.000173330307007,
+                  -1.9916937351226807,
+                  -1.982853651046753,
+                  12.072509765625,
+                  2.0443389720385206
                 ]
               ]
             }
@@ -339,11 +231,7 @@
       ],
       [
         "en",
-        "scholarship"
-      ],
-      [
-        "en",
-        "website"
+        "enrollment"
       ],
       [
         "en",
@@ -351,19 +239,11 @@
       ],
       [
         "en",
-        "course"
-      ],
-      [
-        "en",
-        "coe"
+        "scholarship"
       ],
       [
         "en",
         "others"
-      ],
-      [
-        "en",
-        "event"
       ]
     ]
   },
@@ -386,25 +266,16 @@
             "answer": "allowance"
           },
           {
-            "answer": "scholarship"
-          },
-          {
-            "answer": "website"
+            "answer": "enrollment"
           },
           {
             "answer": "grades"
           },
           {
-            "answer": "course"
-          },
-          {
-            "answer": "coe"
+            "answer": "scholarship"
           },
           {
             "answer": "others"
-          },
-          {
-            "answer": "event"
           }
         ]
       }
