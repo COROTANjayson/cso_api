@@ -305,7 +305,6 @@ const ShowPossibleCategory = async (req, res) => {
                     'phone_num': { $nin: [' ', null, '8080', 'AutoloadMax', 'TM', '4438'] },
                 },
             },
-            { $sort: { _id: -1 } },
             ...querydetails
 
         ]);
@@ -346,8 +345,9 @@ const ShowPossibleCategory = async (req, res) => {
 
             return query
         }))
+
         return res.status(201).json({
-            query_list: queries,
+            query_list: queries.reverse(),
             success: true
         });
     } catch (err) {
@@ -430,6 +430,7 @@ const ShowUnidentifiedQueryByMonth = async (req, res) => {
                     'category_id': others._id,
                 },
             },
+            { $sort: { _id: -1 } },
             { "$match": { "$expr": { "$eq": [{ "$month": '$createdAt' }, parseInt(month)] } } },
 
             ...querydetails
@@ -526,6 +527,7 @@ const GetCurrentUnidentifiedQuery = async (req, res) => {
                     }
                 },
             },
+            { $sort: { _id: -1 } },
             ...querydetails
 
         ]);
