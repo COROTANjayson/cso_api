@@ -296,12 +296,12 @@ const ShowPossibleCategory = async (req, res) => {
 
 
     try {
-
+        
         const others = await Category.findOne({ category_name: 'others' });
         queries = await Query.aggregate([
             {
                 "$match": {
-                    'category_id': others._id,
+                    'category_id': ObjectId(others._id),
                     'phone_num': { $nin: [' ', null, '8080', 'AutoloadMax', 'TM', '4438'] },
                 },
             },
@@ -309,6 +309,8 @@ const ShowPossibleCategory = async (req, res) => {
 
         ]);
 
+        console.log(queries.length)
+        
         const category = await Category.find()
 
         category.forEach(element => {
@@ -318,9 +320,13 @@ const ShowPossibleCategory = async (req, res) => {
             manager.addAnswer('en', element.categoryname, element.category_name);
         });
 
+      
+
         await manager.train();
         manager.save();
 
+        console.log(queries.length)
+        
 
         await Promise.all(queries.map(async function (query) {
             let string
@@ -457,6 +463,7 @@ const ShowUnidentifiedQueryByMonth = async (req, res) => {
 const GetCurrentUnidentifiedQuery = async (req, res) => {
 
     try {
+        
         const { category_name, date } = req;
 
         const currentdate = new Date();
@@ -472,7 +479,7 @@ const GetCurrentUnidentifiedQuery = async (req, res) => {
         // console.log(currentYear);
         // console.log(today);
         // console.log(currentMonth);
-        // console.log("This is week", result);
+        console.log("This is week", currentWeek);
 
         let matchDate
         // 1 - year
@@ -492,7 +499,7 @@ const GetCurrentUnidentifiedQuery = async (req, res) => {
             matchDate = [
                 { "$eq": [{ "$month": '$createdAt' }, currentMonth] },
                 { "$eq": [{ "$year": '$createdAt' }, currentYear] },
-                { "$eq": [{ "$week": '$createdAt' }, currentWeek] }
+                { "$eq": [{ "$week": '$createdAt' }, currentWeek-1] }
             ]
         } else if (current === 4) {
             matchDate = [
@@ -522,6 +529,7 @@ const GetCurrentUnidentifiedQuery = async (req, res) => {
                     "$expr": {
                         "$and": [
                             ...matchDate
+                        
                         ]
 
                     }
