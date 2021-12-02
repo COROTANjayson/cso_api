@@ -606,6 +606,7 @@ const listenReply = (io) => {
                                     });
         
                                     // console.log(newSMS);
+                                    console.log(typeof newSMSStduent.student_id);
                                     newSMS.save((data1)=>{
                                         // sender_id:ObjectId(newSMSStduent.student_id),
                                         const newQuery = new Query({
@@ -654,7 +655,7 @@ const listenReply = (io) => {
                                                     is_read:true
                                                 });
                     
-                                                // console.log(newSMS);
+                                                console.log(typeof newSMSStduent.student_id);
                                                 newSMS.save((data1)=>{
                                                     
                                                     const newQuery = new Query({
@@ -741,7 +742,8 @@ const listenReply = (io) => {
                                         // newSMS.save((data1)=>{
                                             
                                         // });
-                                    
+                                        
+                                        console.log(typeof newSMSStduent.student_id);
                                         const newQuery = new Query({
                                             sender_id:newSMSStduent.student_id,
                                             category_id:nlpReply.categoryId,

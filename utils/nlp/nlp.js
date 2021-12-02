@@ -117,6 +117,7 @@ const nlpFunctionV2 = async (text) =>{
             message:''
         }
 
+        console.log(response);
 
         if(response.answer == undefined){
             data.message = `I'm sorry but your query doesn’t belong to any defined category, Please wait for our team to get on your query shortly.`
