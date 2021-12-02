@@ -34,8 +34,8 @@
           "useStemDict": true
         },
         "stemDict": {
-          "allow": {
-            "intent": "allowance",
+          "event,is,the,when": {
+            "intent": "when is the event",
             "domain": "default"
           },
           "scholarship": {
@@ -46,8 +46,8 @@
             "intent": "website",
             "domain": "default"
           },
-          "grade": {
-            "intent": "grades",
+          "date,event,is,of,the,what": {
+            "intent": "when is the event",
             "domain": "default"
           },
           "cours": {
@@ -58,8 +58,12 @@
             "intent": "coe",
             "domain": "default"
           },
-          "other": {
-            "intent": "others",
+          "about,event,new,the": {
+            "intent": "what is the event ",
+            "domain": "default"
+          },
+          "event,is,the,tommorrow,what": {
+            "intent": "what is the event ",
             "domain": "default"
           },
           "event": {
@@ -90,8 +94,8 @@
         "sentences": [
           {
             "domain": "default",
-            "utterance": "allowance",
-            "intent": "allowance"
+            "utterance": "when is the event",
+            "intent": "when is the event"
           },
           {
             "domain": "default",
@@ -105,8 +109,8 @@
           },
           {
             "domain": "default",
-            "utterance": "grades",
-            "intent": "grades"
+            "utterance": "what is the date of the event",
+            "intent": "when is the event"
           },
           {
             "domain": "default",
@@ -177,8 +181,14 @@
               "address": 1
             },
             "intentFeatures": {
-              "allowance": {
-                "allow": 1
+              "when is the event": {
+                "when": 1,
+                "is": 1,
+                "the": 1,
+                "event": 1,
+                "date": 1,
+                "of": 1,
+                "what": 1
               },
               "scholarship": {
                 "scholarship": 1
@@ -209,8 +219,8 @@
               }
             },
             "featuresToIntent": {
-              "allow": [
-                "allowance"
+              "when": [
+                "when is the event"
               ],
               "scholarship": [
                 "scholarship"
@@ -218,8 +228,9 @@
               "websit": [
                 "website"
               ],
-              "grade": [
-                "grades"
+              "the": [
+                "when is the event",
+                "what is the event "
               ],
               "cours": [
                 "course"
@@ -417,7 +428,7 @@
     "extraSentences": [
       [
         "en",
-        "allowance"
+        "when is the event"
       ],
       [
         "en",
@@ -429,7 +440,7 @@
       ],
       [
         "en",
-        "grades"
+        "what is the date of the event"
       ],
       [
         "en",
@@ -471,9 +482,14 @@
     },
     "responses": {
       "en": {
-        "undefined": [
+        "when is the event": [
           {
-            "answer": "allowance"
+            "answer": "october 2s"
+          }
+        ],
+        "what is the event ": [
+          {
+            "answer": "october 2s"
           },
           {
             "answer": "scholarship"
