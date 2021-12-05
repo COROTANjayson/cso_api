@@ -38,14 +38,17 @@
             "intent": "when is the event",
             "domain": "default"
           },
+ "intent": "website",
           "date,event,of,the": {
             "intent": "when is the event",
+
             "domain": "default"
           },
           "date,event,is,of,the,what": {
             "intent": "when is the event",
             "domain": "default"
           },
+
           "about,all,event,is,the,what": {
             "intent": "what is the event ",
             "domain": "default"
@@ -57,11 +60,25 @@
           "event,is,the,tommorrow,what": {
             "intent": "what is the event ",
             "domain": "default"
+          },
+          "event": {
+            "intent": "event",
+            "domain": "default"
+          },
+          "number": {
+            "intent": "number",
+            "domain": "default"
+          },
+          "address": {
+            "intent": "address",
+            "domain": "default"
           }
         },
         "intentDict": {
+address": "default"
           "when is the event": "default",
           "what is the event ": "default"
+
         },
         "sentences": [
           {
@@ -91,6 +108,7 @@
           },
           {
             "domain": "default",
+
             "utterance": "what is the event tommorrow",
             "intent": "what is the event "
           },
@@ -101,6 +119,7 @@
           },
           {
             "domain": "default",
+
             "utterance": "about the new event",
             "intent": "what is the event "
           },
@@ -124,6 +143,7 @@
               "log": true
             },
             "features": {
+
               "when": 1,
               "is": 1,
               "the": 1,
@@ -169,6 +189,7 @@
                 "when is the event",
                 "what is the event "
               ],
+
               "the": [
                 "when is the event",
                 "what is the event "
@@ -177,6 +198,7 @@
                 "when is the event",
                 "what is the event "
               ],
+
               "date": [
                 "when is the event"
               ],
@@ -213,6 +235,7 @@
                 "log": true
               },
               "features": [
+
                 "when",
                 "is",
                 "the",
@@ -288,6 +311,7 @@
       ],
       [
         "en",
+
         "what is the event tommorrow"
       ],
       [
@@ -296,6 +320,7 @@
       ],
       [
         "en",
+
         "about the new event"
       ],
       [
@@ -318,6 +343,7 @@
     },
     "responses": {
       "en": {
+
         "when is the event": [
           {
             "answer": "october 2s"
@@ -325,6 +351,7 @@
         ],
         "what is the event ": [
           {
+
             "answer": "october 2s"
           },
           {

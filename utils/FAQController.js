@@ -108,7 +108,7 @@ const AddFAQ = async (req, user_id, res) => {
 
         const newAddedFAQ = await newFAQ.save();
 
-        //Scan the Query collection
+        // //Scan the Query collection
         ScanQuery(faq_utterances, faq_title, faq_answer, newAddedFAQ._id, category_id)
 
         return res.status(201).json({
@@ -279,7 +279,8 @@ const ScanQuery = async (faq_utterances, faq_title, faq_answer, faq_id, category
 
     faq.forEach(element => {
         element.faq_utterances.forEach(e=>{
-            manager.addDocument('en', e , element.faq_title);
+            manager.addDocument('en', e.value, element.faq_title);
+
         })
         manager.addAnswer('en', element.faq_title, element.faq_answer);
     });
@@ -302,7 +303,34 @@ const ScanQuery = async (faq_utterances, faq_title, faq_answer, faq_id, category
             )
         }
     })
+}
 
+const IdentifyPossibleQueries = async (queries, category_name) => {
+
+    const manager = new NlpManager({ languages: ['en'], forceNER: true });
+   
+    // console.log(queries)
+    const category = await Category.find()
+
+    manager.addDocument('en', category_name, category_name);
+    manager.addAnswer('en', category_name, category_name);
+
+    await manager.train();
+    manager.save();
+
+
+    let possible_query = []
+    
+    await Promise.all(queries.map(async function (query) {
+        const response = await manager.process('en', query.query_name);
+
+        if (response.intent !== 'None') {
+            possible_query.push(query)
+        }
+
+    }))
+    // console.log(possible_query)
+    return possible_query;
 
 }
 

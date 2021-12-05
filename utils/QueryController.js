@@ -15,9 +15,9 @@ const { NlpManager } = require('node-nlp');
 const querydetails = [
     {
         "$lookup": {
-            "from": 'senders',
+            "from": 'students',
             "localField": 'sender_id',
-            "foreignField": 'student_id',
+            "foreignField": '_id',
             "as": "sender"
         },
     },
@@ -31,7 +31,7 @@ const querydetails = [
         "$lookup": {
             "from": 'students',
             "localField": 'sender_id',
-            "foreignField": 'student_id',
+            "foreignField": '_id',
             "as": "student"
         }
     },
@@ -314,8 +314,6 @@ const ShowPossibleCategory = async (req, res) => {
         const category = await Category.find()
 
         category.forEach(element => {
-            console.log(element.category_name)
-
             manager.addDocument('en', element.category_name, element.category_name);
             manager.addAnswer('en', element.categoryname, element.category_name);
         });
@@ -351,9 +349,11 @@ const ShowPossibleCategory = async (req, res) => {
 
             return query
         }))
+        
+        const queries2 = queries.filter(e=>e.category.category_name === 'others');
 
         return res.status(201).json({
-            query_list: queries.reverse(),
+            query_list: queries2.reverse(),
             success: true
         });
     } catch (err) {
@@ -496,6 +496,7 @@ const GetCurrentUnidentifiedQuery = async (req, res) => {
                 { "$eq": [{ "$year": '$createdAt' }, currentYear] },
             ]
         } else if (current === 3) {
+            console.log('-------------- 3')
             matchDate = [
                 { "$eq": [{ "$month": '$createdAt' }, currentMonth] },
                 { "$eq": [{ "$year": '$createdAt' }, currentYear] },
@@ -540,6 +541,9 @@ const GetCurrentUnidentifiedQuery = async (req, res) => {
 
         ]);
 
+        console.log('Length of Queries');
+        console.log(queries.length);
+
         const queryWithCategory = await IdentifyPossibleCategory(queries, 1)
 
         let finalQuery = queryWithCategory
@@ -580,7 +584,6 @@ const IdentifyPossibleCategory = async (queries, select) => {
 
     await manager.train();
     manager.save();
-
 
     let query_result
     if (select === 1) {

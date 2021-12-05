@@ -16,7 +16,9 @@ const nlpFunction = async (text) =>{
         manager.addAnswer('en', element.faq_title, element.faq_answer);
     });
 
-    const translation =  await translate(text, {to: 'en'});
+    // const translation =  await translate(text, {to: 'en'});
+    const translation = {text:text};
+
     console.log('------------------------------')
     console.log(translation)
     await manager.train();
@@ -50,6 +52,7 @@ const nlpFunction = async (text) =>{
         return data;
 
     }catch(e){
+        console.log('error here');
         console.log(e);
     }
     // // Train and save the model.
@@ -100,6 +103,7 @@ const nlpFunctionV2 = async (text) =>{
         })
 
         const translation =  await translate(text, {from: 'ceb',to: 'en'});
+        // const translation = {text:text};
         console.log(translation);
         console.log('----------------')
 
@@ -117,6 +121,7 @@ const nlpFunctionV2 = async (text) =>{
             message:''
         }
 
+        console.log(response);
 
         if(response.answer == undefined){
             data.message = `I'm sorry but your query doesn’t belong to any defined category, Please wait for our team to get on your query shortly.`
