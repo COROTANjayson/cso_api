@@ -18,20 +18,6 @@ const querydetails = [
             "from": 'students',
             "localField": 'sender_id',
             "foreignField": '_id',
-            "as": "sender"
-        },
-    },
-    {
-        "$unwind": {
-            "path": "$sender",
-            "preserveNullAndEmptyArrays": true
-        }
-    },
-    {
-        "$lookup": {
-            "from": 'students',
-            "localField": 'sender_id',
-            "foreignField": '_id',
             "as": "student"
         }
     },
