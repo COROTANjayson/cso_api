@@ -305,7 +305,6 @@ const ScanQuery = async (faq_utterances, faq_title, faq_answer, faq_id, category
     })
 }
 
-
 const IdentifyPossibleQueries = async (queries, category_name) => {
 
     const manager = new NlpManager({ languages: ['en'], forceNER: true });
@@ -334,7 +333,6 @@ const IdentifyPossibleQueries = async (queries, category_name) => {
     return possible_query;
 
 }
-
 module.exports = {
     AddFAQ,
     ShowAllFAQ,
