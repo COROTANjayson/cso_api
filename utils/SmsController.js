@@ -542,6 +542,8 @@ const listenReply = (io) => {
                                 const response = await axios.get(`http://student-server-dummy.herokuapp.com/${newContactNumber}`);
                                 console.log(response.data);
                                 const newStudent = new Student({
+                                    first_name: response.data.Student.first_name,
+                                    last_name: response.data.Student.last_name,
                                     phone_number: messageDetails.sender,
                                     school: response.data.Student.school,
                                     course: response.data.Student.course
@@ -850,6 +852,8 @@ function verificationMessageIdentify(message,io){
                                 const response = await axios.get(`http://student-server-dummy.herokuapp.com/${newContactNumber}`);
                                 console.log(response.data);
                                 const newStudent = new Student({
+                                    first_name: response.data.Student.first_name,
+                                    last_name: response.data.Student.last_name,
                                     phone_number: message.sender,
                                     school: response.data.Student.school,
                                     course: response.data.Student.course
@@ -908,6 +912,8 @@ function verificationMessageIdentify(message,io){
                                 const response = await axios.get(`http://student-server-dummy.herokuapp.com/${newContactNumber}`);
                                 console.log(response.data);
                                 const newStudent = new Student({
+                                    first_name: response.data.Student.first_name,
+                                    last_name: response.data.Student.last_name,
                                     phone_number: message.sender,
                                     school: response.data.Student.school,
                                     course: response.data.Student.course
@@ -993,6 +999,8 @@ function verificationMessageIdentify(message,io){
                             const response = await axios.get(`http://student-server-dummy.herokuapp.com/${newContactNumber}`);
                             console.log(response.data);
                             const newStudent = new Student({
+                                first_name: response.data.Student.first_name,
+                                last_name: response.data.Student.last_name,
                                 phone_number: message.sender,
                                 school: response.data.Student.school,
                                 course: response.data.Student.course
@@ -1043,6 +1051,8 @@ function sendCategoryList(message,io){
                     const response = await axios.get(`http://student-server-dummy.herokuapp.com/${newContactNumber}`);
                     console.log(response.data);
                     const newStudent = new Student({
+                        first_name: response.data.Student.first_name,
+                        last_name: response.data.Student.last_name,
                         phone_number: message.sender,
                         school: response.data.Student.school,
                         course: response.data.Student.course
