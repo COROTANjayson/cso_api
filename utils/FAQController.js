@@ -333,36 +333,6 @@ const IdentifyPossibleQueries = async (queries, category_name) => {
     return possible_query;
 
 }
-
-const IdentifyPossibleQueries = async (queries, category_name) => {
-
-    const manager = new NlpManager({ languages: ['en'], forceNER: true });
-   
-    // console.log(queries)
-    const category = await Category.find()
-
-    manager.addDocument('en', category_name, category_name);
-    manager.addAnswer('en', category_name, category_name);
-
-    await manager.train();
-    manager.save();
-
-
-    let possible_query = []
-    
-    await Promise.all(queries.map(async function (query) {
-        const response = await manager.process('en', query.query_name);
-
-        if (response.intent !== 'None') {
-            possible_query.push(query)
-        }
-
-    }))
-    // console.log(possible_query)
-    return possible_query;
-
-}
-
 module.exports = {
     AddFAQ,
     ShowAllFAQ,
