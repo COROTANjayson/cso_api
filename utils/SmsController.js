@@ -717,11 +717,7 @@ const listenReply = (io) => {
                                     console.log(result);
                                  })
                             }
-                          
-                            
-                           
                         } else {
-                            
                             modem.sendSMS(messageDetails.sender, nlpReply.message,  false, (data)=>{
                                 console.log(data);
                                 if(data.request == 'SendSMS'){

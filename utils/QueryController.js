@@ -486,7 +486,7 @@ const GetCurrentUnidentifiedQuery = async (req, res) => {
             matchDate = [
                 { "$eq": [{ "$month": '$createdAt' }, currentMonth] },
                 { "$eq": [{ "$year": '$createdAt' }, currentYear] },
-                { "$eq": [{ "$week": '$createdAt' }, currentWeek-1] }
+                { "$eq": [{ "$week": '$createdAt' }, currentWeek] }
             ]
         } else if (current === 4) {
             matchDate = [
