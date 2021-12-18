@@ -500,6 +500,7 @@ const listenReply = (io) => {
     modem.on('onNewMessage', messageDetails =>{  
         // countReply++;  
         // console.log(`Reply count here1113: ${countReply}`)
+        console.log('here it is')
 
         modem.emit('messageChannel', {
             message:'Connected to the socket'
@@ -515,6 +516,8 @@ const listenReply = (io) => {
             }
         }else{
             try {
+
+                console.log('people')
                 modem.getOwnNumber((phone)=>{
                     
                     const newSMS = new SMS({
@@ -719,11 +722,7 @@ const listenReply = (io) => {
                                     console.log(result);
                                  })
                             }
-                          
-                            
-                           
                         } else {
-                            
                             modem.sendSMS(messageDetails.sender, nlpReply.message,  false, (data)=>{
                                 console.log(data);
                                 if(data.request == 'SendSMS'){

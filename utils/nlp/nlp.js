@@ -1,7 +1,7 @@
 const { NlpManager } = require('node-nlp');
 const FAQ = require("../../models/FAQ");
 const Category = require("../../models/Category");
-const translate = require('@vitalets/google-translate-api');
+// const translate = require('@vitalets/google-translate-api');
 
 const manager = new NlpManager({ languages: ['en'], forceNER: true, nlu: { log: true }});
 
@@ -102,8 +102,8 @@ const nlpFunctionV2 = async (text) =>{
             // console.log(e._id);
         })
 
-        const translation =  await translate(text, {from: 'ceb',to: 'en'});
-        // const translation = {text:text};
+        // const translation =  await translate(text, {from: 'ceb',to: 'en'});
+        const translation = {text:text};
         console.log(translation);
         console.log('----------------')
 
