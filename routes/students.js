@@ -9,7 +9,8 @@ const {
     DeleteStudent,
     GetAllInquirerRecords,
     GetInquirerRecords,
-    SelectBroadcast
+    SelectBroadcast,
+    FilterStudentRecords
 } = require("../utils/StudentsController");
 
 // Show all student (api/students/show)
@@ -52,6 +53,11 @@ router.get("/showinquirer/:id", userAuth, async (req, res) => {
 router.post("/broadcast", userAuth, async (req, res) => {
     // await SelectBroadcast(req.body, res);
     await SelectBroadcast(req.body.data, res);
+});
+
+router.post("/filterstudentrecords", userAuth, async (req, res) => {
+    // await SelectBroadcast(req.body, res);
+    await FilterStudentRecords(req.body.data, res);
 });
 
 module.exports = router;

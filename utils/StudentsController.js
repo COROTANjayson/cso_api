@@ -195,6 +195,8 @@ const GetAllInquirerRecords = async (req, res) => {
         const arrayUniqueByKey = [...new Map(records.map(item =>
         [item[key], item])).values()];
 
+        
+
         return res.json({
             records: arrayUniqueByKey,
             succes: true
@@ -256,6 +258,7 @@ const GetInquirerRecords = async (req, phonenumber ,res) => {
     }
 }
 
+
 const SelectBroadcast = async (req, res) => {
 
     try {
@@ -290,6 +293,71 @@ const SelectBroadcast = async (req, res) => {
     }
 }
 
+const FilterStudentRecords = async (req, res) => {
+
+    try {
+        const {filter} = req;
+
+        const records = await Query.aggregate([
+            {"$match":{'phone_num':{$nin: [ ' ',null, '8080', 'AutoloadMax', 'TM', '4438' ]} }},
+        
+            {
+                "$lookup": {
+                    "from": 'students',
+                    "localField": 'phone_num',
+                    "foreignField": 'phone_number',
+                    "as": "student"
+                }
+            },
+           
+            {
+                "$unwind": {
+                    "path": "$student",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
+            
+        ]);
+
+         records.map(function(el) {
+            if(el.student === undefined) { 
+                el.student = null;
+            }
+          })
+        
+        const key = 'phone_num';
+
+        const arrayUniqueByKey = [...new Map(records.map(item =>
+        [item[key], item])).values()];
+        
+        let filterRecords
+
+        if(filter === "all"){
+            filterRecords = arrayUniqueByKey
+        } else if (filter === "students"){
+            filterRecords = arrayUniqueByKey.filter(item => item.student !== null);
+        }else if (filter === "unspecified"){
+            filterRecords = arrayUniqueByKey.filter(item => item.student === null);
+        }
+
+       
+        
+        
+        return res.json({
+            records: filterRecords,
+            succes: true
+        });
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
+    }
+}
+
 
 module.exports = {
     AddStudent,
@@ -299,5 +367,6 @@ module.exports = {
     DeleteStudent,
     GetAllInquirerRecords,
     GetInquirerRecords,
-    SelectBroadcast
+    SelectBroadcast,
+    FilterStudentRecords
 };
