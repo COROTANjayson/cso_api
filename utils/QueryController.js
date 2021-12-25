@@ -10,6 +10,7 @@ mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 const { SECRET } = require("../config");
 const { NlpManager } = require('node-nlp');
+const { DateTime } = require("luxon");
 
 
 const querydetails = [
@@ -456,10 +457,8 @@ const GetCurrentUnidentifiedQuery = async (req, res) => {
         const currentYear = currentdate.getFullYear();
         const today = currentdate.getDate();
         const currentMonth = currentdate.getMonth() + 1;
+        const currentWeek = DateTime.now().weekNumber
 
-        const oneJan = new Date(currentdate.getFullYear(), 0, 1);
-        const numberOfDays = Math.floor((currentdate - oneJan) / (24 * 60 * 60 * 1000));
-        const currentWeek = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7);
 
         const current = parseInt(date)
         // console.log(currentYear);
@@ -486,13 +485,13 @@ const GetCurrentUnidentifiedQuery = async (req, res) => {
             matchDate = [
                 { "$eq": [{ "$month": '$createdAt' }, currentMonth] },
                 { "$eq": [{ "$year": '$createdAt' }, currentYear] },
-                { "$eq": [{ "$week": '$createdAt' }, currentWeek-1] }
+                { "$eq": [{ "$week": '$createdAt' }, currentWeek] }
             ]
         } else if (current === 4) {
             matchDate = [
                 { "$eq": [{ "$month": '$createdAt' }, currentMonth] },
                 { "$eq": [{ "$year": '$createdAt' }, currentYear] },
-                { "$eq": [{ "$dayOfMonth": '$createdAt' }, today-1] },
+                { "$eq": [{ "$dayOfMonth": '$createdAt' }, today] },
             ]
         } else {
             matchDate = []
@@ -542,6 +541,115 @@ const GetCurrentUnidentifiedQuery = async (req, res) => {
 
         return res.status(201).json({
             query_list: finalQuery,
+            success: true
+        });
+
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
+    }
+}
+
+const GetCurrentQuery = async (req, res) => {
+
+    try {
+        
+        const { category_name, date } = req;
+
+        const currentdate = new Date();
+        const currentYear = currentdate.getFullYear();
+        const today = currentdate.getDate();
+        const currentMonth = currentdate.getMonth() + 1;
+        const currentWeek = DateTime.now().weekNumber
+        
+        const current = parseInt(date)
+        console.log("This is week", currentWeek);
+
+        //define a date object variable that will take the current system date  
+       todaydate = new Date();  
+
+        let matchDate
+        // 1 - year
+        // 2 - month
+        // 3 - week
+        // 4 - day
+        if (current === 1) {
+            matchDate = [
+                { "$eq": [{ "$year": '$createdAt' }, currentYear] },
+            ]
+        } else if (current === 2) {
+            matchDate = [
+                { "$eq": [{ "$month": '$createdAt' }, currentMonth] },
+                { "$eq": [{ "$year": '$createdAt' }, currentYear] },
+            ]
+        } else if (current === 3) {
+            console.log('-------------- 3')
+            matchDate = [
+                { "$eq": [{ "$month": '$createdAt' }, currentMonth] },
+                { "$eq": [{ "$year": '$createdAt' }, currentYear] },
+                { "$eq": [{ "$week": '$createdAt' }, currentWeek] }
+            ]
+        } else if (current === 4) {
+            matchDate = [
+                { "$eq": [{ "$month": '$createdAt' }, currentMonth] },
+                { "$eq": [{ "$year": '$createdAt' }, currentYear] },
+                { "$eq": [{ "$dayOfMonth": '$createdAt' }, today] },
+            ]
+        } else {
+            matchDate = []
+        }
+
+
+        const category = await Category.findOne({ category_name: "others" });
+        
+        const queries = await Query.aggregate([
+            {
+                "$match": {
+                    'phone_num': {
+                        $nin: [' ', null, '8080', 'AutoloadMax', 'TM', '4438']
+                    },
+                    // 'category_id': category._id,
+                    $expr: {$ne: ['category_id', category._id]}
+                    // ...matchCategory
+                },
+            },
+            {
+                "$match": {
+                    // 'category_id': category._id,
+                    "category_id": { "$ne": category._id } 
+                    // ...matchCategory
+                }
+            },
+            {
+                "$match": {
+                    "$expr": {
+                        "$and": [
+                            ...matchDate
+                        
+                        ]
+
+                    }
+                },
+            },
+            { $sort: { _id: -1 } },
+            ...querydetails
+
+        ]);
+
+        // console.log('Length of Queries');
+        // console.log(queries.length);
+        finalQuery = queries
+        if (category_name !== "all") {
+            finalQuery = queries.filter(function (query) {
+                return query.category.category_name === category_name;
+            })
+        }
+        return res.status(201).json({
+            query_list: finalQuery,
+            // query_list: queries,
             success: true
         });
 
@@ -633,5 +741,6 @@ module.exports = {
     ShowPossibleCategory,
     ChangeQueryCategory,
     ShowUnidentifiedQueryByMonth,
-    GetCurrentUnidentifiedQuery
+    GetCurrentUnidentifiedQuery,
+    GetCurrentQuery
 };
