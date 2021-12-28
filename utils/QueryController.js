@@ -662,6 +662,114 @@ const GetCurrentQuery = async (req, res) => {
     }
 }
 
+
+const GetCurrentUnknownQuery = async (req, res) => {
+
+    try {
+        
+        const { category_name, date } = req;
+
+        const currentdate = new Date();
+        const currentYear = currentdate.getFullYear();
+        const today = currentdate.getDate();
+        const currentMonth = currentdate.getMonth() + 1;
+        const currentWeek = DateTime.now().weekNumber
+
+
+        const current = parseInt(date)
+        // console.log(currentYear);
+        // console.log(today);
+        // console.log(currentMonth);
+        console.log("This is week", currentWeek);
+
+        let matchDate
+        // 1 - year
+        // 2 - month
+        // 3 - week
+        // 4 - day
+        if (current === 1) {
+            matchDate = [
+                { "$eq": [{ "$year": '$createdAt' }, currentYear] },
+            ]
+        } else if (current === 2) {
+            matchDate = [
+                { "$eq": [{ "$month": '$createdAt' }, currentMonth] },
+                { "$eq": [{ "$year": '$createdAt' }, currentYear] },
+            ]
+        } else if (current === 3) {
+            console.log('-------------- 3')
+            matchDate = [
+                { "$eq": [{ "$month": '$createdAt' }, currentMonth] },
+                { "$eq": [{ "$year": '$createdAt' }, currentYear] },
+                { "$eq": [{ "$week": '$createdAt' }, currentWeek] }
+            ]
+        } else if (current === 4) {
+            matchDate = [
+                { "$eq": [{ "$month": '$createdAt' }, currentMonth] },
+                { "$eq": [{ "$year": '$createdAt' }, currentYear] },
+                { "$eq": [{ "$dayOfMonth": '$createdAt' }, today] },
+            ]
+        } else {
+            matchDate = []
+        }
+
+
+        const category = await Category.findOne({ category_name: "others" });
+
+        const queries = await Query.aggregate([
+            {
+                "$match": {
+                    'phone_num': {
+                        $nin: [' ', null, '8080', 'AutoloadMax', 'TM', '4438']
+                    },
+                    'category_id': category._id,
+                    // ...matchCategory
+                },
+            },
+            {
+                "$match": {
+                    "$expr": {
+                        "$and": [
+                            ...matchDate
+                        
+                        ]
+
+                    }
+                },
+            },
+            { $sort: { _id: -1 } },
+            ...querydetails
+
+        ]);
+
+        console.log('Length of Queries');
+        console.log(queries.length);
+
+        const queryWithCategory = await IdentifyPossibleCategory(queries, 1)
+
+        let finalQuery = queryWithCategory
+
+        if (category_name !== "all") {
+            finalQuery = queryWithCategory.filter(function (query) {
+                return query.possible_category === category_name;
+            })
+        }
+
+        const finalfinalQuery = finalQuery.filter(e=>!e.student);
+        return res.status(201).json({
+            query_list: finalfinalQuery,
+            success: true
+        });
+
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            message: "Server Error",
+            success: false
+        });
+    }
+}
+
 const IdentifyPossibleCategory = async (queries, select) => {
 
     const manager = new NlpManager({ languages: ['en'], forceNER: true });
@@ -742,5 +850,6 @@ module.exports = {
     ChangeQueryCategory,
     ShowUnidentifiedQueryByMonth,
     GetCurrentUnidentifiedQuery,
-    GetCurrentQuery
+    GetCurrentQuery,
+    GetCurrentUnknownQuery
 };
