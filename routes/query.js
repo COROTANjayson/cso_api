@@ -13,7 +13,8 @@ const {
     ChangeQueryCategory,
     ShowUnidentifiedQueryByMonth,
     GetCurrentUnidentifiedQuery,
-    GetCurrentQuery
+    GetCurrentQuery,
+    GetCurrentUnknownQuery
 } = require("../utils/QueryController");
 
 // // Show all query (api/query/show)
@@ -83,6 +84,12 @@ router.post("/get-current-unidentified-query", userAuth, async (req, res) => {
 router.post("/get-current-query", userAuth, async (req, res) => {
     // console.log(req.body.data);
     await GetCurrentQuery( req.body.data, res);
+    
+});
+
+router.post("/get-current-query-unknown", userAuth, async (req, res) => {
+    // console.log(req.body.data);
+    await GetCurrentUnknownQuery( req.body.data, res);
     
 });
 

@@ -4,6 +4,9 @@
       "en"
     ],
     "forceNER": true,
+    "nlu": {
+      "log": true
+    },
     "tag": "nlp",
     "threshold": 0.5,
     "autoLoad": true,
@@ -13,7 +16,8 @@
   },
   "nluManager": {
     "settings": {
-      "tag": "nlu-manager"
+      "tag": "nlu-manager",
+      "log": true
     },
     "locales": [
       "en"
@@ -34,104 +38,38 @@
           "useStemDict": true
         },
         "stemDict": {
-          "allow": {
-            "intent": "allowance",
+          "of,result,the,when": {
+            "intent": "scholarship.when",
             "domain": "default"
           },
-          "enrol": {
-            "intent": "enrollment",
+          "appli,how,to": {
+            "intent": "apply_scholarship",
             "domain": "default"
           },
-          "grade": {
-            "intent": "grades",
-            "domain": "default"
-          },
-          "scholarship": {
-            "intent": "scholarship",
-            "domain": "default"
-          },
-          "other": {
-            "intent": "others",
-            "domain": "default"
-          },
-          "websit": {
-            "intent": "website",
-            "domain": "default"
-          },
-          "cours": {
-            "intent": "course",
-            "domain": "default"
-          },
-          "coe": {
-            "intent": "coe",
-            "domain": "default"
-          },
-          "event": {
-            "intent": "event",
+          "appli": {
+            "intent": "apply_scholarship",
             "domain": "default"
           }
         },
         "intentDict": {
-          "allowance": "default",
-          "enrollment": "default",
-          "grades": "default",
-          "scholarship": "default",
-          "others": "default",
-          "website": "default",
-          "course": "default",
-          "coe": "default",
-          "event": "default"
+          "scholarship.when": "default",
+          "apply_scholarship": "default"
         },
         "sentences": [
           {
             "domain": "default",
-            "utterance": "allowance",
-            "intent": "allowance"
+            "utterance": "when   result of the",
+            "intent": "scholarship.when"
           },
           {
             "domain": "default",
-            "utterance": "enrollment",
-            "intent": "enrollment"
+            "utterance": "how to apply",
+            "intent": "apply_scholarship"
           },
           {
             "domain": "default",
-            "utterance": "grades",
-            "intent": "grades"
-          },
-          {
-            "domain": "default",
-            "utterance": "scholarship",
-            "intent": "scholarship"
-          },
-          {
-            "domain": "default",
-            "utterance": "others",
-            "intent": "others"
-          },
-          {
-            "domain": "default",
-            "utterance": "website",
-            "intent": "website"
-          },
-          {
-            "domain": "default",
-            "utterance": "course",
-            "intent": "course"
-          },
-          {
-            "domain": "default",
-            "utterance": "scholarship",
-            "intent": "scholarship"
-          },
-          {
-            "domain": "default",
-            "utterance": "coe",
-            "intent": "coe"
-          },
-          {
-            "domain": "default",
-            "utterance": "event",
-            "intent": "event"
+            "utterance": "apply",
+            "intent": "apply_scholarship"
           }
         ],
         "domains": {
@@ -148,87 +86,57 @@
               "log": true
             },
             "features": {
-              "allow": 1,
-              "enrol": 1,
-              "grade": 1,
-              "scholarship": 1,
-              "other": 1,
-              "websit": 1,
-              "cours": 1,
-              "coe": 1,
-              "event": 1
+              "when": 1,
+              "result": 1,
+              "of": 1,
+              "the": 1,
+              "how": 1,
+              "to": 1,
+              "appli": 1
             },
             "intents": {
-              "allowance": 1,
-              "enrollment": 1,
-              "grades": 1,
-              "scholarship": 1,
-              "others": 1,
-              "website": 1,
-              "course": 1,
-              "coe": 1,
-              "event": 1
+              "scholarship.when": 1,
+              "apply_scholarship": 1
             },
             "intentFeatures": {
-              "allowance": {
-                "allow": 1
+              "scholarship.when": {
+                "when": 1,
+                "result": 1,
+                "of": 1,
+                "the": 1
               },
-              "enrollment": {
-                "enrol": 1
-              },
-              "grades": {
-                "grade": 1
-              },
-              "scholarship": {
-                "scholarship": 1
-              },
-              "others": {
-                "other": 1
-              },
-              "website": {
-                "websit": 1
-              },
-              "course": {
-                "cours": 1
-              },
-              "coe": {
-                "coe": 1
-              },
-              "event": {
-                "event": 1
+              "apply_scholarship": {
+                "how": 1,
+                "to": 1,
+                "appli": 1
               }
             },
             "featuresToIntent": {
-              "allow": [
-                "allowance"
+              "when": [
+                "scholarship.when"
               ],
-              "enrol": [
-                "enrollment"
+              "result": [
+                "scholarship.when"
               ],
-              "grade": [
-                "grades"
+              "of": [
+                "scholarship.when"
               ],
-              "scholarship": [
-                "scholarship"
+              "the": [
+                "scholarship.when"
               ],
-              "other": [
-                "others"
+              "how": [
+                "apply_scholarship"
               ],
-              "websit": [
-                "website"
+              "to": [
+                "apply_scholarship"
               ],
-              "cours": [
-                "course"
-              ],
-              "coe": [
-                "coe"
-              ],
-              "event": [
-                "event"
+              "appli": [
+                "apply_scholarship"
               ]
             },
             "neuralNetwork": {
               "settings": {
+                "log": true,
                 "locale": "en",
                 "tag": "nlu-en",
                 "keepStopwords": true,
@@ -236,139 +144,41 @@
                 "nonedeltaMultiplier": 1.2,
                 "spellCheck": false,
                 "spellCheckDistance": 1,
-                "filterZeros": true,
-                "log": true
+                "filterZeros": true
               },
               "features": [
-                "allow",
-                "enrol",
-                "grade",
-                "scholarship",
-                "other",
-                "websit",
-                "cours",
-                "coe",
-                "event"
+                "when",
+                "result",
+                "of",
+                "the",
+                "how",
+                "to",
+                "appli"
               ],
               "intents": [
-                "allowance",
-                "enrollment",
-                "grades",
-                "scholarship",
-                "others",
-                "website",
-                "course",
-                "coe",
-                "event"
+                "scholarship.when",
+                "apply_scholarship"
               ],
               "perceptrons": [
                 [
-                  12.710345268249512,
-                  -1.2819839715957642,
-                  -1.2763692140579224,
-                  -1.297464370727539,
-                  -1.2680974006652832,
-                  -1.2618231773376465,
-                  -1.255312204360962,
-                  -1.2472400665283203,
-                  -1.2401642799377441,
-                  1.291705412860936
+                  3.2966368198394775,
+                  3.2966368198394775,
+                  3.2966368198394775,
+                  3.2966368198394775,
+                  -0.322038859128952,
+                  -0.322038859128952,
+                  -1.0984264612197876,
+                  1.099075258032598
                 ],
                 [
-                  -1.234655499458313,
-                  12.71042537689209,
-                  -1.2819079160690308,
-                  -1.3019962310791016,
-                  -1.274070382118225,
-                  -1.2680426836013794,
-                  -1.261771321296692,
-                  -1.2540005445480347,
-                  -1.2471500635147095,
-                  1.2939524086896588
-                ],
-                [
-                  -1.2420179843902588,
-                  -1.2344862222671509,
-                  12.710589408874512,
-                  -1.3073511123657227,
-                  -1.279698371887207,
-                  -1.2739264965057373,
-                  -1.2679040431976318,
-                  -1.2604215145111084,
-                  -1.2538058757781982,
-                  1.2956931707993706
-                ],
-                [
-                  -1.29702889919281,
-                  -1.2931610345840454,
-                  -1.2890160083770752,
-                  12.976192474365234,
-                  -1.2998294830322266,
-                  -1.2963954210281372,
-                  -1.2926744222640991,
-                  -1.3058562278747559,
-                  -1.3006469011306763,
-                  1.2994863250855226
-                ],
-                [
-                  -1.2509629726409912,
-                  -1.2437622547149658,
-                  -1.2363395690917969,
-                  -1.2936042547225952,
-                  12.70991039276123,
-                  -1.2824296951293945,
-                  -1.276824712753296,
-                  -1.2681148052215576,
-                  -1.2618430852890015,
-                  1.2981094132369164
-                ],
-                [
-                  -1.2578529119491577,
-                  -1.2508853673934937,
-                  -1.2436878681182861,
-                  -1.2985529899597168,
-                  -1.2350456714630127,
-                  12.7100248336792,
-                  -1.2823209762573242,
-                  -1.274058222770691,
-                  -1.268033504486084,
-                  1.2997109733317398
-                ],
-                [
-                  -1.2644821405410767,
-                  -1.2577552795410156,
-                  -1.2507905960083008,
-                  -1.3034182786941528,
-                  -1.242413878440857,
-                  -1.234892725944519,
-                  12.710172653198242,
-                  -1.2797327041625977,
-                  -1.2739614248275757,
-                  1.3011133733614126
-                ],
-                [
-                  -1.2736812829971313,
-                  -1.2673609256744385,
-                  -1.2607924938201904,
-                  -1.2892868518829346,
-                  -1.2510385513305664,
-                  -1.2438384294509888,
-                  -1.236416220664978,
-                  12.710243225097656,
-                  -1.2820909023284912,
-                  1.3027867657053218
-                ],
-                [
-                  -1.2797669172286987,
-                  -1.273702621459961,
-                  -1.2673825025558472,
-                  -1.2933650016784668,
-                  -1.2580311298370361,
-                  -1.2510608434677124,
-                  -1.243861198425293,
-                  -1.2348650693893433,
-                  12.710216522216797,
-                  1.303759755939994
+                  -1.081304669380188,
+                  -1.081304669380188,
+                  -1.081304669380188,
+                  -1.081304669380188,
+                  0.15324096381664276,
+                  0.15324096381664276,
+                  9.748475074768066,
+                  4.337400442343114
                 ]
               ]
             }
@@ -380,43 +190,15 @@
     "extraSentences": [
       [
         "en",
-        "allowance"
+        "when   result of the"
       ],
       [
         "en",
-        "enrollment"
+        "how to apply"
       ],
       [
         "en",
-        "grades"
-      ],
-      [
-        "en",
-        "scholarship"
-      ],
-      [
-        "en",
-        "others"
-      ],
-      [
-        "en",
-        "website"
-      ],
-      [
-        "en",
-        "course"
-      ],
-      [
-        "en",
-        "scholarship"
-      ],
-      [
-        "en",
-        "coe"
-      ],
-      [
-        "en",
-        "event"
+        "apply"
       ]
     ]
   },
@@ -434,33 +216,14 @@
     },
     "responses": {
       "en": {
-        "undefined": [
+        "scholarship.when": [
           {
-            "answer": "allowance"
-          },
+            "answer": "The list of the student that has been accepted will be posted as soon as possible (Testing Purposes)\n"
+          }
+        ],
+        "apply_scholarship": [
           {
-            "answer": "enrollment"
-          },
-          {
-            "answer": "grades"
-          },
-          {
-            "answer": "scholarship"
-          },
-          {
-            "answer": "others"
-          },
-          {
-            "answer": "website"
-          },
-          {
-            "answer": "course"
-          },
-          {
-            "answer": "coe"
-          },
-          {
-            "answer": "event"
+            "answer": "To apply please visit our webiste (dummy data)"
           }
         ]
       }
