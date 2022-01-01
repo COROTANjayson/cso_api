@@ -722,7 +722,7 @@ const GetCurrentUnknownQuery = async (req, res) => {
                     'phone_num': {
                         $nin: [' ', null, '8080', 'AutoloadMax', 'TM', '4438']
                     },
-                    'category_id': category._id,
+                    // 'category_id': category._id,
                     // ...matchCategory
                 },
             },
